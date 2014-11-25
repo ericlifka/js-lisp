@@ -15,12 +15,18 @@ function cons(car, cdr) {
     };
 }
 
+function nullCheck(input) {
+    return !input || input.length === 0;
+}
+
 function parse(input) {
-    if (!input || input.length === 0) {
+    if (nullCheck(input)) {
         return cons();
     }
 
     var head = cons();
+
+
 
     return head;
 }
