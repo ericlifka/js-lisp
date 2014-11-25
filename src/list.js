@@ -6,6 +6,6 @@ function cons(car, cdr) {
     };
 }
 
-exports = {
+module.exports = {
     cons: cons
 };
