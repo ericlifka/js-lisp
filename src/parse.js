@@ -1,12 +1,9 @@
 /*
 Parse lists of the form
 (sym sym sym)
-into linked lists made up of objects like
-{
-    car: sym
-    cdr: list*
-}
- */
+into linked lists made up of cons sells
+*/
+
 
 
 function nullCheck(input) {

@@ -5,3 +5,7 @@ function cons(car, cdr) {
         cdr: cdr
     };
 }
+
+exports = {
+    cons: cons
+};
