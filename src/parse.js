@@ -1,10 +1,12 @@
+/*global require*/
+
 /*
 Parse lists of the form
 (sym sym sym)
 into linked lists made up of cons sells
 */
 
-
+var list = require('./list');
 
 function nullCheck(input) {
     return !input || input.length === 0;
@@ -12,10 +14,10 @@ function nullCheck(input) {
 
 function parse(input) {
     if (nullCheck(input)) {
-        return cons();
+        return list.cons();
     }
 
-    var head = cons();
+    var head = list.cons();
 
 
 
