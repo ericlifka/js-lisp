@@ -8,12 +8,6 @@ into linked lists made up of objects like
 }
  */
 
-function cons(car, cdr) {
-    return {
-        car: car,
-        cdr: cdr
-    };
-}
 
 function nullCheck(input) {
     return !input || input.length === 0;
