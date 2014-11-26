@@ -1,6 +1,5 @@
-/*global require,describe,it*/
 
-var should = require("should");
+var should = require('should');
 var list = require('../src/list');
 
 describe('list', function(){

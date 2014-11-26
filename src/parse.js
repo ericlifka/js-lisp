@@ -1,5 +1,3 @@
-/*global require*/
-
 /*
 Parse lists of the form
 (sym sym sym)
