@@ -16,8 +16,7 @@ describe 'cons', ->
         li_first = list.cons(1)
         li_second = list.cons(2, li_first)
         li_second.car.should.be.exactly(2)
-        li_second.cdr.should.be.an.instanceOf(Object)
-        li_second.cdr.car.should.be.exactly(1)
+        list.isCons(li_second.cdr).should.be.ok
 
 
 describe 'isCons', ->
