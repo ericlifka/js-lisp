@@ -28,24 +28,29 @@ function isCloseChar(char) {
 }
 
 function parse(inputBuffer) {
-    return parse_recur(inputBuffer, 0);
+    return parse_recur(inputBuffer, 0).list;
 }
 
 function parse_recur(inputBuffer, currentPosition) {
-    var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar, closedList;
+    var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar, closedList, charsProcessed;
 
     if (nullCheck(inputBuffer)) {
-        return null;
+        return {
+            list: null,
+            parsedCharacters: 0
+        };
     }
 
     closedList = true;
     consHead = null;
     consCurrent = null;
     bufferLength = inputBuffer.length;
+    charsProcessed = 0;
 
     while (currentPosition < bufferLength) {
         currentChar = inputBuffer[currentPosition];
         currentPosition++;
+        charsProcessed++;
 
         whitespaceChar = isWhitespace(currentChar);
         closeChar = isCloseChar(currentChar);
@@ -72,12 +77,20 @@ function parse_recur(inputBuffer, currentPosition) {
 
         if (isOpenChar(currentChar)) {
             if (consHead) {
-                throw new ParseError('Nested lists not supported');
+                var subParse = parse_recur(inputBuffer, currentPosition - 1);
+                if (!consCurrent.car) {
+                    consCurrent.car = subParse.list;
+                } else {
+                    consCurrent.cdr = list.cons(subParse.list);
+                    consCurrent = consCurrent.cdr;
+                }
+                currentPosition += subParse.parsedCharacters - 1;
+                charsProcessed += subParse.parsedCharacters - 1;
+            } else {
+                closedList = false;
+                consHead = list.cons();
+                consCurrent = consHead;
             }
-
-            closedList = false;
-            consHead = list.cons();
-            consCurrent = consHead;
 
             continue;
         }
@@ -97,7 +110,10 @@ function parse_recur(inputBuffer, currentPosition) {
         throw new ParseError("List wasn't closed before end of input buffer");
     }
 
-    return consHead;
+    return {
+        list: consHead,
+        parsedCharacters: charsProcessed
+    };
 }
 
 module.exports = parse;
