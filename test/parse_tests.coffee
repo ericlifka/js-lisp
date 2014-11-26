@@ -23,7 +23,7 @@ describe 'parse', ->
         list.cdr.car.should.be.exactly('2')
         list.cdr.cdr.car.should.be.exactly('3')
 
-    it.only 'should support nested lists', ->
+    it 'should support nested lists', ->
         list = parse("(1 (2 3) 4)")
         isCons(list).should.be.ok
         isCons(list.cdr.car).should.be.ok
