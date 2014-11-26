@@ -1,5 +1,8 @@
+should = require('should')
+
 parse = require('../src/parse')
 {isCons} = require('../src/list')
+{ParseError} = require('../src/error')
 
 describe 'parse', ->
     it 'should return null for bad input', ->
@@ -22,4 +25,5 @@ describe 'parse', ->
 
     it 'should support nested lists'
 
-    it 'should reject symbols outside of lists'
+    it 'should reject symbols outside of lists', ->
+        should(-> parse("2")).throw(ParseError)

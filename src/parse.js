@@ -48,10 +48,6 @@ function parse(inputBuffer, currentPosition) {
 
         if (whitespaceChar || closeChar) {
             if (currentSymbol) {
-                if (!consHead) {
-                    throw new ParseError('Symbol encountered before list started');
-                }
-
                 if (!consCurrent.car) {
                     consCurrent.car = currentSymbol;
                 } else {
@@ -77,6 +73,10 @@ function parse(inputBuffer, currentPosition) {
             consCurrent = consHead;
 
             continue;
+        }
+
+        if (!consHead) {
+            throw new ParseError('Symbol encountered before list started');
         }
 
         if (currentSymbol) {
