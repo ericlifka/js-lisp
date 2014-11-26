@@ -7,12 +7,16 @@ into linked lists made up of cons sells
 var list = require('./list');
 
 function nullCheck(input) {
-    return !input || input.length === 0;
+    return !(
+        input &&
+        (typeof input === "string") &&
+        input.length > 0
+    );
 }
 
 function parse(input) {
     if (nullCheck(input)) {
-        return list.cons();
+        return null;
     }
 
     var head = list.cons();
@@ -21,3 +25,5 @@ function parse(input) {
 
     return head;
 }
+
+module.exports = parse;
