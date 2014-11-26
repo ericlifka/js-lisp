@@ -28,12 +28,13 @@ function isCloseChar(char) {
 }
 
 function parse(inputBuffer, currentPosition) {
-    var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar;
+    var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar, closedList;
 
     if (nullCheck(inputBuffer)) {
         return null;
     }
 
+    closedList = true;
     consHead = null;
     consCurrent = null;
     bufferLength = inputBuffer.length;
@@ -59,6 +60,7 @@ function parse(inputBuffer, currentPosition) {
             }
 
             if (closeChar) {
+                closedList = true;
                 break;
             } else {
                 continue;
@@ -69,6 +71,8 @@ function parse(inputBuffer, currentPosition) {
             if (consHead) {
                 throw new ParseError('Nested lists not supported');
             }
+
+            closedList = false;
             consHead = list.cons();
             consCurrent = consHead;
 
@@ -84,6 +88,10 @@ function parse(inputBuffer, currentPosition) {
         } else {
             currentSymbol = "" + currentChar;
         }
+    }
+
+    if (!closedList) {
+        throw new ParseError("List wasn't closed before end of input buffer");
     }
 
     return consHead;

@@ -27,3 +27,6 @@ describe 'parse', ->
 
     it 'should reject symbols outside of lists', ->
         should(-> parse("2")).throw(ParseError)
+
+    it 'should reject unclosed lists', ->
+        should(-> parse("(1 2")).throw(ParseError)
