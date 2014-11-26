@@ -1,6 +1,7 @@
 should = require('should')
 
 parse = require('../src/parse')
+{toString} = require('../src/list')
 {isCons} = require('../src/list')
 {ParseError} = require('../src/error')
 
@@ -16,19 +17,11 @@ describe 'parse', ->
 
     it 'should parse a simple list', ->
         list = parse("(1 2 3)")
-        isCons(list).should.be.ok
-        isCons(list.cdr).should.be.ok
-        isCons(list.cdr.cdr).should.be.ok
-        list.car.should.be.exactly('1')
-        list.cdr.car.should.be.exactly('2')
-        list.cdr.cdr.car.should.be.exactly('3')
+        toString(list).should.equal("(1 2 3)")
 
     it 'should support nested lists', ->
         list = parse("(1 (2 3) 4)")
-        isCons(list).should.be.ok
-        isCons(list.cdr.car).should.be.ok
-        list.cdr.car.car.should.be.exactly('2')
-        list.cdr.car.cdr.car.should.be.exactly('3')
+        toString(list).should.equal("(1 (2 3) 4)")
 
     it 'should reject symbols outside of lists', ->
         should(-> parse("2")).throw(ParseError)
