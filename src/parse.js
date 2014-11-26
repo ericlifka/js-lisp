@@ -27,7 +27,11 @@ function isCloseChar(char) {
     return /\)/.test(char);
 }
 
-function parse(inputBuffer, currentPosition) {
+function parse(inputBuffer) {
+    return parse_recur(inputBuffer, 0);
+}
+
+function parse_recur(inputBuffer, currentPosition) {
     var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar, closedList;
 
     if (nullCheck(inputBuffer)) {
@@ -38,7 +42,6 @@ function parse(inputBuffer, currentPosition) {
     consHead = null;
     consCurrent = null;
     bufferLength = inputBuffer.length;
-    currentPosition = currentPosition || 0;
 
     while (currentPosition < bufferLength) {
         currentChar = inputBuffer[currentPosition];
