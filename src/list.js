@@ -6,6 +6,13 @@ function cons(car, cdr) {
     };
 }
 
+function isCons(cell) {
+    return cell instanceof Object &&
+        cell.hasOwnProperty('car') &&
+        cell.hasOwnProperty('cdr');
+}
+
 module.exports = {
-    cons: cons
+    cons: cons,
+    isCons: isCons
 };
