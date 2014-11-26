@@ -5,6 +5,7 @@ into linked lists made up of cons sells
 */
 
 var list = require('./list');
+var ParseError = require('./error').ParseError;
 
 function nullCheck(input) {
     return !(
@@ -14,16 +15,78 @@ function nullCheck(input) {
     );
 }
 
-function parse(input) {
-    if (nullCheck(input)) {
+function isWhitespace(char) {
+    return /\s/.test(char);
+}
+
+function isOpenChar(char) {
+    return /\(/.test(char);
+}
+
+function isCloseChar(char) {
+    return /\)/.test(char);
+}
+
+function parse(inputBuffer, currentPosition) {
+    var bufferLength, consHead, consCurrent, currentSymbol, currentChar, whitespaceChar, closeChar;
+
+    if (nullCheck(inputBuffer)) {
         return null;
     }
 
-    var head = list.cons();
+    consHead = null;
+    consCurrent = null;
+    bufferLength = inputBuffer.length;
+    currentPosition = currentPosition || 0;
 
+    while (currentPosition < bufferLength) {
+        currentChar = inputBuffer[currentPosition];
+        currentPosition++;
 
+        whitespaceChar = isWhitespace(currentChar);
+        closeChar = isCloseChar(currentChar);
 
-    return head;
+        if (whitespaceChar || closeChar) {
+            if (currentSymbol) {
+                if (!consHead) {
+                    throw new ParseError('Symbol encountered before list started');
+                }
+
+                if (!consCurrent.car) {
+                    consCurrent.car = currentSymbol;
+                } else {
+                    consCurrent.cdr = list.cons(currentSymbol);
+                    consCurrent = consCurrent.cdr;
+                }
+
+                currentSymbol = null;
+            }
+
+            if (closeChar) {
+                break;
+            } else {
+                continue;
+            }
+        }
+
+        if (isOpenChar(currentChar)) {
+            if (consHead) {
+                throw new ParseError('Nested lists not supported');
+            }
+            consHead = list.cons();
+            consCurrent = consHead;
+
+            continue;
+        }
+
+        if (currentSymbol) {
+            currentSymbol += currentChar;
+        } else {
+            currentSymbol = "" + currentChar;
+        }
+    }
+
+    return consHead;
 }
 
 module.exports = parse;

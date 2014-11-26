@@ -16,6 +16,10 @@ describe 'parse', ->
         isCons(list).should.be.ok
         isCons(list.cdr).should.be.ok
         isCons(list.cdr.cdr).should.be.ok
-        list.car.should.be.exactly(1)
-        list.cdr.car.should.be.exactly(2)
-        list.cdr.cdr.car.should.be.exactly(3)
+        list.car.should.be.exactly('1')
+        list.cdr.car.should.be.exactly('2')
+        list.cdr.cdr.car.should.be.exactly('3')
+
+    it 'should support nested lists'
+
+    it 'should reject symbols outside of lists'
