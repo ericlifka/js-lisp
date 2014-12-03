@@ -3,8 +3,13 @@ function fnConverter(list) {
         return "null";
     }
 
-    var base = "";
+    var base = list.car;
+    var params = [];
+    while (null != (list = list.cdr)) {
+        params.push(list.car);
+    }
 
+    return "" + base + "(" + params.join(", ") + ")";
 }
 
 module.exports = {
