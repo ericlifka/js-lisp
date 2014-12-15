@@ -1,19 +1,32 @@
 var readline = require('readline');
+var inputInterface = readline.createInterface(process.stdin, process.stdout);
+inputInterface.setPrompt('js-lisp> ');
+inputInterface.on('close', function () {
+    console.log("terminating js-lisp REPL");
+    process.exit(0);
+});
+
+function processLine(inputLine) {
+    console.log("input-line: ", inputLine);
+}
+
+function printResult(evalResult) {
+    console.log(evalResult);
+}
 
 function main() {
-    var inputInterface = readline.createInterface(process.stdin, process.stdout);
-    inputInterface.setPrompt('js-lisp> ');
-    inputInterface.prompt();
     inputInterface.on('line', function (line) {
         if (line === "(quit)") {
             inputInterface.close();
+            return;
         }
-        else {
-            inputInterface.prompt();
-        }
-    }).on('close', function () {
-        process.exit(0);
+
+        var result = processLine(line); // EVAL
+        printResult(result);            // PRINT
+        inputInterface.prompt();        // REPEAT
     });
+
+    inputInterface.prompt();            // READ
 }
 
 main();
