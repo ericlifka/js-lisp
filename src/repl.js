@@ -1,4 +1,7 @@
+var Environment = require('./environment');
 var readline = require('readline');
+var parse = require('./parse');
+
 var inputInterface = readline.createInterface(process.stdin, process.stdout);
 inputInterface.setPrompt('js-lisp> ');
 inputInterface.on('close', function () {
@@ -6,8 +9,9 @@ inputInterface.on('close', function () {
     process.exit(0);
 });
 
-function processLine(inputLine) {
-    console.log("input-line: ", inputLine);
+function processLine(line, environment) {
+    var list = parse(line);
+    return list;
 }
 
 function printResult(evalResult) {
@@ -15,13 +19,18 @@ function printResult(evalResult) {
 }
 
 function main() {
+    var globalEnvironment = Environment.create();
+
     inputInterface.on('line', function (line) {
         if (line === "(quit)") {
             inputInterface.close();
             return;
         }
 
-        var result = processLine(line); // EVAL
+        var result = processLine(       // EVAL
+                        line,
+                        globalEnvironment);
+
         printResult(result);            // PRINT
         inputInterface.prompt();        // REPEAT
     });
