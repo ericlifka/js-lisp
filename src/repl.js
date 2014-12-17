@@ -1,4 +1,5 @@
 var Environment = require('./environment');
+var List = require('./list');
 var readline = require('readline');
 var parse = require('./parse');
 
@@ -15,7 +16,11 @@ function processLine(line, environment) {
 }
 
 function printResult(evalResult) {
-    console.log(evalResult);
+    if (List.isCons(evalResult)) {
+        console.log(List.toString(evalResult));
+    } else {
+        console.log(evalResult);
+    }
 }
 
 function main() {
