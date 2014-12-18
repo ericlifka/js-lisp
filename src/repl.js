@@ -10,9 +10,11 @@ inputInterface.on('close', function () {
     process.exit(0);
 });
 
-function processLine(line, environment) {
+function processLine(line, environment, callback) {
     var list = parse(line);
-    return list;
+    if (typeof callback === 'function') {
+        callback(list);
+    }
 }
 
 function printResult(evalResult) {
@@ -32,12 +34,14 @@ function main() {
             return;
         }
 
-        var result = processLine(       // EVAL
-                        line,
-                        globalEnvironment);
-
-        printResult(result);            // PRINT
-        inputInterface.prompt();        // REPEAT
+        processLine(                        // EVAL
+            line,
+            globalEnvironment,
+            function (result) {
+                printResult(result);        // PRINT
+                inputInterface.prompt();    // REPEAT
+            }
+        );
     });
 
     inputInterface.prompt();            // READ
