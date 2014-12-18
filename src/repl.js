@@ -44,7 +44,14 @@ function main() {
         );
     });
 
-    inputInterface.prompt();            // READ
+    inputInterface.prompt();                // READ
 }
 
-main();
+if (!module.parent) {
+    main();
+} else {
+    module.exports = {
+        processLine: processLine,
+        printResult: printResult
+    };
+}
