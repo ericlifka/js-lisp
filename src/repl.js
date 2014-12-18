@@ -1,11 +1,13 @@
 var Environment = require('./environment');
 var List = require('./list');
-var readline = require('readline');
+var Readline = require('readline');
 var parse = require('./parse');
 
-var inputInterface = readline.createInterface(process.stdin, process.stdout);
-inputInterface.setPrompt('js-lisp> ');
-inputInterface.on('close', function () {
+var GLOBAL_ENVIRONMENT = Environment.create();
+var INPUT = Readline.createInterface(process.stdin, process.stdout);
+
+INPUT.setPrompt('js-lisp> ');
+INPUT.on('close', function () {
     console.log("terminating js-lisp REPL");
     process.exit(0);
 });
@@ -17,34 +19,31 @@ function processLine(line, environment, callback) {
     }
 }
 
-function printResult(evalResult) {
-    if (List.isCons(evalResult)) {
-        console.log(List.toString(evalResult));
+function printResult(result) {
+    if (List.isCons(result)) {
+        console.log(List.toString(result));
     } else {
-        console.log(evalResult);
+        console.log(result);
     }
 }
 
 function main() {
-    var globalEnvironment = Environment.create();
-
-    inputInterface.on('line', function (line) {
+    INPUT.on('line', function (line) {
         if (line === "(quit)") {
-            inputInterface.close();
+            INPUT.close();
             return;
         }
 
         processLine(                        // EVAL
             line,
-            globalEnvironment,
+            GLOBAL_ENVIRONMENT,
             function (result) {
                 printResult(result);        // PRINT
-                inputInterface.prompt();    // REPEAT
-            }
-        );
+                INPUT.prompt();    // REPEAT
+            });
     });
 
-    inputInterface.prompt();                // READ
+    INPUT.prompt();                // READ
 }
 
 if (!module.parent) {
