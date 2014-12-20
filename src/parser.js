@@ -47,7 +47,7 @@ Parser.prototype = {
         this.parsePosition = 0;
         this.parseDepth = 0;
 
-        while (this.parsePosition < this.currentParseString.length) {
+        while (this.parsePosition < this.currentParseString.length && !this.errorState) {
             this._parseStep();
         }
     },
@@ -59,6 +59,15 @@ Parser.prototype = {
             this.parseDepth++;
         }
 
+        else if (char === ')') {
+            if (this.inProcessLists.length === 0) {
+                this.errorState = "Unbalanced List - Found close ')' without matching open '('";
+                return;
+            }
+
+            var completeList = this.inProcessLists.pop();
+        }
+
         else if (isWhitespace(char)) {
             if (this.currentSymbol) {
                 this.currentSymbol = null;
@@ -68,6 +77,7 @@ Parser.prototype = {
                 this.currentString.value += char;
             }
         }
+
 
         this.parsePosition++;
     }
