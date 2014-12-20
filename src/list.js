@@ -34,9 +34,9 @@ function symbol() {
 }
 
 function string() {
-    var symbol = new Cell('string');
-    symbol.value = "";
-    return symbol;
+    var string = new Cell('string');
+    string.value = "";
+    return string;
 }
 
 function isTrueCons(cell) {
