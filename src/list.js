@@ -17,8 +17,13 @@ function symbol() {
     return symbol;
 }
 
+function isTrueCons(cell) {
+    return cell instanceof Cell &&
+        cell.type === 'cons';
+}
+
 function isCons(cell) {
-    return cell instanceof Object &&
+    return cell && cell.hasOwnProperty &&
         cell.hasOwnProperty('car') &&
         cell.hasOwnProperty('cdr');
 }
@@ -58,6 +63,7 @@ function toString(list) {
 module.exports = {
     cons: cons,
     symbol: symbol,
+    isTrueCons: isTrueCons,
     isCons: isCons,
     toString: toString
 };
