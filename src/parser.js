@@ -40,6 +40,4 @@ Parser.parse = function (string) {
     return lists[0];
 };
 
-module.exports = {
-    Parser: Parser
-};
+module.exports = Parser;
