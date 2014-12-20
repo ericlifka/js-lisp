@@ -54,7 +54,17 @@ Parser.prototype = {
     _parseStep: function () {
         var char = this.currentParseString[this.parsePosition];
 
-        if (char === '(') {
+        if (this.currentString) {
+            if (char === '"') {
+                // If there is a string being built then close it
+                this.currentString = null;
+            }
+            else {
+                this.currentString.value += char;
+            }
+        }
+
+        else if (char === '(') {
             var newList = List.cons();
 
             if (this.parseDepth === 0) {
@@ -82,11 +92,6 @@ Parser.prototype = {
         else if (char === '"') {
             if (this.currentSymbol) {
                 this.errorState = "Illegal Character '\"' in symbol at buffer position " + this.parsePosition;
-            }
-
-            else if (this.currentString) {
-                // If there is a string being built then close it
-                this.currentString = null;
             }
 
             else {
