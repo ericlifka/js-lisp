@@ -17,6 +17,12 @@ function symbol() {
     return symbol;
 }
 
+function string() {
+    var symbol = new Cell('string');
+    symbol.value = "";
+    return symbol;
+}
+
 function isTrueCons(cell) {
     return cell instanceof Cell &&
         cell.type === 'cons';
