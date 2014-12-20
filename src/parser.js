@@ -50,6 +50,7 @@ Parser.prototype = {
 
         if (char === '(') {
             this.inProcessLists.push(List.cons());
+            this.parseDepth++;
         }
         else {
 
