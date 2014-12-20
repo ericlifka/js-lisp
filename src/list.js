@@ -1,10 +1,20 @@
 var ListError = require('./error').ListError;
 
+function Cell(type) {
+    this.type = type;
+}
+
 function cons(car, cdr) {
     return {
         car: car,
         cdr: cdr
     };
+}
+
+function symbol() {
+    var symbol = new Cell("symbol");
+    symbol.name = "";
+    return symbol;
 }
 
 function isCons(cell) {
@@ -47,6 +57,7 @@ function toString(list) {
 
 module.exports = {
     cons: cons,
+    symbol: symbol,
     isCons: isCons,
     toString: toString
 };
