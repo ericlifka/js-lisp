@@ -30,6 +30,10 @@ Parser.prototype = {
             return;
         }
         this.currentParseString = this.stringQueue.pop();
+        if (this.currentParseString.length === 0) {
+            return;
+        }
+        this.parsePosition = 0;
     }
 };
 
