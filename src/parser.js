@@ -58,10 +58,13 @@ Parser.prototype = {
             this.inProcessLists.push(List.cons());
             this.parseDepth++;
         }
+
         else if (isWhitespace(char)) {
             if (this.currentSymbol) {
                 this.currentSymbol = null;
-            } else if (this.currentString) {
+            }
+
+            if (this.currentString) {
                 this.currentString.value += char;
             }
         }
