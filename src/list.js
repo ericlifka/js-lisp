@@ -60,10 +60,19 @@ function toString(list) {
     return "(" + toString_recur(list) + ")";
 }
 
+function addToEnd(list, cell) {
+    if (!isCons(list)) {
+        throw new ListError("Cannot add Cell '" + cell + "' to non list '" + list +"'");
+    }
+
+
+}
+
 module.exports = {
     cons: cons,
     symbol: symbol,
     isTrueCons: isTrueCons,
     isCons: isCons,
-    toString: toString
+    toString: toString,
+    addToEnd: addToEnd
 };
