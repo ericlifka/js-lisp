@@ -63,10 +63,11 @@ Parser.prototype = {
             if (this.inProcessLists.length === 0) {
                 this.errorState = "Unbalanced List - Found close ')' without matching open '(' at buffer position " +
                     this.parsePosition;
-                return;
             }
-
-            var completeList = this.inProcessLists.pop();
+            else {
+                this.inProcessLists.pop();
+                this.parseDepth--;
+            }
         }
 
         else if (isWhitespace(char)) {
