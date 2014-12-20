@@ -3,7 +3,7 @@ should = require('should')
 list = require('../src/list')
 {ListError} = require('../src/error')
 
-describe 'list', ->
+describe.only 'list', ->
     describe 'cons', ->
         it 'should create an empty list', ->
             li = list.cons()
@@ -37,13 +37,9 @@ describe 'list', ->
             list.isCons({car:true}).should.not.be.ok
             list.isCons({cdr:true}).should.not.be.ok
 
-    describe 'toString', ->
-        it 'should reject non cons cells as input', ->
-            should(-> list.toString({})).throw(ListError)
-            should(-> list.toString(5)).throw(ListError)
-
+    describe.only 'toString', ->
         it 'should represent empty list as ()', ->
-            list.toString(list.cons()).should.equal("()")
+            list.cons().toString().should.equal("()")
 
         it 'should represent simple list as (1 2 3)', ->
             cons = list.cons

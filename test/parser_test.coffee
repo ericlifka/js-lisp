@@ -5,7 +5,7 @@ Parser = require('../src/parser')
 {isCons} = require('../src/list')
 {ParseError} = require('../src/error')
 
-describe.only 'parser', ->
+describe 'parser', ->
     it 'should return null for bad input', ->
         (Parser.parse() is null).should.be.ok
         (Parser.parse("") is null).should.be.ok

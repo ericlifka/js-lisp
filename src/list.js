@@ -51,11 +51,16 @@ function isCons(cell) {
 }
 
 function printList(list) {
-    if (!list.cdr) {
-        return "" + list.car;
+    var curr = "";
+    if (list.car) {
+        curr += list.car;
     }
 
-    return list.car + " " + printList(list.cdr);
+    if (!list.cdr) {
+        return curr;
+    }
+
+    return curr + " " + printList(list.cdr);
 }
 
 function addToEnd(list, cell) {
