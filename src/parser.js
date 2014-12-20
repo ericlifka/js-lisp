@@ -85,7 +85,16 @@ Parser.prototype = {
                 this.currentString = null;
             } else {
                 // Create a new string to build
+                var newString = List.string();
 
+                if (this.parseDepth === 0) {
+                    this.lists.push(newString);
+                }
+                else {
+                    List.addToEnd(this.inProcessLists[0], newString);
+                }
+
+                this.currentString = newString;
             }
         }
 
