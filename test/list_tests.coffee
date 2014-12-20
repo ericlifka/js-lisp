@@ -43,11 +43,11 @@ describe 'list', ->
 
         it 'should represent simple list as (1 2 3)', ->
             cons = list.cons
-            list.toString(cons(1, cons(2, cons(3)))).should.equal("(1 2 3)")
+            cons(1, cons(2, cons(3))).toString().should.equal("(1 2 3)")
 
         it 'should represent nested list as (1 (2 3) 4)', ->
             cons = list.cons
-            list.toString(cons(1, cons(cons(2, cons(3)), cons(4)))).should.equal("(1 (2 3) 4)")
+            cons(1, cons(cons(2, cons(3)), cons(4))).toString().should.equal("(1 (2 3) 4)")
 
         it 'should use builtin toString of objects', ->
             list.toString(list.cons({toString:->"abc"})).should.equal("(abc)")
