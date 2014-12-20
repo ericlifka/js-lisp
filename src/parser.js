@@ -55,7 +55,16 @@ Parser.prototype = {
         var char = this.currentParseString[this.parsePosition];
 
         if (char === '(') {
-            this.inProcessLists.push(List.cons());
+            var newList = List.cons();
+
+            if (this.parseDepth === 0) {
+                this.lists.push(newList);
+            }
+            else {
+                List.addToEnd(this.inProcessLists[0], newList);
+            }
+
+            this.inProcessLists.push(newList);
             this.parseDepth++;
         }
 
