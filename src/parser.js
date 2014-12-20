@@ -88,11 +88,6 @@ Parser.prototype = {
         }
 
         else if (char === '(') {
-            if (this.currentSymbol) {
-                this.errorState = "Invalid character in Symbol '(' at buffer position " + this.parsePosition;
-                return;
-            }
-
             var newList = List.cons();
 
             if (this.parseDepth === 0) {
