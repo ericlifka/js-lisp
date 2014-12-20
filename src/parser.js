@@ -79,6 +79,16 @@ Parser.prototype = {
             }
         }
 
+        else if (char === '"') {
+            if (this.currentString) {
+                // If there is a string being built then close it
+                this.currentString = null;
+            } else {
+                // Create a new string to build
+
+            }
+        }
+
         else if (isWhitespace(char)) {
             if (this.currentSymbol) {
                 this.currentSymbol = null;
