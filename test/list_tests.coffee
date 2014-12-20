@@ -3,7 +3,7 @@ should = require('should')
 list = require('../src/list')
 {ListError} = require('../src/error')
 
-describe.only 'list', ->
+describe 'list', ->
     describe 'cons', ->
         it 'should create an empty list', ->
             li = list.cons()
@@ -37,7 +37,7 @@ describe.only 'list', ->
             list.isCons({car:true}).should.not.be.ok
             list.isCons({cdr:true}).should.not.be.ok
 
-    describe.only 'toString', ->
+    describe 'toString', ->
         it 'should represent empty list as ()', ->
             list.cons().toString().should.equal("()")
 
