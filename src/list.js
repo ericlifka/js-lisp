@@ -62,7 +62,7 @@ function toString(list) {
 
 function addToEnd(list, cell) {
     if (!isCons(list)) {
-        throw new ListError("Cannot add Cell '" + cell + "' to non list '" + list +"'");
+        throw new ListError("Cannot add Cell '" + cell + "' to non list '" + list + "'");
     }
 
     var current = list;
