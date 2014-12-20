@@ -4,6 +4,7 @@ var List = require('./list');
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
+    this.currentParseString = null;
 }
 
 Parser.prototype = {
@@ -21,7 +22,14 @@ Parser.prototype = {
 
     },
     _processQueue: function () {
-
+        if (this.currentParseString) {
+            // check for errors and continue parsing
+            return;
+        }
+        if (this.stringQueue.length === 0) {
+            return;
+        }
+        this.currentParseString = this.stringQueue.pop();
     }
 };
 
