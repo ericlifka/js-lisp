@@ -61,7 +61,8 @@ Parser.prototype = {
 
         else if (char === ')') {
             if (this.inProcessLists.length === 0) {
-                this.errorState = "Unbalanced List - Found close ')' without matching open '('";
+                this.errorState = "Unbalanced List - Found close ')' without matching open '(' at buffer position " +
+                    this.parsePosition;
                 return;
             }
 
