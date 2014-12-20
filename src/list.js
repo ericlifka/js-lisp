@@ -4,6 +4,22 @@ function Cell(type) {
     this.type = type;
 }
 
+Cell.prototype.toString = function () {
+    if (this.type === 'cons') {
+        return "(" + printList(this) + ")";
+    }
+
+    if (this.type === 'symbol') {
+        return this.name;
+    }
+
+    if (this.type === 'string') {
+        return '"' + this.value + '"';
+    }
+
+    return "[Object Cell]";
+};
+
 function cons(car, cdr) {
     var c = new Cell('cons');
     c.car = car;
@@ -34,36 +50,12 @@ function isCons(cell) {
         cell.hasOwnProperty('cdr');
 }
 
-function toString_recur(cell) {
-    if (!cell) {
-        return "";
+function printList(list) {
+    if (!list.cdr) {
+        return "" + list.car;
     }
 
-    if (!isCons(cell)) {
-        throw new ListError("Given non cons cell to print");
-    }
-
-    if (!cell.car) {
-        return "";
-    }
-
-    var current;
-
-    if (isCons(cell.car)) { // handle sub-lists
-        current = toString(cell.car);
-    } else {
-        current = "" + cell.car;
-    }
-
-    if (cell.cdr) {
-        return current + " " + toString_recur(cell.cdr);
-    } else {
-        return current;
-    }
-}
-
-function toString(list) {
-    return "(" + toString_recur(list) + ")";
+    return list.car + " " + printList(list.cdr);
 }
 
 function addToEnd(list, cell) {
@@ -88,6 +80,5 @@ module.exports = {
     string: string,
     isTrueCons: isTrueCons,
     isCons: isCons,
-    toString: toString,
     addToEnd: addToEnd
 };
