@@ -1,7 +1,9 @@
 var ParseError = require('./error').ParseError;
+var List = require('./list');
 
 function Parser() {
     this.stringQueue = [];
+    this.lists = [];
 }
 
 Parser.prototype = {
