@@ -5,6 +5,8 @@ function Parser() {
     this.stringQueue = [];
     this.lists = [];
     this.currentParseString = null;
+    this.parsePosition = 0;
+    this.parseDepth = 0;
 }
 
 Parser.prototype = {
@@ -29,11 +31,24 @@ Parser.prototype = {
         if (this.stringQueue.length === 0) {
             return;
         }
+
         this.currentParseString = this.stringQueue.pop();
         if (this.currentParseString.length === 0) {
             return;
         }
+
         this.parsePosition = 0;
+        this.parseDepth = 0;
+
+        while (this.parsePosition < this.currentParseString.length) {
+            this._parseStep();
+        }
+    },
+    _parseStep: function () {
+        var char = this.currentParseString[this.parsePosition];
+        if (char === '(') {
+
+        }
     }
 };
 
