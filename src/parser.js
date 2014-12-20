@@ -4,6 +4,7 @@ var List = require('./list');
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
+    this.inProcessLists = [];
     this.currentParseString = null;
     this.parsePosition = 0;
     this.parseDepth = 0;
@@ -46,9 +47,15 @@ Parser.prototype = {
     },
     _parseStep: function () {
         var char = this.currentParseString[this.parsePosition];
+
         if (char === '(') {
+            this.inProcessLists.push(List.cons());
+        }
+        else {
 
         }
+
+        this.parsePosition++;
     }
 };
 
