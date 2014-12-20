@@ -113,23 +113,17 @@ Parser.prototype = {
         }
 
         else if (char === '"') {
-            if (this.currentSymbol) {
-                this.errorState = "Illegal Character '\"' in symbol at buffer position " + this.parsePosition;
-            }
+            // Create a new string to build
+            var newString = List.string();
 
+            if (this.parseDepth === 0) {
+                this.lists.push(newString);
+            }
             else {
-                // Create a new string to build
-                var newString = List.string();
-
-                if (this.parseDepth === 0) {
-                    this.lists.push(newString);
-                }
-                else {
-                    List.addToEnd(this.inProcessLists[0], newString);
-                }
-
-                this.currentString = newString;
+                List.addToEnd(this.inProcessLists[0], newString);
             }
+
+            this.currentString = newString;
         }
 
         else if (isWhitespace(char)) {
