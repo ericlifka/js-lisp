@@ -63,7 +63,7 @@ Parser.prototype = {
         var char = this.currentParseString[this.parsePosition];
 
         if (this.currentString) {
-            if (char === '"') {
+            if (char === '"' && this.currentParseString[this.parsePosition - 1] !== "\\") {
                 // If there is a string being built then close it
                 this.currentString = null;
             }
