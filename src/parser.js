@@ -27,7 +27,7 @@ Parser.prototype = {
         };
     },
     getLists: function () {
-
+        return this.lists;
     },
     _processQueue: function () {
         if (this.currentParseString) {
