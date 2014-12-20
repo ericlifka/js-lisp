@@ -5,6 +5,14 @@ function isWhitespace(char) {
     return /\s/.test(char);
 }
 
+function isSymbolTerminator(char) {
+    return isWhitespace(char) || char === ')';
+}
+
+function isLegalSymbolChar(char) {
+    return true;
+}
+
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
@@ -61,6 +69,21 @@ Parser.prototype = {
             }
             else {
                 this.currentString.value += char;
+            }
+        }
+
+        else if (this.currentSymbol) {
+            if (isSymbolTerminator(char)) {
+                this.currentSymbol = null;
+            }
+
+            else if (this.isLegalSymbolChar(char)) {
+                this.currentSymbol.name += char;
+            }
+
+            else {
+                this.errorState = "Invalid character in Symbol '(' at buffer position " + this.parsePosition;
+                return;
             }
         }
 
