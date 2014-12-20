@@ -20,8 +20,11 @@ Parser.parse = function (string) {
     var parser = new Parser();
     parser.addString(string);
     var state = parser.parseState();
-    if (state.error) {
-        throw new ParseError(state.error);
+    if (state.parseError) {
+        throw new ParseError(state.parseError);
+    }
+    if (!state.parseIncomplete) {
+        throw new ParseError("Parser.parse only handles balanced list segments");
     }
     var lists = parser.getLists();
     if (lists.length !== 1) {
