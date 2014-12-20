@@ -5,14 +5,14 @@ function Cell(type) {
 }
 
 function cons(car, cdr) {
-    return {
-        car: car,
-        cdr: cdr
-    };
+    var c = new Cell('cons');
+    c.car = car;
+    c.cdr = cdr;
+    return c;
 }
 
 function symbol() {
-    var symbol = new Cell("symbol");
+    var symbol = new Cell('symbol');
     symbol.name = "";
     return symbol;
 }
