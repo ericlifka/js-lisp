@@ -11,6 +11,7 @@ function Parser() {
     this.inProcessLists = [];
     this.currentParseString = null;
     this.currentSymbol = null;
+    this.currentString = null;
     this.parsePosition = 0;
     this.parseDepth = 0;
 }
@@ -60,6 +61,8 @@ Parser.prototype = {
         else if (isWhitespace(char)) {
             if (this.currentSymbol) {
                 this.currentSymbol = null;
+            } else if (this.currentString) {
+                this.currentString.value += char;
             }
         }
 
