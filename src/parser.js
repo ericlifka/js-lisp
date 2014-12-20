@@ -1,11 +1,16 @@
 var ParseError = require('./error').ParseError;
 var List = require('./list');
 
+function isWhitespace(char) {
+    return /\s/.test(char);
+}
+
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
     this.inProcessLists = [];
     this.currentParseString = null;
+    this.currentSymbol = null;
     this.parsePosition = 0;
     this.parseDepth = 0;
 }
@@ -52,8 +57,10 @@ Parser.prototype = {
             this.inProcessLists.push(List.cons());
             this.parseDepth++;
         }
-        else {
-
+        else if (isWhitespace(char)) {
+            if (this.currentSymbol) {
+                this.currentSymbol = null;
+            }
         }
 
         this.parsePosition++;
