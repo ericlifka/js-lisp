@@ -80,10 +80,16 @@ Parser.prototype = {
         }
 
         else if (char === '"') {
-            if (this.currentString) {
+            if (this.currentSymbol) {
+                this.errorState = "Illegal Character '\"' in symbol at buffer position " + this.parsePosition;
+            }
+
+            else if (this.currentString) {
                 // If there is a string being built then close it
                 this.currentString = null;
-            } else {
+            }
+
+            else {
                 // Create a new string to build
                 var newString = List.string();
 
