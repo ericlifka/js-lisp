@@ -50,5 +50,5 @@ describe 'list', ->
             cons(1, cons(cons(2, cons(3)), cons(4))).toString().should.equal("(1 (2 3) 4)")
 
         it 'should use builtin toString of objects', ->
-            list.toString(list.cons({toString:->"abc"})).should.equal("(abc)")
+            list.cons({toString:->"abc"}).toString().should.equal("(abc)")
 
