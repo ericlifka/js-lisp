@@ -65,7 +65,15 @@ function addToEnd(list, cell) {
         throw new ListError("Cannot add Cell '" + cell + "' to non list '" + list +"'");
     }
 
+    var current = list;
 
+    while (!!current.cdr) {
+        current = current.cdr;
+    }
+
+    current.cdr = cons(cell);
+
+    return list;
 }
 
 module.exports = {
