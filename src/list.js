@@ -85,6 +85,7 @@ function addToEnd(list, cell) {
 module.exports = {
     cons: cons,
     symbol: symbol,
+    string: string,
     isTrueCons: isTrueCons,
     isCons: isCons,
     toString: toString,
