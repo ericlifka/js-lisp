@@ -1,12 +1,13 @@
 var ParseError = require('./error').ParseError;
 
 function Parser() {
-
+    this.stringQueue = [];
 }
 
 Parser.prototype = {
     addString: function (string) {
-
+        this.stringQueue.push(string);
+        this._processQueue();
     },
     parseState: function () {
         return {
@@ -15,6 +16,9 @@ Parser.prototype = {
         };
     },
     getLists: function () {
+
+    },
+    _processQueue: function () {
 
     }
 };
