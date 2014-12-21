@@ -105,13 +105,7 @@ Parser.prototype = {
         else if (char === '(') {
             var newList = List.cons();
 
-            if (this.parseDepth === 0) {
-                this.lists.push(newList);
-            }
-            else {
-                List.addToEnd(this.inProcessLists[0], newList);
-            }
-
+            this._storeNewCell(newList);
             this.inProcessLists.push(newList);
             this.parseDepth++;
         }
@@ -131,30 +125,25 @@ Parser.prototype = {
             // Create a new string to build
             var newString = List.string();
 
-            if (this.parseDepth === 0) {
-                this.lists.push(newString);
-            }
-            else {
-                List.addToEnd(this.inProcessLists[0], newString);
-            }
-
+            this._storeNewCell(newString);
             this.currentString = newString;
         }
 
         else if (isLegalSymbolChar(char)) {
             var newSymbol = List.symbol(char);
 
-            if (this.parseDepth === 0) {
-                this.lists.push(newSymbol);
-            }
-            else {
-                List.addToEnd(this.inProcessLists[0], newSymbol);
-            }
-
+            this._storeNewCell(newSymbol);
             this.currentSymbol = newSymbol;
         }
 
         this.parsePosition++;
+    },
+    _storeNewCell: function (cell) {
+        if (this.parseDepth === 0) {
+            this.lists.push(cell);
+        } else {
+            List.addToEnd(this.inProcessLists[0], cell);
+        }
     }
 };
 
