@@ -65,14 +65,16 @@ Parser.prototype = {
     },
 
     _processQueue: function () {
-        if (this.currentParseString && this.errorState) {
+        if (this.errorState) {
             return;
         }
 
         while (this.stringQueue.length > 0) {
-            this.currentParseString = this.stringQueue.pop();
-            this.parsePosition = 0;
-            this.parseDepth = 0;
+            if (!this.currentParseString) {
+                this.currentParseString = this.stringQueue.pop();
+                this.parsePosition = 0;
+                this.parseDepth = 0;
+            }
 
             if (!this.currentParseString ||
                 this.currentParseString.length === 0) {
@@ -81,20 +83,18 @@ Parser.prototype = {
                 continue;
             }
 
-            while (!this.errorState &&
-                this.parsePosition < this.currentParseString.length) {
-
+            while (this.parsePosition < this.currentParseString.length) {
                 this.currentChar = this.currentParseString[this.parsePosition];
                 this._parseStep();
+                if (this.errorState) {
+                    return;
+                }
                 this.parsePosition++;
             }
 
-            if (!this.errorState &&
-                this.parsePosition === this.currentParseString.length) {
-
-                this.currentParseString = null;
-                this.parsePosition = 0;
-            }
+            this.currentParseString = null;
+            this.parsePosition = 0;
+            this.parseDepth = 0;
         }
     },
     _parseStep: function () {
