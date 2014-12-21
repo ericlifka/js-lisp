@@ -6,11 +6,11 @@ Parser = require('../src/parser')
 {ParseError} = require('../src/error')
 
 describe.only 'parser', ->
-    it 'should return null for bad input', ->
-        (Parser.parse() is null).should.be.ok
-        (Parser.parse("") is null).should.be.ok
-        (Parser.parse({}) is null).should.be.ok
-        (Parser.parse(5) is null).should.be.ok
+    it 'should error on bad input', ->
+        should(-> Parser.parse()).throw(ParseError)
+        should(-> Parser.parse("")).throw(ParseError)
+        should(-> Parser.parse({})).throw(ParseError)
+        should(-> Parser.parse(5)).throw(ParseError)
 
     it 'should return a cons cell list', ->
         isCons(Parser.parse("()")).should.be.ok

@@ -134,8 +134,7 @@ Parser.prototype = {
         // TODO: backslashes should be handled in a forward looking manner
         // TODO: instead of backward looking because currently escaping
         // TODO: an escape character does not work, such as "\\"
-        if (this.currentChar === '"' &&
-            this.currentParseString[this.parsePosition - 1] !== "\\") {
+        if (this._isStringTerminator()) {
 
             // non-escaped quote character ends the current string
             this.currentString = null;
@@ -208,10 +207,35 @@ Parser.prototype = {
         } else {
             List.addToEnd(this.inProcessLists[0], cell);
         }
+    },
+    _isStringTerminator: function () {
+        if (this.currentChar !== '"') {
+            return false;
+        }
+        var count = 0;
+        var position = this.parsePosition - 1;
+        while (this.currentParseString[position] === '\\') {
+            count++;
+            position--;
+        }
+
+        if (count > 0) {
+            // An even number of backslashes means that they escape each other
+            // and do not effect the quote. An odd number means that the one
+            // at the end escapes the quote and the string does not end.
+            return count % 2 === 0;
+        }
+        else {
+            // The quote character is not escaped, so the string should end
+            return true;
+        }
     }
 };
 
 Parser.parse = function (string) {
+    if (!string) {
+        throw new ParseError("Parser.parse no input supplied");
+    }
     var parser = new Parser();
     parser.parseString(string);
     var state = parser.parseState();
@@ -222,6 +246,9 @@ Parser.parse = function (string) {
         throw new ParseError("Parser.parse only handles balanced list segments");
     }
     var lists = parser.getLists();
+    if (lists.length === 0) {
+        throw new ParseError("Parser.parse no lists found");
+    }
     if (lists.length !== 1) {
         throw new ParseError("Parser.parse only supports single lists");
     }
