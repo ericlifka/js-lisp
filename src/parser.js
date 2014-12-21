@@ -136,6 +136,15 @@ Parser.prototype = {
             this.currentSymbol = newSymbol;
         }
 
+        else if (isWhitespace(char)) {
+            // ignore whitespace outside of strings
+        }
+
+        else {
+            // this is a catch all of characters we don't know how to parse yet
+            this.errorState = "Unexpected character '" + char + "' at " + this.parsePosition;
+        }
+
         this.parsePosition++;
     },
     _storeNewCell: function (cell) {
