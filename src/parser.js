@@ -35,9 +35,21 @@ function Parser() {
 }
 
 Parser.prototype = {
-    addString: function (string) {
-        this.stringQueue.push(string);
+    addString: function (/* strings... */) {
+        var i = 0;
+        var length = arguments.length;
+        var str;
+        for (; i < length; i++) {
+            str = arguments[i];
+            if (typeof str === "string") {
+                this.stringQueue.push(str);
+            }
+        }
+
         this._processQueue();
+    },
+    addStrings: function (strings) {
+        this.addString.apply(this, strings);
     },
     parseState: function () {
         return {
