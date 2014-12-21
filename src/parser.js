@@ -17,6 +17,10 @@ function isNumeric(symbol) {
     return symbol && symbol.length > 0 && !isNaN(symbol);
 }
 
+function stackTop(stack) {
+    return stack[stack.length - 1];
+}
+
 function convertSymbolToNumber(cell) {
     cell.value = +cell.name;
     cell.type = 'number';
@@ -205,7 +209,7 @@ Parser.prototype = {
         if (this.parseDepth === 0) {
             this.lists.push(cell);
         } else {
-            List.addToEnd(this.inProcessLists[0], cell);
+            List.addToEnd(stackTop(this.inProcessLists), cell);
         }
     },
     _isStringTerminator: function () {
