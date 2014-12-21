@@ -46,6 +46,7 @@ Parser.prototype = {
     getLists: function () {
         return this.lists;
     },
+
     _processQueue: function () {
         if (this.currentParseString) {
             // check for errors and continue parsing
@@ -82,6 +83,10 @@ Parser.prototype = {
 
         else if (this.currentSymbol) {
             if (isSymbolTerminator(char)) {
+                if (isNumeric(this.currentSymbol.name)) {
+                    convertSymbolToNumber(this.currentSymbol);
+                }
+
                 this.currentSymbol = null;
             }
 
