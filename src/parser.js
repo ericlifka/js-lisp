@@ -92,7 +92,7 @@ Parser.prototype = {
                 this.currentSymbol = null;
             }
 
-            else if (this.isLegalSymbolChar(char)) {
+            else if (isLegalSymbolChar(char)) {
                 this.currentSymbol.name += char;
             }
 
@@ -139,6 +139,19 @@ Parser.prototype = {
             }
 
             this.currentString = newString;
+        }
+
+        else if (isLegalSymbolChar(char)) {
+            var newSymbol = List.symbol(char);
+
+            if (this.parseDepth === 0) {
+                this.lists.push(newSymbol);
+            }
+            else {
+                List.addToEnd(this.inProcessLists[0], newSymbol);
+            }
+
+            this.currentSymbol = newSymbol;
         }
 
         this.parsePosition++;
