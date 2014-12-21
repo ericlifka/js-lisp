@@ -42,7 +42,10 @@ Parser.prototype = {
     parseState: function () {
         return {
             error: this.errorState,
-            incomplete: false
+            complete: !!(
+                !this.currentParseString &&
+                this.parsePosition === 0 &&
+                this.stringQueue.length === 0)
         };
     },
     getLists: function () {
@@ -67,7 +70,15 @@ Parser.prototype = {
         this.parseDepth = 0;
 
         while (this.parsePosition < this.currentParseString.length && !this.errorState) {
+
             this._parseStep();
+        }
+
+        if (!this.errorState &&
+            this.parsePosition === this.currentParseString.length) {
+
+            this.currentParseString = null;
+            this.parsePosition = 0;
         }
     },
     _parseStep: function () {
