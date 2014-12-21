@@ -174,7 +174,7 @@ Parser.parse = function (string) {
     if (state.error) {
         throw new ParseError(state.error);
     }
-    if (!state.incomplete) {
+    if (!state.complete) {
         throw new ParseError("Parser.parse only handles balanced list segments");
     }
     var lists = parser.getLists();
