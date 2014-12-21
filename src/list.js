@@ -39,6 +39,12 @@ function string() {
     return string;
 }
 
+function number() {
+    var number = new Cell('number');
+    number.value = 0;
+    return number;
+}
+
 function isTrueCons(cell) {
     return cell instanceof Cell &&
         cell.type === 'cons';
@@ -83,6 +89,7 @@ module.exports = {
     cons: cons,
     symbol: symbol,
     string: string,
+    number: number,
     isTrueCons: isTrueCons,
     isCons: isCons,
     addToEnd: addToEnd
