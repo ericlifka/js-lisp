@@ -5,19 +5,13 @@ function Cell(type) {
 }
 
 Cell.prototype.toString = function () {
-    if (this.type === 'cons') {
-        return "(" + printList(this) + ")";
+    switch(this.type) {
+        case 'cons': return "(" + printList(this) + ")";
+        case 'symbol': return this.name;
+        case 'string': return '"' + this.value + '"';
+        case 'number': return "" + this.value;
+        default: return "[object Cell]";
     }
-
-    if (this.type === 'symbol') {
-        return this.name;
-    }
-
-    if (this.type === 'string') {
-        return '"' + this.value + '"';
-    }
-
-    return "[Object Cell]";
 };
 
 function cons(car, cdr) {
