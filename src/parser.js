@@ -146,16 +146,7 @@ Parser.prototype = {
     },
     _parseStep_InSymbol: function () {
         if (isSymbolTerminator(this.currentChar)) {
-            // Rather than try to parse numbers differently, we can allow
-            // all numeric characters in symbols and then check at the end
-            // of the symbol if it could be read as a number instead. This
-            // simplifies parsing because we don't have to guess the type
-            // number and then convert back to symbol if parsing fails.
-            if (isNumeric(this.currentSymbol.name)) {
-                convertSymbolToNumber(this.currentSymbol);
-            }
-
-            this.currentSymbol = null;
+            this._parseStep_EndCurrentSymbol();
         }
 
         else if (isLegalSymbolChar(this.currentChar)) {
@@ -198,6 +189,18 @@ Parser.prototype = {
             this.inProcessLists.pop();
             this.parseDepth--;
         }
+    },
+    _parseStep_EndCurrentSymbol: function () {
+        // Rather than try to parse numbers differently, we can allow
+        // all numeric characters in symbols and then check at the end
+        // of the symbol if it could be read as a number instead. This
+        // simplifies parsing because we don't have to guess the type
+        // number and then convert back to symbol if parsing fails.
+        if (isNumeric(this.currentSymbol.name)) {
+            convertSymbolToNumber(this.currentSymbol);
+        }
+
+        this.currentSymbol = null;
     },
     _storeNewCell: function (cell) {
         if (this.parseDepth === 0) {
