@@ -68,14 +68,18 @@ function addToEnd(list, cell) {
         throw new ListError("Cannot add Cell '" + cell + "' to non list '" + list + "'");
     }
 
-    var current = list;
+    if (list.car === undefined && list.cdr === undefined) {
+        // An empty cons represents an empty list so the item should go in the car
+        list.car = cell;
+        return;
+    }
 
-    while (!!current.cdr) {
+    var current = list;
+    while (current.cdr) {
         current = current.cdr;
     }
 
     current.cdr = cons(cell);
-
     return list;
 }
 

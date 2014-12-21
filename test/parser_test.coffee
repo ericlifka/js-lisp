@@ -4,7 +4,7 @@ Parser = require('../src/parser')
 List = require('../src/list')
 {ParseError} = require('../src/error')
 
-describe.only 'parser', ->
+describe 'parser', ->
     it 'should error on bad input', ->
         should(-> Parser.parse()).throw(ParseError)
         should(-> Parser.parse("")).throw(ParseError)
