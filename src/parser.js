@@ -35,7 +35,7 @@ function Parser() {
 }
 
 Parser.prototype = {
-    addString: function (/* strings... */) {
+    parseString: function (/* strings... */) {
         var i = 0;
         var length = arguments.length;
         var str;
@@ -48,8 +48,8 @@ Parser.prototype = {
 
         this._processQueue();
     },
-    addStrings: function (strings) {
-        this.addString.apply(this, strings);
+    parseStrings: function (strings) {
+        this.parseString.apply(this, strings);
     },
     parseState: function () {
         return {
@@ -181,7 +181,7 @@ Parser.prototype = {
 
 Parser.parse = function (string) {
     var parser = new Parser();
-    parser.addString(string);
+    parser.parseString(string);
     var state = parser.parseState();
     if (state.error) {
         throw new ParseError(state.error);
