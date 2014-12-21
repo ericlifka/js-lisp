@@ -98,13 +98,7 @@ Parser.prototype = {
     },
     _parseStep: function () {
         if (this.currentString) {
-            if (this.currentChar === '"' && this.currentParseString[this.parsePosition - 1] !== "\\") {
-                // If there is a string being built then close it
-                this.currentString = null;
-            }
-            else {
-                this.currentString.value += this.currentChar;
-            }
+            this._parseStep_InString();
         }
 
         else if (this.currentSymbol) {
@@ -167,6 +161,20 @@ Parser.prototype = {
         else {
             // this is a catch all of characters we don't know how to parse yet
             this.errorState = "Unexpected character '" + this.currentChar + "' at " + this.parsePosition;
+        }
+    },
+    _parseStep_InString: function () {
+        // TODO: backslashes should be handled in a forward looking manner
+        // TODO: instead of backward looking because currently escaping
+        // TODO: an escape character does not work, such as "\\"
+        if (this.currentChar === '"' &&
+            this.currentParseString[this.parsePosition - 1] !== "\\") {
+
+            // non-escaped quote character ends the current string
+            this.currentString = null;
+        }
+        else {
+            this.currentString.value += this.currentChar;
         }
     },
     _storeNewCell: function (cell) {
