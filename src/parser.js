@@ -95,7 +95,8 @@ Parser.prototype = {
             }
 
             else {
-                this.errorState = "Invalid character in Symbol '(' at buffer position " + this.parsePosition;
+                this.errorState = "Invalid character in Symbol '" + char +
+                    "' at buffer position " + this.parsePosition;
                 return;
             }
         }
