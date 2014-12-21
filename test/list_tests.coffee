@@ -55,3 +55,8 @@ describe 'list', ->
         it 'should support symbols', ->
             list.symbol(":sym").toString().should.equal(":sym")
 
+        it 'should support numbers', ->
+            list.number(-45.23).toString().should.equal("-45.23")
+
+        it 'should support strings', ->
+            list.string("hiya").toString().should.equal('"hiya"')
