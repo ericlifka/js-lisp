@@ -70,18 +70,7 @@ Parser.prototype = {
         }
 
         while (this.stringQueue.length > 0) {
-            if (!this.currentParseString) {
-                this.currentParseString = this.stringQueue.pop();
-                this.parsePosition = 0;
-                this.parseDepth = 0;
-            }
-
-            if (!this.currentParseString ||
-                this.currentParseString.length === 0) {
-
-                this.currentParseString = null;
-                continue;
-            }
+            this._startNextString();
 
             while (this.parsePosition < this.currentParseString.length) {
                 this.currentChar = this.currentParseString[this.parsePosition];
@@ -92,10 +81,20 @@ Parser.prototype = {
                 this.parsePosition++;
             }
 
-            this.currentParseString = null;
+            this._clearCurrentString();
+        }
+    },
+    _startNextString: function () {
+        if (!this.currentParseString) {
+            this.currentParseString = this.stringQueue.pop();
             this.parsePosition = 0;
             this.parseDepth = 0;
         }
+    },
+    _clearCurrentString: function () {
+        this.currentParseString = null;
+        this.parsePosition = 0;
+        this.parseDepth = 0;
     },
     _parseStep: function () {
         if (this.currentString) {
