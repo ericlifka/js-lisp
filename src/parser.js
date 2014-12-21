@@ -18,7 +18,9 @@ function isNumeric(symbol) {
 }
 
 function convertSymbolToNumber(cell) {
-
+    cell.value = +cell.name;
+    cell.type = 'number';
+    delete cell.name;
 }
 
 function Parser() {
