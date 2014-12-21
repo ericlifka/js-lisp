@@ -53,49 +53,51 @@ Parser.prototype = {
     },
 
     _processQueue: function () {
-        if (this.currentParseString) {
-            // check for errors and continue parsing
-            return;
-        }
-        if (this.stringQueue.length === 0) {
+        if (this.currentParseString && this.errorState) {
             return;
         }
 
-        this.currentParseString = this.stringQueue.pop();
-        if (this.currentParseString.length === 0) {
-            return;
-        }
-
-        this.parsePosition = 0;
-        this.parseDepth = 0;
-
-        while (this.parsePosition < this.currentParseString.length && !this.errorState) {
-
-            this._parseStep();
-        }
-
-        if (!this.errorState &&
-            this.parsePosition === this.currentParseString.length) {
-
-            this.currentParseString = null;
+        while (this.stringQueue.length > 0) {
+            this.currentParseString = this.stringQueue.pop();
             this.parsePosition = 0;
+            this.parseDepth = 0;
+
+            if (!this.currentParseString ||
+                this.currentParseString.length === 0) {
+
+                this.currentParseString = null;
+                continue;
+            }
+
+            while (!this.errorState &&
+                this.parsePosition < this.currentParseString.length) {
+
+                this.currentChar = this.currentParseString[this.parsePosition];
+                this._parseStep();
+                this.parsePosition++;
+            }
+
+            if (!this.errorState &&
+                this.parsePosition === this.currentParseString.length) {
+
+                this.currentParseString = null;
+                this.parsePosition = 0;
+            }
         }
     },
     _parseStep: function () {
-        var char = this.currentParseString[this.parsePosition];
-
         if (this.currentString) {
-            if (char === '"' && this.currentParseString[this.parsePosition - 1] !== "\\") {
+            if (this.currentChar === '"' && this.currentParseString[this.parsePosition - 1] !== "\\") {
                 // If there is a string being built then close it
                 this.currentString = null;
             }
             else {
-                this.currentString.value += char;
+                this.currentString.value += this.currentChar;
             }
         }
 
         else if (this.currentSymbol) {
-            if (isSymbolTerminator(char)) {
+            if (isSymbolTerminator(this.currentChar)) {
                 if (isNumeric(this.currentSymbol.name)) {
                     convertSymbolToNumber(this.currentSymbol);
                 }
@@ -103,17 +105,17 @@ Parser.prototype = {
                 this.currentSymbol = null;
             }
 
-            else if (isLegalSymbolChar(char)) {
-                this.currentSymbol.name += char;
+            else if (isLegalSymbolChar(this.currentChar)) {
+                this.currentSymbol.name += this.currentChar;
             }
 
             else {
-                this.errorState = "Invalid character in Symbol '" + char +
+                this.errorState = "Invalid character in Symbol '" + this.currentChar +
                     "' at buffer position " + this.parsePosition;
             }
         }
 
-        else if (char === '(') {
+        else if (this.currentChar === '(') {
             var newList = List.cons();
 
             this._storeNewCell(newList);
@@ -121,7 +123,7 @@ Parser.prototype = {
             this.parseDepth++;
         }
 
-        else if (char === ')') {
+        else if (this.currentChar === ')') {
             if (this.inProcessLists.length === 0) {
                 this.errorState = "Unbalanced List - Found close ')' without matching open '(' at buffer position " +
                     this.parsePosition;
@@ -132,7 +134,7 @@ Parser.prototype = {
             }
         }
 
-        else if (char === '"') {
+        else if (this.currentChar === '"') {
             // Create a new string to build
             var newString = List.string();
 
@@ -140,23 +142,21 @@ Parser.prototype = {
             this.currentString = newString;
         }
 
-        else if (isLegalSymbolChar(char)) {
-            var newSymbol = List.symbol(char);
+        else if (isLegalSymbolChar(this.currentChar)) {
+            var newSymbol = List.symbol(this.currentChar);
 
             this._storeNewCell(newSymbol);
             this.currentSymbol = newSymbol;
         }
 
-        else if (isWhitespace(char)) {
+        else if (isWhitespace(this.currentChar)) {
             // ignore whitespace outside of strings
         }
 
         else {
             // this is a catch all of characters we don't know how to parse yet
-            this.errorState = "Unexpected character '" + char + "' at " + this.parsePosition;
+            this.errorState = "Unexpected character '" + this.currentChar + "' at " + this.parsePosition;
         }
-
-        this.parsePosition++;
     },
     _storeNewCell: function (cell) {
         if (this.parseDepth === 0) {
