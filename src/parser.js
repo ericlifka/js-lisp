@@ -13,6 +13,14 @@ function isLegalSymbolChar(char) {
     return /[a-zA-Z\d_?:!@#$%^&*<>=+\/\-]/.test(char);
 }
 
+function isNumeric(symbol) {
+    return symbol && symbol.length > 0 && !isNaN(symbol);
+}
+
+function convertSymbolToNumber(cell) {
+
+}
+
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
