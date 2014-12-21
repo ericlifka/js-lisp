@@ -41,7 +41,7 @@ Parser.prototype = {
     },
     parseState: function () {
         return {
-            error: null,
+            error: this.errorState,
             incomplete: false
         };
     },
