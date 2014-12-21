@@ -99,7 +99,6 @@ Parser.prototype = {
             else {
                 this.errorState = "Invalid character in Symbol '" + char +
                     "' at buffer position " + this.parsePosition;
-                return;
             }
         }
 
