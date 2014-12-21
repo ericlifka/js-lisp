@@ -102,22 +102,7 @@ Parser.prototype = {
         }
 
         else if (this.currentSymbol) {
-            if (isSymbolTerminator(this.currentChar)) {
-                if (isNumeric(this.currentSymbol.name)) {
-                    convertSymbolToNumber(this.currentSymbol);
-                }
-
-                this.currentSymbol = null;
-            }
-
-            else if (isLegalSymbolChar(this.currentChar)) {
-                this.currentSymbol.name += this.currentChar;
-            }
-
-            else {
-                this.errorState = "Invalid character in Symbol '" + this.currentChar +
-                    "' at buffer position " + this.parsePosition;
-            }
+            this._parseStep_InSymbol();
         }
 
         else if (this.currentChar === '(') {
@@ -175,6 +160,29 @@ Parser.prototype = {
         }
         else {
             this.currentString.value += this.currentChar;
+        }
+    },
+    _parseStep_InSymbol: function () {
+        if (isSymbolTerminator(this.currentChar)) {
+            // Rather than try to parse numbers differently, we can allow
+            // all numeric characters in symbols and then check at the end
+            // of the symbol if it could be read as a number instead. This
+            // simplifies parsing because we don't have to guess the type
+            // number and then convert back to symbol if parsing fails.
+            if (isNumeric(this.currentSymbol.name)) {
+                convertSymbolToNumber(this.currentSymbol);
+            }
+
+            this.currentSymbol = null;
+        }
+
+        else if (isLegalSymbolChar(this.currentChar)) {
+            this.currentSymbol.name += this.currentChar;
+        }
+
+        else {
+            this.errorState = "Invalid character in Symbol '" + this.currentChar +
+                "' at buffer position " + this.parsePosition;
         }
     },
     _storeNewCell: function (cell) {
