@@ -106,41 +106,23 @@ Parser.prototype = {
         }
 
         else if (this.currentChar === '(') {
-            var newList = List.cons();
-
-            this._storeNewCell(newList);
-            this.inProcessLists.push(newList);
-            this.parseDepth++;
+            this._parseStep_StartNewList();
         }
 
         else if (this.currentChar === ')') {
-            if (this.inProcessLists.length === 0) {
-                this.errorState = "Unbalanced List - Found close ')' without matching open '(' at buffer position " +
-                    this.parsePosition;
-            }
-            else {
-                this.inProcessLists.pop();
-                this.parseDepth--;
-            }
+            this._parseStep_EndCurrentList();
         }
 
         else if (this.currentChar === '"') {
-            // Create a new string to build
-            var newString = List.string();
-
-            this._storeNewCell(newString);
-            this.currentString = newString;
+            this._parseStep_StartNewString();
         }
 
         else if (isLegalSymbolChar(this.currentChar)) {
-            var newSymbol = List.symbol(this.currentChar);
-
-            this._storeNewCell(newSymbol);
-            this.currentSymbol = newSymbol;
+            this._parseStep_StartNewSymbol();
         }
 
         else if (isWhitespace(this.currentChar)) {
-            // ignore whitespace outside of strings
+            // ignore whitespace outside of strings and symbols
         }
 
         else {
@@ -181,8 +163,40 @@ Parser.prototype = {
         }
 
         else {
-            this.errorState = "Invalid character in Symbol '" + this.currentChar +
-                "' at buffer position " + this.parsePosition;
+            this.errorState = "Invalid character in Symbol '" +
+                this.currentChar +
+                "' at buffer position " +
+                this.parsePosition;
+        }
+    },
+    _parseStep_StartNewList: function () {
+        var newList = List.cons();
+
+        this._storeNewCell(newList);
+        this.inProcessLists.push(newList);
+        this.parseDepth++;
+    },
+    _parseStep_StartNewString: function () {
+        var newString = List.string();
+
+        this._storeNewCell(newString);
+        this.currentString = newString;
+    },
+    _parseStep_StartNewSymbol: function () {
+        var newSymbol = List.symbol(this.currentChar);
+
+        this._storeNewCell(newSymbol);
+        this.currentSymbol = newSymbol;
+    },
+    _parseStep_EndCurrentList: function () {
+        if (this.inProcessLists.length === 0) {
+            this.errorState = "Unbalanced List - Found close ')' without " +
+                "matching open '(' at buffer position " +
+                this.parsePosition;
+        }
+        else {
+            this.inProcessLists.pop();
+            this.parseDepth--;
         }
     },
     _storeNewCell: function (cell) {
