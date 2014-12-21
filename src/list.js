@@ -21,21 +21,21 @@ function cons(car, cdr) {
     return c;
 }
 
-function symbol() {
+function symbol(name) {
     var symbol = new Cell('symbol');
-    symbol.name = "";
+    symbol.name = arguments.length === 0 ? "" : ""+name;
     return symbol;
 }
 
-function string() {
+function string(value) {
     var string = new Cell('string');
-    string.value = "";
+    string.value = arguments.length === 0 ? "" : ""+value;
     return string;
 }
 
-function number() {
+function number(value) {
     var number = new Cell('number');
-    number.value = 0;
+    number.value = arguments.length === 0 ? 0 : +value;
     return number;
 }
 
