@@ -53,7 +53,5 @@ describe 'list', ->
             list.cons({toString:->"abc"}).toString().should.equal("(abc)")
 
         it 'should support symbols', ->
-            sym = list.symbol()
-            sym.name = ":sym"
-            ("#{sym}").should.equal(":sym")
+            list.symbol(":sym").toString().should.equal(":sym")
 
