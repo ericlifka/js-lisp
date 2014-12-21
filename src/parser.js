@@ -107,6 +107,10 @@ Parser.prototype = {
 
         else if (this.currentSymbol) {
             this._parseStep_InSymbol();
+
+            if (this.currentChar === ')') {
+                this._parseStep_EndCurrentList();
+            }
         }
 
         else if (this.currentChar === '(') {
