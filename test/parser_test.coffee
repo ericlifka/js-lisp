@@ -12,7 +12,7 @@ describe.only 'parser', ->
         should(-> Parser.parse(5)).throw(ParseError)
 
     it 'should return a cons cell list', ->
-        List.isCons(Parser.parse("()")).should.be.ok
+        List.isTrueCons(Parser.parse("()")).should.be.ok
 
     it 'should parse a simple list', ->
         list = Parser.parse("(1 2 3)")
