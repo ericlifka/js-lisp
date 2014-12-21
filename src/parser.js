@@ -141,17 +141,6 @@ Parser.prototype = {
             this.currentString = newString;
         }
 
-        else if (isWhitespace(char)) {
-            if (this.currentSymbol) {
-                this.currentSymbol = null;
-            }
-
-            if (this.currentString) {
-                this.currentString.value += char;
-            }
-        }
-
-
         this.parsePosition++;
     }
 };
