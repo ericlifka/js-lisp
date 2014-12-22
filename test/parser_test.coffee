@@ -40,3 +40,8 @@ describe 'parser', ->
         should(state.complete).be.ok
         lists = p.getLists()
         should(lists.length).equal(1)
+
+    it 'should support non nested lists', ->
+        p = new Parser()
+        p.parseString "(1) (a)(3)"
+        should(p.getLists().length).equal(3)
