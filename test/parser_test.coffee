@@ -29,3 +29,4 @@ describe 'parser', ->
 
     it 'should reject unclosed lists', ->
         should(-> Parser.parse("(1 2")).throw(ParseError)
+        should(-> Parser.parse("(1 (2)")).throw(ParseError)
