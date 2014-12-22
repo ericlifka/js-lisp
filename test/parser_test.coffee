@@ -22,8 +22,10 @@ describe 'parser', ->
         list = Parser.parse("(1 (2 3) 4)")
         list.toString().should.equal("(1 (2 3) 4)")
 
-    it 'should reject symbols outside of lists', ->
-        should(-> Parser.parse("2")).throw(ParseError)
+    it 'should parse tokens outside of lists', ->
+        Parser.parse('someToken').toString().should.equal('someToken')
+        Parser.parse('532').toString().should.equal('532')
+        Parser.parse('"something goin on"').toString().should.equal('"something goin on"')
 
     it 'should reject unclosed lists', ->
         should(-> Parser.parse("(1 2")).throw(ParseError)
