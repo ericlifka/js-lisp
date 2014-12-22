@@ -35,7 +35,6 @@ function Parser() {
     this.currentSymbol = null;
     this.currentString = null;
     this.parsePosition = 0;
-    this.parseDepth = 0;
 }
 
 Parser.prototype = {
@@ -61,7 +60,7 @@ Parser.prototype = {
             complete: !!(
                 !this.currentParseString &&         // There should not be an in progress string
                 this.stringQueue.length === 0 &&    // There should not be any pending strings
-                this.parseDepth === 0)              // All lists should be closed
+                this.inProcessLists.length === 0)   // All lists should be closed
         };
     },
     getLists: function () {
@@ -171,7 +170,6 @@ Parser.prototype = {
 
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
-        this.parseDepth++;
     },
     _parseStep_StartNewString: function () {
         var newString = List.string();
@@ -193,7 +191,6 @@ Parser.prototype = {
         }
         else {
             this.inProcessLists.pop();
-            this.parseDepth--;
         }
     },
     _parseStep_EndCurrentSymbol: function () {
@@ -209,7 +206,7 @@ Parser.prototype = {
         this.currentSymbol = null;
     },
     _storeNewCell: function (cell) {
-        if (this.parseDepth === 0) {
+        if (this.inProcessLists.length === 0) {
             this.lists.push(cell);
         } else {
             List.addToEnd(stackTop(this.inProcessLists), cell);
