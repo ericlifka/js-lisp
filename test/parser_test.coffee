@@ -30,3 +30,13 @@ describe 'parser', ->
     it 'should reject unclosed lists', ->
         should(-> Parser.parse("(1 2")).throw(ParseError)
         should(-> Parser.parse("(1 (2)")).throw(ParseError)
+
+    it 'should support lists across parse strings', ->
+        p = new Parser()
+        p.parseString "(1 2"
+        p.parseString "  3 4)"
+        state = p.parseState()
+        should(state.error).be.not.ok
+        should(state.complete).be.ok
+        lists = p.getLists()
+        should(lists.length).equal(1)
