@@ -50,7 +50,6 @@ describe 'parser', ->
         p = new Parser()
         p.parseString "5 -3 1.24 1.3e10"
         nums = p.getLists()
-        console.log nums
         nums[0].value.should.equal(5)
         nums[1].value.should.equal(-3)
         nums[2].value.should.equal(1.24)

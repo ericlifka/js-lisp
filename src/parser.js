@@ -92,7 +92,7 @@ Parser.prototype = {
     },
     _clearCurrentString: function () {
         this.currentParseString = null;
-        this.currentSymbol = null;
+        this._endCurrentSymbol();
         this.parsePosition = 0;
     },
     _parseStep: function () {
@@ -148,7 +148,7 @@ Parser.prototype = {
     },
     _parseStep_InSymbol: function () {
         if (isSymbolTerminator(this.currentChar)) {
-            this._parseStep_EndCurrentSymbol();
+            this._endCurrentSymbol();
         }
 
         else if (isLegalSymbolChar(this.currentChar)) {
@@ -190,13 +190,13 @@ Parser.prototype = {
             this.inProcessLists.pop();
         }
     },
-    _parseStep_EndCurrentSymbol: function () {
+    _endCurrentSymbol: function () {
         // Rather than try to parse numbers differently, we can allow
         // all numeric characters in symbols and then check at the end
         // of the symbol if it could be read as a number instead. This
         // simplifies parsing because we don't have to guess the type
         // number and then convert back to symbol if parsing fails.
-        if (isNumeric(this.currentSymbol.name)) {
+        if (this.currentSymbol && isNumeric(this.currentSymbol.name)) {
             convertSymbolToNumber(this.currentSymbol);
         }
 
