@@ -54,3 +54,7 @@ describe 'parser', ->
         nums[1].value.should.equal(-3)
         nums[2].value.should.equal(1.24)
         nums[3].value.should.equal(1.3e10)
+
+    it 'should support escape characters', ->
+        Parser.parse('"\\"').value.should.equal("\\")
+        Parser.parse('"\""').value.should.equal('"')
