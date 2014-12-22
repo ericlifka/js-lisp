@@ -86,6 +86,7 @@ Parser.prototype = {
             }
 
             this._clearCurrentString();
+            this.currentSymbol = null;
         }
     },
     _startNextString: function () {
