@@ -59,9 +59,9 @@ Parser.prototype = {
         return {
             error: this.errorState,
             complete: !!(
-                !this.currentParseString &&
-                this.parsePosition === 0 &&
-                this.stringQueue.length === 0)
+                !this.currentParseString &&         // There should not be an in progress string
+                this.stringQueue.length === 0 &&    // There should not be any pending strings
+                this.parseDepth === 0)              // All lists should be closed
         };
     },
     getLists: function () {
