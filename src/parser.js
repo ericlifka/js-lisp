@@ -86,20 +86,18 @@ Parser.prototype = {
             }
 
             this._clearCurrentString();
-            this.currentSymbol = null;
         }
     },
     _startNextString: function () {
         if (!this.currentParseString) {
             this.currentParseString = this.stringQueue.pop();
             this.parsePosition = 0;
-            this.parseDepth = 0;
         }
     },
     _clearCurrentString: function () {
         this.currentParseString = null;
+        this.currentSymbol = null;
         this.parsePosition = 0;
-        this.parseDepth = 0;
     },
     _parseStep: function () {
         if (this.currentString) {
