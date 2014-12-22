@@ -39,11 +39,8 @@ function Parser() {
 
 Parser.prototype = {
     parseString: function (/* strings... */) {
-        var i = 0;
-        var length = arguments.length;
-        var str;
-        for (; i < length; i++) {
-            str = arguments[i];
+        for (var i = 0, length = arguments.length; i < length; i++) {
+            var str = arguments[i];
             if (typeof str === "string") {
                 this.stringQueue.push(str);
             }
