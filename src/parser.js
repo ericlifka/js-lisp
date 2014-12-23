@@ -251,7 +251,7 @@ Parser.prototype = {
     }
 };
 
-Parser.parse = function (string) {
+function parse(string) {
     if (!string) {
         throw new ParseError("Parser.parse no input supplied");
     }
@@ -275,4 +275,5 @@ Parser.parse = function (string) {
 };
 
 module.exports = Parser;
+module.exports.parse = parse;
 module.exports._escapeChar = escapeChar;
