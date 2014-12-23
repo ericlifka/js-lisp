@@ -152,18 +152,14 @@ Parser.prototype = {
             this.currentString.value += escapeChar(this.currentChar);
             this.escapeNext = false;
         }
+        else if (this._isStringTerminator()) {
+            this.currentString = null;
+        }
+        else if (this.currentChar === '\\') {
+            this.escapeNext = true;
+        }
         else {
-            if (this._isStringTerminator()) {
-                this.currentString = null;
-            }
-            else {
-                if (this.currentChar === '\\') {
-                    this.escapeNext = true;
-                }
-                else {
-                    this.currentString.value += this.currentChar;
-                }
-            }
+            this.currentString.value += this.currentChar;
         }
     },
     _parseStep_InSymbol: function () {
