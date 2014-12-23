@@ -10,7 +10,7 @@ function isSymbolTerminator(char) {
 }
 
 function isLegalSymbolChar(char) {
-    return /[a-zA-Z\d_?:!@#$%^&*<>=+.\/\-]/.test(char);
+    return /[a-zA-Z\d_|?:!@#$%^&*<>=+.\/\-\\]/.test(char);
 }
 
 function isNumeric(symbol) {
