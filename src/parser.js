@@ -165,18 +165,6 @@ Parser.prototype = {
                 }
             }
         }
-
-        // TODO: backslashes should be handled in a forward looking manner
-        // TODO: instead of backward looking because currently escaping
-        // TODO: an escape character does not work, such as "\\"
-        if (this._isStringTerminator()) {
-
-            // non-escaped quote character ends the current string
-            this.currentString = null;
-        }
-        else {
-            this.currentString.value += this.currentChar;
-        }
     },
     _parseStep_InSymbol: function () {
         if (isSymbolTerminator(this.currentChar)) {
