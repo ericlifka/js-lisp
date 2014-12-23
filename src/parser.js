@@ -149,7 +149,21 @@ Parser.prototype = {
     },
     _parseStep_InString: function () {
         if (this.escapeNext) {
-            var char = escapeChar(this.currentChar);
+            this.currentString.value += escapeChar(this.currentChar);
+            this.escapeNext = false;
+        }
+        else {
+            if (this._isStringTerminator()) {
+                this.currentString = null;
+            }
+            else {
+                if (this.currentChar === '\\') {
+                    this.escapeNext = true;
+                }
+                else {
+                    this.currentString.value += this.currentChar;
+                }
+            }
         }
 
         // TODO: backslashes should be handled in a forward looking manner
