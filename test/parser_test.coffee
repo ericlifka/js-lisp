@@ -56,8 +56,8 @@ describe 'parser', ->
         nums[3].value.should.equal(1.3e10)
 
     it 'should support escape characters', ->
-        Parser.parse('"\\"').value.should.equal("\\")
-        Parser.parse('"\""').value.should.equal('"')
+        Parser.parse('"\\\\"').value.should.equal("\\")
+        Parser.parse('"\\""').value.should.equal('"')
 
 describe 'escapeChar', ->
     it "should convert special characters into their escaped version", ->
