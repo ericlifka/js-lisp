@@ -71,3 +71,7 @@ describe 'escapeChar', ->
             0: '\0'
         for c, esc of mapping
             Parser._escapeChar(c).should.equal(esc)
+
+    it "should leave everything else the same", ->
+        for c in 'acdXYZ123[]{}\'"\\.,/?\n'
+            Parser._escapeChar(c).should.equal(c)
