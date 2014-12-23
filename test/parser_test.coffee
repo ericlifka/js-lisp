@@ -58,3 +58,16 @@ describe 'parser', ->
     it 'should support escape characters', ->
         Parser.parse('"\\"').value.should.equal("\\")
         Parser.parse('"\""').value.should.equal('"')
+
+describe 'escapeChar', ->
+    it "should convert special characters into their escaped version", ->
+        mapping =
+            b: '\b'
+            f: '\f'
+            n: '\n'
+            r: '\r'
+            t: '\t'
+            v: '\v'
+            0: '\0'
+        for c, esc of mapping
+            Parser._escapeChar(c).should.equal(esc)

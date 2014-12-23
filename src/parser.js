@@ -275,3 +275,4 @@ Parser.parse = function (string) {
 };
 
 module.exports = Parser;
+module.exports._escapeChar = escapeChar;
