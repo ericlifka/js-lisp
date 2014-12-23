@@ -152,7 +152,7 @@ Parser.prototype = {
             this.currentString.value += escapeChar(this.currentChar);
             this.escapeNext = false;
         }
-        else if (this._isStringTerminator()) {
+        else if (this.currentChar === '"') {
             this.currentString = null;
         }
         else if (this.currentChar === '\\') {
@@ -224,9 +224,6 @@ Parser.prototype = {
         } else {
             List.addToEnd(stackTop(this.inProcessLists), cell);
         }
-    },
-    _isStringTerminator: function () {
-        return this.currentChar === '"';
     }
 };
 
