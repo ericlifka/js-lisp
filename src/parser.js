@@ -230,26 +230,7 @@ Parser.prototype = {
         }
     },
     _isStringTerminator: function () {
-        if (this.currentChar !== '"') {
-            return false;
-        }
-        var count = 0;
-        var position = this.parsePosition - 1;
-        while (this.currentParseString[position] === '\\') {
-            count++;
-            position--;
-        }
-
-        if (count > 0) {
-            // An even number of backslashes means that they escape each other
-            // and do not effect the quote. An odd number means that the one
-            // at the end escapes the quote and the string does not end.
-            return count % 2 === 0;
-        }
-        else {
-            // The quote character is not escaped, so the string should end
-            return true;
-        }
+        return this.currentChar === '"';
     }
 };
 
