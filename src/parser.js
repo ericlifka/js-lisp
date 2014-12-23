@@ -27,6 +27,19 @@ function convertSymbolToNumber(cell) {
     delete cell.name;
 }
 
+var ESCAPE_MAP = {
+    "b": "\b",
+    "f": "\f",
+    "n": "\n",
+    "r": "\r",
+    "t": "\t",
+    "v": "\v",
+    "0": "\0"
+};
+function escapeChar(char) {
+    return ESCAPE_MAP[char] || char;
+}
+
 function Parser() {
     this.stringQueue = [];
     this.lists = [];
@@ -136,7 +149,7 @@ Parser.prototype = {
     },
     _parseStep_InString: function () {
         if (this.escapeNext) {
-
+            var char = escapeChar(this.currentChar);
         }
 
         // TODO: backslashes should be handled in a forward looking manner
