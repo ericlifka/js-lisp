@@ -34,6 +34,7 @@ function Parser() {
     this.currentParseString = null;
     this.currentSymbol = null;
     this.currentString = null;
+    this.escapeNext = false;
     this.parsePosition = 0;
 }
 
@@ -134,6 +135,10 @@ Parser.prototype = {
         }
     },
     _parseStep_InString: function () {
+        if (this.escapeNext) {
+
+        }
+
         // TODO: backslashes should be handled in a forward looking manner
         // TODO: instead of backward looking because currently escaping
         // TODO: an escape character does not work, such as "\\"
