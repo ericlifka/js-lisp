@@ -14,9 +14,8 @@ INPUT.on('close', function () {
 
 function processLine(line, environment, callback) {
     var list = parse(line);
-    if (typeof callback === 'function') {
-        callback(list);
-    }
+
+    callback(list);
 }
 
 function printResult(result) {
