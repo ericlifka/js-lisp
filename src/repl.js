@@ -31,6 +31,10 @@ function processLine(line, errorCB, incompleteCB, completeCB) {
     }
 }
 
+function evalList(list, environment, callback) {
+    callback();
+}
+
 function printResult(result) {
     console.log("" + result);
 }
@@ -63,8 +67,10 @@ function main() {
                 INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
                 INPUT.prompt();
             },
-            function completeCB(result) {
-                printResult(result);
+            function completeCB(lists) {
+                lists.forEach(function (list) {
+                    evalList(list, GLOBAL_ENVIRONMENT, printResult);
+                });
 
                 resetPrompt();
                 INPUT.prompt();
