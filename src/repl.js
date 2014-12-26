@@ -1,7 +1,7 @@
 var Environment = require('./environment');
 var List = require('./list');
 var Readline = require('readline');
-var parse = require('./parse');
+var Parser = require('./parser');
 
 var GLOBAL_ENVIRONMENT = Environment.create();
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
@@ -13,7 +13,7 @@ INPUT.on('close', function () {
 });
 
 function processLine(line, environment, callback) {
-    var list = parse(line);
+    var list = Parser.parse(line);
 
     callback(list);
 }
