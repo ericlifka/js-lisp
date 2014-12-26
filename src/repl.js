@@ -31,16 +31,22 @@ function main() {
             return;
         }
 
-        processLine(                        // EVAL
+        processLine(
             line,
-            GLOBAL_ENVIRONMENT,
-            function (result) {
-                printResult(result);        // PRINT
-                INPUT.prompt();             // REPEAT
-            });
+            function completeCB(result) {
+                printResult(result);
+                INPUT.prompt();
+            },
+            function incompleteCB() {
+
+            },
+            function errorCB() {
+
+            }
+        );
     });
 
-    INPUT.prompt();                         // READ
+    INPUT.prompt();
 }
 
 if (!module.parent) {
