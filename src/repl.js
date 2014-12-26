@@ -13,7 +13,7 @@ INPUT.on('close', function () {
     process.exit(0);
 });
 
-function processLine(line, completeCB, incompleteCB, errorCB) {
+function processLine(line, errorCB, incompleteCB, completeCB) {
     PARSER.parseString(line);
     var state = PARSER.parseState();
     var lists = PARSER.getLists();
@@ -33,17 +33,16 @@ function main() {
 
         processLine(
             line,
-            function completeCB(result) {
-                printResult(result);
-                INPUT.prompt();
+            function errorCB() {
+
             },
             function incompleteCB() {
 
             },
-            function errorCB() {
-
-            }
-        );
+            function completeCB(result) {
+                printResult(result);
+                INPUT.prompt();
+            });
     });
 
     INPUT.prompt();
