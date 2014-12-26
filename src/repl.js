@@ -26,8 +26,12 @@ function printResult(result) {
     console.log("" + result);
 }
 
-function parseError(errorState) {
-    console.log("ParseError: " + errorState.error);
+function parseError(parserState) {
+    console.log("ParseError: " + parserState.error);
+}
+
+function resetParser() {
+
 }
 
 function main() {
@@ -39,7 +43,12 @@ function main() {
 
         processLine(
             line,
-            parseError,
+            function errorCB(parserState) {
+                parseError(parserState);
+                resetParser();
+                INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+                INPUT.prompt();
+            },
             function incompleteCB() {
                 INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
                 INPUT.prompt();
@@ -47,6 +56,7 @@ function main() {
             function completeCB(result) {
                 printResult(result);
 
+                resetParser();
                 INPUT.setPrompt(NEW_STATEMENT_PROMPT);
                 INPUT.prompt();
             });
