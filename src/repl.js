@@ -19,11 +19,7 @@ function processLine(line, environment, callback) {
 }
 
 function printResult(result) {
-    if (List.isCons(result)) {
-        console.log(List.toString(result));
-    } else {
-        console.log(result);
-    }
+    console.log("" + result);
 }
 
 function main() {
