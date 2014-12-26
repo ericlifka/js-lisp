@@ -37,9 +37,7 @@ function main() {
 
         processLine(
             line,
-            function errorCB(parserState) {
-                parseError(parserState);
-            },
+            parseError,
             function incompleteCB() {
 
             },
