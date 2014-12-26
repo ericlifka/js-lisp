@@ -13,10 +13,10 @@ INPUT.on('close', function () {
     process.exit(0);
 });
 
-function processLine(line, environment, callback) {
-    var lists;
+function processLine(line, completeCB, incompleteCB, errorCB) {
     PARSER.parseString(line);
-    lists = PARSER.getLists();
+    var state = PARSER.parseState();
+    var lists = PARSER.getLists();
     callback(lists);
 }
 
