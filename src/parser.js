@@ -41,14 +41,7 @@ function escapeChar(char) {
 }
 
 function Parser() {
-    this.stringQueue = [];
-    this.lists = [];
-    this.inProcessLists = [];
-    this.currentParseString = null;
-    this.currentSymbol = null;
-    this.currentString = null;
-    this.escapeNext = false;
-    this.parsePosition = 0;
+    this.reset();
 }
 
 Parser.prototype = {
@@ -76,6 +69,17 @@ Parser.prototype = {
     },
     getLists: function () {
         return this.lists;
+    },
+    reset: function () {
+        this.stringQueue = [];
+        this.lists = [];
+        this.inProcessLists = [];
+        this.currentParseString = null;
+        this.currentSymbol = null;
+        this.currentString = null;
+        this.escapeNext = false;
+        this.parsePosition = 0;
+        this.errorState = null;
     },
 
     _processQueue: function () {

@@ -45,6 +45,7 @@ function main() {
             line,
             function errorCB(parserState) {
                 parseError(parserState);
+
                 resetParser();
                 INPUT.setPrompt(NEW_STATEMENT_PROMPT);
                 INPUT.prompt();
