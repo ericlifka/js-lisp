@@ -18,14 +18,17 @@ INPUT.on('close', function () {
 function processLine(line, errorCB, incompleteCB, completeCB) {
     PARSER.parseString(line);
     var state = PARSER.parseState();
+
     if (state.error) {
         errorCB(state.error);
     }
-    if (!state.complete) {
-
+    else if (!state.complete) {
+        incompleteCB();
     }
-    var lists = PARSER.getLists();
-    callback(lists);
+    else {
+        var lists = PARSER.getLists();
+        completeCB(lists);
+    }
 }
 
 function printResult(result) {
