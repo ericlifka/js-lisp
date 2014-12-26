@@ -3,6 +3,7 @@ var List = require('./list');
 var Readline = require('readline');
 var Parser = require('./parser');
 
+var PARSER = new Parser();
 var GLOBAL_ENVIRONMENT = Environment.create();
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
 
@@ -13,9 +14,10 @@ INPUT.on('close', function () {
 });
 
 function processLine(line, environment, callback) {
-    var list = Parser.parse(line);
-
-    callback(list);
+    var lists;
+    PARSER.parseString(line);
+    lists = PARSER.getLists();
+    callback(lists);
 }
 
 function printResult(result) {
