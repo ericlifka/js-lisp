@@ -6,8 +6,10 @@ var Parser = require('./parser');
 var PARSER = new Parser();
 var GLOBAL_ENVIRONMENT = Environment.create();
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
+var NEW_STATEMENT_PROMPT = 'js-lisp> ';
+var CONTINUE_STATEMENT_PROMPT = "> ";
 
-INPUT.setPrompt('js-lisp> ');
+INPUT.setPrompt(NEW_STATEMENT_PROMPT);
 INPUT.on('close', function () {
     console.log("terminating js-lisp REPL");
     process.exit(0);
@@ -39,10 +41,13 @@ function main() {
             line,
             parseError,
             function incompleteCB() {
-
+                INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
+                INPUT.prompt();
             },
             function completeCB(result) {
                 printResult(result);
+
+                INPUT.setPrompt(NEW_STATEMENT_PROMPT);
                 INPUT.prompt();
             });
     });
