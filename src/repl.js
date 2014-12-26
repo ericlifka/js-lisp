@@ -38,11 +38,11 @@ function main() {
             GLOBAL_ENVIRONMENT,
             function (result) {
                 printResult(result);        // PRINT
-                INPUT.prompt();    // REPEAT
+                INPUT.prompt();             // REPEAT
             });
     });
 
-    INPUT.prompt();                // READ
+    INPUT.prompt();                         // READ
 }
 
 if (!module.parent) {
