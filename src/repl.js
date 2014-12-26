@@ -30,8 +30,9 @@ function parseError(parserState) {
     console.log("ParseError: " + parserState.error);
 }
 
-function resetParser() {
-
+function resetPrompt() {
+    PARSER.reset();
+    INPUT.setPrompt(NEW_STATEMENT_PROMPT);
 }
 
 function main() {
@@ -46,8 +47,7 @@ function main() {
             function errorCB(parserState) {
                 parseError(parserState);
 
-                resetParser();
-                INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+                resetPrompt();
                 INPUT.prompt();
             },
             function incompleteCB() {
@@ -57,8 +57,7 @@ function main() {
             function completeCB(result) {
                 printResult(result);
 
-                resetParser();
-                INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+                resetPrompt();
                 INPUT.prompt();
             });
     });
