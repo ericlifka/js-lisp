@@ -18,6 +18,12 @@ INPUT.on('close', function () {
 function processLine(line, errorCB, incompleteCB, completeCB) {
     PARSER.parseString(line);
     var state = PARSER.parseState();
+    if (state.error) {
+        errorCB(state.error);
+    }
+    if (!state.complete) {
+
+    }
     var lists = PARSER.getLists();
     callback(lists);
 }
@@ -26,8 +32,8 @@ function printResult(result) {
     console.log("" + result);
 }
 
-function parseError(parserState) {
-    console.log("ParseError: " + parserState.error);
+function parseError(error) {
+    console.log("ParseError: " + error);
 }
 
 function resetPrompt() {
@@ -44,8 +50,8 @@ function main() {
 
         processLine(
             line,
-            function errorCB(parserState) {
-                parseError(parserState);
+            function errorCB(error) {
+                parseError(error);
 
                 resetPrompt();
                 INPUT.prompt();
