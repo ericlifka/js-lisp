@@ -24,6 +24,10 @@ function printResult(result) {
     console.log("" + result);
 }
 
+function parseError(errorState) {
+    console.log("ParseError: " + errorState.error);
+}
+
 function main() {
     INPUT.on('line', function (line) {
         if (line === "(quit)") {
@@ -33,8 +37,8 @@ function main() {
 
         processLine(
             line,
-            function errorCB() {
-
+            function errorCB(parserState) {
+                parseError(parserState);
             },
             function incompleteCB() {
 
