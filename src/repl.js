@@ -68,12 +68,23 @@ function main() {
                 INPUT.prompt();
             },
             function completeCB(lists) {
-                lists.forEach(function (list) {
-                    evalList(list, GLOBAL_ENVIRONMENT, printResult);
-                });
+                var current = 0;
+                var total = lists.length;
+                var eval = function () {
+                    if (current >= total) {
+                        resetPrompt();
+                        INPUT.prompt();
+                    }
+                    else {
+                        evalList(lists[current], GLOBAL_ENVIRONMENT, function (evalResult) {
+                            printResult(evalResult);
+                            current += 1;
+                            eval();
+                        });
+                    }
+                };
 
-                resetPrompt();
-                INPUT.prompt();
+                eval();
             });
     });
 
