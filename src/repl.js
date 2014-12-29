@@ -26,12 +26,12 @@ function processLine(line, errorCB, incompleteCB, completeCB) {
         incompleteCB();
     }
     else {
-        var lists = PARSER.getLists();
-        completeCB(lists);
+        var statements = PARSER.getStatements();
+        completeCB(statements);
     }
 }
 
-function evalList(list, environment, callback) {
+function evalStatement(statement, environment, callback) {
     callback();
 }
 
@@ -67,24 +67,24 @@ function main() {
                 INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
                 INPUT.prompt();
             },
-            function completeCB(lists) {
+            function completeCB(statements) {
                 var current = 0;
-                var total = lists.length;
-                var eval = function () {
+                var total = statements.length;
+                var evalNext = function () {
                     if (current >= total) {
                         resetPrompt();
                         INPUT.prompt();
                     }
                     else {
-                        evalList(lists[current], GLOBAL_ENVIRONMENT, function (evalResult) {
+                        evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult) {
                             printResult(evalResult);
                             current += 1;
-                            eval();
+                            evalNext();
                         });
                     }
                 };
 
-                eval();
+                evalNext();
             });
     });
 

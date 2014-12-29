@@ -38,18 +38,18 @@ describe 'parser', ->
         state = p.parseState()
         should(state.error).be.not.ok
         should(state.complete).be.ok
-        lists = p.getLists()
+        lists = p.getStatements()
         should(lists.length).equal(1)
 
     it 'should support non nested lists', ->
         p = new Parser()
         p.parseString "(1) (a)(3)"
-        should(p.getLists().length).equal(3)
+        should(p.getStatements().length).equal(3)
 
     it 'should support numbers', ->
         p = new Parser()
         p.parseString "5 -3 1.24 1.3e10"
-        nums = p.getLists()
+        nums = p.getStatements()
         nums[0].value.should.equal(5)
         nums[1].value.should.equal(-3)
         nums[2].value.should.equal(1.24)

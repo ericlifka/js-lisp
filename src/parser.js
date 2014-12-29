@@ -67,12 +67,12 @@ Parser.prototype = {
                 this.inProcessLists.length === 0)   // All lists should be closed
         };
     },
-    getLists: function () {
-        return this.lists;
+    getStatements: function () {
+        return this.statements;
     },
     reset: function () {
         this.stringQueue = [];
-        this.lists = [];
+        this.statements = [];
         this.inProcessLists = [];
         this.currentParseString = null;
         this.currentSymbol = null;
@@ -224,7 +224,7 @@ Parser.prototype = {
     },
     _storeNewCell: function (cell) {
         if (this.inProcessLists.length === 0) {
-            this.lists.push(cell);
+            this.statements.push(cell);
         } else {
             List.addToEnd(stackTop(this.inProcessLists), cell);
         }
@@ -244,15 +244,15 @@ function parse(string) {
     if (!state.complete) {
         throw new ParseError("Parser.parse only handles balanced list segments");
     }
-    var lists = parser.getLists();
-    if (lists.length === 0) {
+    var statements = parser.getStatements();
+    if (statements.length === 0) {
         throw new ParseError("Parser.parse no lists found");
     }
-    if (lists.length !== 1) {
+    if (statements.length !== 1) {
         throw new ParseError("Parser.parse only supports single lists");
     }
-    return lists[0];
-};
+    return statements[0];
+}
 
 module.exports = Parser;
 module.exports.parse = parse;
