@@ -4,7 +4,7 @@ var Readline = require('readline');
 var Parser = require('./parser');
 
 var PARSER = new Parser();
-var GLOBAL_ENVIRONMENT = Environment.create();
+var GLOBAL_ENVIRONMENT = Environment.createTopLevel();
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
 var NEW_STATEMENT_PROMPT = 'js-lisp> ';
 var CONTINUE_STATEMENT_PROMPT = "> ";

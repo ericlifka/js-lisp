@@ -8,6 +8,10 @@ function create() {
     return new Environment();
 }
 
+function createTopLevel() {
+    return addBuiltins(create());
+}
+
 function addBuiltins(env) {
     env.symbols['+'] = function () {
         var sum = 0;
@@ -16,8 +20,11 @@ function addBuiltins(env) {
         }
         return sum;
     };
+    return env;
 }
 
 module.exports = {
-    create: create
+    create: create,
+    createTopLevel: createTopLevel,
+    addBuiltins: addBuiltins
 };
