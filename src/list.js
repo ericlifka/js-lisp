@@ -50,6 +50,12 @@ function isCons(cell) {
         cell.hasOwnProperty('cdr');
 }
 
+function isValidEntity(cell) {
+    return cell &&
+        cell instanceof Cell &&
+        !!cell.type;
+}
+
 function printList(list) {
     var curr = "";
     if (list.car) {
@@ -90,5 +96,6 @@ module.exports = {
     number: number,
     isTrueCons: isTrueCons,
     isCons: isCons,
+    isValidEntity: isValidEntity,
     addToEnd: addToEnd
 };
