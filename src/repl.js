@@ -32,6 +32,10 @@ function processLine(line, errorCB, incompleteCB, completeCB) {
 }
 
 function evalStatement(statement, environment, callback) {
+    if (!List.isValidEntity(statement)) {
+        return callback(null, "Eval on non-valid entity");
+    }
+
     switch (statement.type) {
         case 'cons':
             break;
@@ -42,9 +46,9 @@ function evalStatement(statement, environment, callback) {
             callback(statement);
             break;
         default:
+            callback(null, "Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'");
             break;
     }
-    callback();
 }
 
 function printResult(result) {
