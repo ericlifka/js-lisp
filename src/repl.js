@@ -32,6 +32,18 @@ function processLine(line, errorCB, incompleteCB, completeCB) {
 }
 
 function evalStatement(statement, environment, callback) {
+    switch (statement.type) {
+        case 'cons':
+            break;
+        case 'symbol':
+            break;
+        case 'string':
+        case 'number':
+            callback(statement);
+            break;
+        default:
+            break;
+    }
     callback();
 }
 
@@ -41,6 +53,10 @@ function printResult(result) {
 
 function parseError(error) {
     console.log("ParseError: " + error);
+}
+
+function evaluationError(error) {
+    console.log("EvaluationError: " + error);
 }
 
 function resetPrompt() {
@@ -74,14 +90,19 @@ function main() {
                     if (current >= total) {
                         resetPrompt();
                         INPUT.prompt();
+                        return;
                     }
-                    else {
-                        evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult) {
+
+                    evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
+                        if (error) {
+                            evaluationError(error);
+                        }
+                        else {
                             printResult(evalResult);
                             current += 1;
-                            evalNext();
-                        });
-                    }
+                        }
+                        evalNext();
+                    });
                 };
 
                 evalNext();
