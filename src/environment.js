@@ -13,10 +13,13 @@ function createTopLevel() {
 }
 
 function addBuiltins(env) {
-    env.symbols['+'] = function () {
+    env.symbols['+'] = function (argList) {
         var sum = 0;
-        for (var i = 0; i < arguments.length; i++) {
-            sum += arguments[i];
+        while (argList) {
+            if (argList.car.type === 'number') {
+                sum += argList.car.value;
+            }
+            argList = argList.cdr;
         }
         return sum;
     };
