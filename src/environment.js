@@ -4,6 +4,18 @@ function Environment() {
     this.symbols = { };
 }
 
+Environment.prototype.getSymbolValue = function (symbol) {
+    if (this.symbols.hasOwnProperty(symbol)) {
+        return this.symbols[symbol];
+    }
+    else if (this.parent) {
+        return this.parent.getSymbolValue(symbol);
+    }
+    else {
+        return null;
+    }
+};
+
 function create() {
     return new Environment();
 }
