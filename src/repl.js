@@ -39,12 +39,22 @@ function evalStatement(statement, environment, callback) {
     switch (statement.type) {
         case 'cons':
             break;
+
         case 'symbol':
+            var value = environment.getSymbolValue(statement.name);
+            if (value) {
+                callback(value);
+            }
+            else {
+                callback(null, 'No value found for symbol "' + statement.name + '"');
+            }
             break;
+
         case 'string':
         case 'number':
             callback(statement);
             break;
+
         default:
             callback(null, "Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'");
             break;
