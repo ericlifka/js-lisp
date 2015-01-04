@@ -38,6 +38,7 @@ function evalStatement(statement, environment, callback) {
 
     switch (statement.type) {
         case 'cons':
+            evalList(statement, environment, callback);
             break;
 
         case 'symbol':
@@ -59,6 +60,10 @@ function evalStatement(statement, environment, callback) {
             callback(null, "Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'");
             break;
     }
+}
+
+function evalList(list, environment, callback) {
+    callback(list);
 }
 
 function printResult(result) {
