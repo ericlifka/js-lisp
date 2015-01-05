@@ -19,6 +19,10 @@ Cell.prototype.length = function () {
         return NaN;
     }
 
+    if (!this.car) {
+        return 0;
+    }
+
     var length = 0;
     var iterator = this;
     while (iterator) {
