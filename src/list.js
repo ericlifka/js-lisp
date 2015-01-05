@@ -14,6 +14,20 @@ Cell.prototype.toString = function () {
     }
 };
 
+Cell.prototype.length = function () {
+    if (this.type !== 'cons') {
+        return NaN;
+    }
+
+    var length = 0;
+    var iterator = this;
+    while (iterator) {
+        length += 1;
+        iterator = iterator.cdr;
+    }
+    return length;
+};
+
 function cons(car, cdr) {
     var c = new Cell('cons');
     c.car = car;
