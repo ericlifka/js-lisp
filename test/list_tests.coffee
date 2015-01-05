@@ -66,3 +66,14 @@ describe 'list', ->
             isNaN(list.symbol().length()).should.be.ok
             isNaN(list.string().length()).should.be.ok
             isNaN(list.number().length()).should.be.ok
+
+        it 'should handle empty lists', ->
+            list.cons().length().should.equal(0)
+
+        it 'should handle length 1 lists', ->
+            list.cons(list.string("abc")).length().should.equal(1)
+
+        it 'should handle length n lists', ->
+            cons = list.cons
+            cons(1, cons(2)).length().should.equal(2)
+            cons(1, cons(2, cons(3))).length().should.equal(3)
