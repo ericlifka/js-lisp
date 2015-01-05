@@ -60,3 +60,9 @@ describe 'list', ->
 
         it 'should support strings', ->
             list.string("hiya").toString().should.equal('"hiya"')
+
+    describe 'length', ->
+        it 'should return NaN for non lists', ->
+            isNaN(list.symbol().length()).should.be.ok
+            isNaN(list.string().length()).should.be.ok
+            isNaN(list.number().length()).should.be.ok
