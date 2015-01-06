@@ -63,6 +63,10 @@ function evalStatement(statement, environment, callback) {
 }
 
 function evalList(list, environment, callback) {
+    // The empty list evaluates to itself
+    if (list.length() === 0) {
+        return callback(list);
+    }
     callback(list);
 }
 
