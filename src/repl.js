@@ -67,6 +67,16 @@ function evalList(list, environment, callback) {
     if (list.length() === 0) {
         return callback(list);
     }
+
+    var functionSymbol = list.car;
+    var parameters = list.cdr;
+
+    if (functionSymbol.type !== 'symbol') {
+        return callback(null, "Cannot call '" + functionSymbol + "'");
+    }
+
+    var functionValue = environment.getSymbolValue(functionSymbol.name);
+
     callback(list);
 }
 
