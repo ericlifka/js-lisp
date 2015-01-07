@@ -86,8 +86,11 @@ function evalList(list, environment, callback) {
             return callback(null, "Error evaluating function '" + functionSymbol.name + "': '" + error.message + "'");
         }
     }
-    else if (functionValue.type === 'function') {
+    else if (functionValue && functionValue.type === 'function') {
         return callback(null, "Custom functions not supported yet");
+    }
+    else {
+        return callback(null, "Cannot invoke non function value '" + functionValue + "'");
     }
 
     return callback(result);
