@@ -148,8 +148,8 @@ function main() {
                         }
                         else {
                             printResult(evalResult);
-                            current += 1;
                         }
+                        current += 1;
                         evalNext();
                     });
                 };
