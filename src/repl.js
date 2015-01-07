@@ -77,7 +77,20 @@ function evalList(list, environment, callback) {
 
     var functionValue = environment.getSymbolValue(functionSymbol.name);
 
-    callback(list);
+    var result = null;
+    if (typeof functionValue === 'function') {
+        try {
+            result = functionValue(parameters);
+        }
+        catch (error) {
+            return callback(null, "Error evaluating function '" + functionSymbol.name + "': '" + error + "'");
+        }
+    }
+    else if (functionValue.type === 'function') {
+        return callback(null, "Custom functions not supported yet");
+    }
+
+    return callback(result);
 }
 
 function printResult(result) {
