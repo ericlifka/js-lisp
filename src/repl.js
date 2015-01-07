@@ -83,7 +83,7 @@ function evalList(list, environment, callback) {
             result = functionValue(parameters);
         }
         catch (error) {
-            return callback(null, "Error evaluating function '" + functionSymbol.name + "': '" + error + "'");
+            return callback(null, "Error evaluating function '" + functionSymbol.name + "': '" + error.message + "'");
         }
     }
     else if (functionValue.type === 'function') {
