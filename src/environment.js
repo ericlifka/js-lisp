@@ -1,3 +1,4 @@
+var EvaluationError = require('./error').EvaluationError;
 
 function Environment() {
     this.parent = null;
@@ -30,6 +31,8 @@ function addBuiltins(env) {
         while (argList) {
             if (argList.car.type === 'number') {
                 sum += argList.car.value;
+            } else {
+                throw new EvaluationError("Encountered non numeric value in '+': '" + argList.car + "'");
             }
             argList = argList.cdr;
         }
