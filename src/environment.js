@@ -29,11 +29,10 @@ function addBuiltins(env) {
     env.symbols['+'] = function (argList) {
         var sum = 0;
         while (argList) {
-            if (argList.car.type === 'number') {
-                sum += argList.car.value;
-            } else {
+            if (argList.car.type !== 'number') {
                 throw new EvaluationError("Encountered non numeric value in '+': '" + argList.car + "'");
             }
+            sum += argList.car.value;
             argList = argList.cdr;
         }
         return sum;
