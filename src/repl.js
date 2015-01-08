@@ -15,20 +15,53 @@ INPUT.on('close', function () {
     process.exit(0);
 });
 
-function processLine(line, errorCB, incompleteCB, completeCB) {
+function parseInput(line) {
     PARSER.parseString(line);
     var state = PARSER.parseState();
 
     if (state.error) {
-        errorCB(state.error);
+        parseError(state.error);
+
+        PARSER.reset();
+        INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+        INPUT.prompt();
     }
     else if (!state.complete) {
-        incompleteCB();
+        INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
+        INPUT.prompt();
     }
     else {
         var statements = PARSER.getStatements();
-        completeCB(statements);
+
+        PARSER.reset();
+        INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+
+        evaluateInput(statements);
     }
+}
+
+function evaluateInput(statements) {
+    var current = 0;
+    var total = statements.length;
+    var evalNext = function () {
+        if (current >= total) {
+            INPUT.prompt();
+            return;
+        }
+
+        evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
+            if (error) {
+                evaluationError(error);
+            }
+            else {
+                printResult(evalResult);
+            }
+            current += 1;
+            evalNext();
+        });
+    };
+
+    evalNext();
 }
 
 function evalStatement(statement, environment, callback) {
@@ -108,11 +141,6 @@ function evaluationError(error) {
     console.log("EvaluationError: " + error);
 }
 
-function resetPrompt() {
-    PARSER.reset();
-    INPUT.setPrompt(NEW_STATEMENT_PROMPT);
-}
-
 function main() {
     INPUT.on('line', function (line) {
         if (line === "(quit)") {
@@ -120,42 +148,7 @@ function main() {
             return;
         }
 
-        processLine(
-            line,
-            function errorCB(error) {
-                parseError(error);
-
-                resetPrompt();
-                INPUT.prompt();
-            },
-            function incompleteCB() {
-                INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
-                INPUT.prompt();
-            },
-            function completeCB(statements) {
-                var current = 0;
-                var total = statements.length;
-                var evalNext = function () {
-                    if (current >= total) {
-                        resetPrompt();
-                        INPUT.prompt();
-                        return;
-                    }
-
-                    evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
-                        if (error) {
-                            evaluationError(error);
-                        }
-                        else {
-                            printResult(evalResult);
-                        }
-                        current += 1;
-                        evalNext();
-                    });
-                };
-
-                evalNext();
-            });
+        parseInput(line);
     });
 
     INPUT.prompt();
@@ -165,7 +158,7 @@ if (!module.parent) {
     main();
 } else {
     module.exports = {
-        processLine: processLine,
+        processLine: parseInput,
         printResult: printResult
     };
 }
