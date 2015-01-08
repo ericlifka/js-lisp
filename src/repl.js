@@ -31,25 +31,23 @@ function parseInput(line) {
         INPUT.prompt();
     }
     else {
-        var statements = PARSER.getStatements();
-
-        PARSER.reset();
-        INPUT.setPrompt(NEW_STATEMENT_PROMPT);
-
-        evaluateInput(statements);
+        evaluateInput(PARSER.getStatements(), function () {
+            PARSER.reset();
+            INPUT.setPrompt(NEW_STATEMENT_PROMPT);
+            INPUT.prompt();
+        });
     }
 }
 
-function evaluateInput(statements) {
+function evaluateInput(statements, complete) {
     var current = 0;
     var total = statements.length;
-    var evalNext = function () {
+    var next = function () {
         if (current >= total) {
-            INPUT.prompt();
-            return;
+            return complete();
         }
 
-        evalStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
+        evaluateStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
             if (error) {
                 evaluationError(error);
             }
@@ -57,14 +55,14 @@ function evaluateInput(statements) {
                 printResult(evalResult);
             }
             current += 1;
-            evalNext();
+            next();
         });
     };
 
-    evalNext();
+    next();
 }
 
-function evalStatement(statement, environment, callback) {
+function evaluateStatement(statement, environment, callback) {
     if (!List.isValidEntity(statement)) {
         return callback(null, "Eval on non-valid entity");
     }
