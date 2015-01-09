@@ -75,6 +75,11 @@ function isCons(cell) {
         cell.hasOwnProperty('cdr');
 }
 
+function isError(cell) {
+    return cell instanceof Cell &&
+        cell.type === 'error';
+}
+
 function isValidEntity(cell) {
     return cell &&
         cell instanceof Cell &&
@@ -122,6 +127,7 @@ module.exports = {
     error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
+    isError: isError,
     isValidEntity: isValidEntity,
     addToEnd: addToEnd
 };
