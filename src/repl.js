@@ -39,12 +39,12 @@ function parseInput(line) {
     }
 }
 
-function evaluateInput(statements, complete) {
+function evaluateInput(statements, callback) {
     var current = 0;
     var total = statements.length;
     var next = function () {
         if (current >= total) {
-            return complete();
+            return callback();
         }
 
         evaluateStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
