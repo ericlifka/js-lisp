@@ -118,7 +118,29 @@ function evalList(list, environment, callback) {
 }
 
 function evaluateParameters(parameters, environment, callback) {
-    callback(parameters);
+    if (!parameters) {
+        return callback(parameters);
+    }
+
+    var evaluated = List.cons();
+    var current = parameters;
+    var next = function () {
+        if (!current) {
+            return callback(evaluated);
+        }
+
+        evaluateStatement(current.car, environment, function (resultValue, error) {
+            if (error) {
+                return callback(null, error);
+            }
+
+            List.addToEnd(evaluated, resultValue);
+            current = current.cdr;
+            next();
+        });
+    };
+
+    next();
 }
 
 function printResult(result) {
