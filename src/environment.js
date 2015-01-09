@@ -1,4 +1,4 @@
-var EvaluationError = require('./error').EvaluationError;
+var List = require('./list');
 
 function Environment() {
     this.parent = null;
@@ -35,7 +35,7 @@ function addBuiltins(env) {
             sum += parameters.car.value;
             parameters = parameters.cdr;
         }
-        callback(sum);
+        callback(List.number(sum));
     };
     return env;
 }
