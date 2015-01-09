@@ -30,7 +30,7 @@ function addBuiltins(env) {
         var sum = 0;
         while (parameters) {
             if (parameters.car.type !== 'number') {
-                return callback(null, "Encountered non numeric value in '+': '" + parameters.car + "'");
+                return callback(List.error("Encountered non numeric value in '+': '" + parameters.car + "'"));
             }
             sum += parameters.car.value;
             parameters = parameters.cdr;
