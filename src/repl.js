@@ -47,13 +47,8 @@ function evaluateInput(statements, callback) {
             return callback();
         }
 
-        evaluateStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult, error) {
-            if (error) {
-                evaluationError(error);
-            }
-            else {
-                printResult(evalResult);
-            }
+        evaluateStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult) {
+            printResult(evalResult);
             current += 1;
             next();
         });
@@ -64,7 +59,7 @@ function evaluateInput(statements, callback) {
 
 function evaluateStatement(statement, environment, callback) {
     if (!List.isValidEntity(statement)) {
-        return callback(null, "Eval on non-valid entity");
+        return callback(List.error("Eval on non-valid entity"));
     }
 
     switch (statement.type) {
@@ -78,17 +73,18 @@ function evaluateStatement(statement, environment, callback) {
                 callback(value);
             }
             else {
-                callback(null, 'No value found for symbol "' + statement.name + '"');
+                callback(List.error('No value found for symbol "' + statement.name + '"'));
             }
             break;
 
+        case 'error':
         case 'string':
         case 'number':
             callback(statement);
             break;
 
         default:
-            callback(null, "Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'");
+            callback(List.error("Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'"));
             break;
     }
 }
@@ -103,16 +99,21 @@ function evalList(list, environment, callback) {
     var parameters = list.cdr;
 
     if (functionSymbol.type !== 'symbol') {
-        return callback(null, "Cannot call '" + functionSymbol + "'");
+        return callback(List.error("Cannot call '" + functionSymbol + "'"));
     }
 
     var functionValue = environment.getSymbolValue(functionSymbol.name);
 
     if (typeof functionValue !== 'function') {
-        return callback(null, "Cannot invoke non function value '" + functionValue + "'");
+        return callback(List.error("Cannot invoke non function value '" + functionValue + "'"));
     }
 
     evaluateParameters(parameters, environment, function (evaluatedParameters) {
+        // If any of the parameters resolve as an error then the whole statement is resolved as that error
+        if (List.isError(evaluatedParameters)) {
+            return callback(evaluatedParameters);
+        }
+
         functionValue(evaluatedParameters, callback);
     });
 }
@@ -129,9 +130,10 @@ function evaluateParameters(parameters, environment, callback) {
             return callback(evaluated);
         }
 
-        evaluateStatement(current.car, environment, function (resultValue, error) {
-            if (error) {
-                return callback(null, error);
+        evaluateStatement(current.car, environment, function (resultValue) {
+            // If any parameter resolves to an error then we can stop evaluating immediately
+            if (List.isError(resultValue)) {
+                return callback(resultValue);
             }
 
             List.addToEnd(evaluated, resultValue);
@@ -149,10 +151,6 @@ function printResult(result) {
 
 function parseError(error) {
     console.log("ParseError: " + error);
-}
-
-function evaluationError(error) {
-    console.log("EvaluationError: " + error);
 }
 
 function main() {
