@@ -26,16 +26,25 @@ function createTopLevel() {
 }
 
 function addBuiltins(env) {
-    env.symbols['+'] = function (parameters, callback) {
-        var sum = 0;
+    var combineNumbers = function (base, parameters, combinator, callback) {
         while (parameters) {
             if (parameters.car.type !== 'number') {
-                return callback(List.error("Encountered non numeric value in '+': '" + parameters.car + "'"));
+                return callback(List.error("Encountered non numeric value in mathematical operator: '" + parameters.car + "'"));
             }
-            sum += parameters.car.value;
+            base = combinator(base, parameters.car.value);
             parameters = parameters.cdr;
         }
-        callback(List.number(sum));
+        callback(List.number(base));
+    };
+    env.symbols['+'] = function (parameters, callback) {
+        combineNumbers(
+            0,
+            parameters,
+            function (a, b) {
+                return a + b;
+            },
+            callback
+        );
     };
     return env;
 }
