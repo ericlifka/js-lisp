@@ -9,6 +9,7 @@ Cell.prototype.toString = function () {
         case 'cons': return "(" + printList(this) + ")";
         case 'symbol': return this.name;
         case 'string': return '"' + this.value + '"';
+        case 'error': return 'Error: "' + this.message + '"';
         case 'number': return "" + this.value;
         default: return "[object Cell]";
     }
@@ -55,6 +56,12 @@ function number(value) {
     var number = new Cell('number');
     number.value = arguments.length === 0 ? 0 : +value;
     return number;
+}
+
+function error(message) {
+    var err = new Cell('error');
+    err.message = arguments.length === 0 ? "" : ""+message;
+    return err;
 }
 
 function isTrueCons(cell) {
@@ -112,6 +119,7 @@ module.exports = {
     symbol: symbol,
     string: string,
     number: number,
+    error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
     isValidEntity: isValidEntity,
