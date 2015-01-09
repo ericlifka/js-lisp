@@ -36,16 +36,12 @@ function addBuiltins(env) {
         }
         callback(List.number(base));
     };
+
     env.symbols['+'] = function (parameters, callback) {
-        combineNumbers(
-            0,
-            parameters,
-            function (a, b) {
-                return a + b;
-            },
-            callback
-        );
+        combineNumbers(0, parameters, function (a, b) { return a + b; }, callback);
     };
+
+
     return env;
 }
 
