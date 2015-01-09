@@ -64,20 +64,27 @@ function error(message) {
     return err;
 }
 
-function isTrueCons(cell) {
-    return cell instanceof Cell &&
-        cell.type === 'cons';
-}
-
 function isCons(cell) {
     return cell && cell.hasOwnProperty &&
         cell.hasOwnProperty('car') &&
         cell.hasOwnProperty('cdr');
 }
 
-function isError(cell) {
+function isType(cell, type) {
     return cell instanceof Cell &&
-        cell.type === 'error';
+        cell.type === type;
+}
+
+function isTrueCons(cell) {
+    return isType(cell, 'cons');
+}
+
+function isError(cell) {
+    return isType(cell, 'error');
+}
+
+function isNumber(cell) {
+    return isType(cell, 'number');
 }
 
 function isValidEntity(cell) {
@@ -128,6 +135,7 @@ module.exports = {
     isTrueCons: isTrueCons,
     isCons: isCons,
     isError: isError,
+    isNumber: isNumber,
     isValidEntity: isValidEntity,
     addToEnd: addToEnd
 };
