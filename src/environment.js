@@ -52,13 +52,25 @@ function addBuiltins(env) {
 
     env.symbols['-'] = function (parameters, callback) {
         if (!parameters) {
-            callback(List.error("'-' needs at least 1 argument"));
+            callback(List.error("- needs at least 1 argument"));
         }
         else if (parameters.length() === 1 && List.isNumber(parameters.car)) {
             callback(List.number(-parameters.car.value));
         }
         else {
             combineNumbers(parameters.car, parameters.cdr, function (a, b) { return a - b; }, callback);
+        }
+    };
+
+    env.symbols['/'] = function (parameters, callback) {
+        if (!parameters) {
+            callback(List.error("/ needs at least 1 argument"));
+        }
+        else if (parameters.length() === 1 && List.isNumber(parameters.car)) {
+            callback(List.number(1 / parameters.car.value));
+        }
+        else {
+            combineNumbers(parameters.car, parameters.cdr, function (a, b) { return a / b; }, callback);
         }
     };
 
