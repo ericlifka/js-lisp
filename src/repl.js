@@ -108,23 +108,17 @@ function evalList(list, environment, callback) {
 
     var functionValue = environment.getSymbolValue(functionSymbol.name);
 
-    var result = null;
-    if (typeof functionValue === 'function') {
-        try {
-            result = functionValue(parameters);
-        }
-        catch (error) {
-            return callback(null, "Error evaluating function '" + functionSymbol.name + "': '" + error.message + "'");
-        }
-    }
-    else if (functionValue && functionValue.type === 'function') {
-        return callback(null, "Custom functions not supported yet");
-    }
-    else {
+    if (typeof functionValue !== 'function') {
         return callback(null, "Cannot invoke non function value '" + functionValue + "'");
     }
 
-    return callback(result);
+    evaluateParameters(parameters, environment, function (evaluatedParameters) {
+        functionValue(evaluatedParameters, callback);
+    });
+}
+
+function evaluateParameters(parameters, environment, callback) {
+    callback(parameters);
 }
 
 function printResult(result) {
