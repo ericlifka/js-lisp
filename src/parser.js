@@ -236,7 +236,10 @@ Parser.prototype = {
         // of the symbol if it could be read as a number instead. This
         // simplifies parsing because we don't have to guess the type
         // number and then convert back to symbol if parsing fails.
-        if (this.currentSymbol && isNumeric(this.currentSymbol.name)) {
+        if (this.currentSymbol &&
+            !this.currentSymbol.quoted &&
+            isNumeric(this.currentSymbol.name)) {
+
             convertSymbolToNumber(this.currentSymbol);
         }
 
