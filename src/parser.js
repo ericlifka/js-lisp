@@ -187,7 +187,9 @@ Parser.prototype = {
         }
     },
     _parseStep_Quote: function () {
-
+        this.quoteNext = {
+            parseLevel: this.inProcessLists.length
+        };
     },
     _parseStep_StartNewList: function () {
         var newList = List.cons();
