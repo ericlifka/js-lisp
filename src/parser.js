@@ -220,6 +220,12 @@ Parser.prototype = {
         }
         else {
             this.inProcessLists.pop();
+
+            if (this.quoteNext &&
+                this.quoteNext.parseLevel === this.inProcessLists.length) {
+
+                this.quoteNext = null;
+            }
         }
     },
     _checkForQuoted: function (newCell) {
@@ -229,19 +235,26 @@ Parser.prototype = {
         }
     },
     _endCurrentSymbol: function () {
-        // Rather than try to parse numbers differently, we can allow
-        // all numeric characters in symbols and then check at the end
-        // of the symbol if it could be read as a number instead. This
-        // simplifies parsing because we don't have to guess the type
-        // number and then convert back to symbol if parsing fails.
-        if (this.currentSymbol &&
-            !this.currentSymbol.quoted &&
-            isNumeric(this.currentSymbol.name)) {
+        if (this.currentSymbol) {
 
-            convertSymbolToNumber(this.currentSymbol);
+            if (this.currentSymbol.quoted) {
+                this.quoteNext = null;
+            }
+
+            // Rather than try to parse numbers differently, we can allow
+            // all numeric characters in symbols and then check at the end
+            // of the symbol if it could be read as a number instead. This
+            // simplifies parsing because we don't have to guess the type
+            // number and then convert back to symbol if parsing fails.
+            if (this.isNumeric(this.currentSymbol.name)) {
+                // Numbers evaluate to themselves already, so quoted numbers are just numbers
+                this.currentSymbol.quoted = false;
+                convertSymbolToNumber(this.currentSymbol);
+            }
+
+            this.currentSymbol = null;
+
         }
-
-        this.currentSymbol = null;
     },
     _storeNewCell: function (cell) {
         if (this.inProcessLists.length === 0) {
