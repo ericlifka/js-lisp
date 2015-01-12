@@ -194,6 +194,7 @@ Parser.prototype = {
     },
     _parseStep_StartNewList: function () {
         var newList = List.cons();
+
         if (this.quoteNext && !this.quoteNext.started) {
             newList.quoted = true;
             this.quoteNext.started = true;
@@ -210,6 +211,11 @@ Parser.prototype = {
     },
     _parseStep_StartNewSymbol: function () {
         var newSymbol = List.symbol(this.currentChar);
+
+        if (this.quoteNext && !this.quoteNext.started) {
+            newSymbol.quoted = true;
+            this.quoteNext.started = true;
+        }
 
         this._storeNewCell(newSymbol);
         this.currentSymbol = newSymbol;
