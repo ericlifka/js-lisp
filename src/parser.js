@@ -202,6 +202,11 @@ Parser.prototype = {
     _parseStep_StartNewString: function () {
         var newString = List.string();
 
+        // Strings evaluate to themselves, so the quoted state isn't tracked
+        if (this.quoteNext && !this.quoteNext.started) {
+            this.quoteNext = null;
+        }
+
         this._storeNewCell(newString);
         this.currentString = newString;
     },
