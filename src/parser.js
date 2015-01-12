@@ -188,11 +188,16 @@ Parser.prototype = {
     },
     _parseStep_Quote: function () {
         this.quoteNext = {
-            parseLevel: this.inProcessLists.length
+            parseLevel: this.inProcessLists.length,
+            started: false
         };
     },
     _parseStep_StartNewList: function () {
         var newList = List.cons();
+        if (this.quoteNext && !this.quoteNext.started) {
+            newList.quoted = true;
+            this.quoteNext.started = true;
+        }
 
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
