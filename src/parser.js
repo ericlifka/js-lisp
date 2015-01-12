@@ -195,11 +195,7 @@ Parser.prototype = {
     _parseStep_StartNewList: function () {
         var newList = List.cons();
 
-        if (this.quoteNext && !this.quoteNext.started) {
-            newList.quoted = true;
-            this.quoteNext.started = true;
-        }
-
+        this._checkForQuoted(newList);
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
     },
@@ -212,11 +208,7 @@ Parser.prototype = {
     _parseStep_StartNewSymbol: function () {
         var newSymbol = List.symbol(this.currentChar);
 
-        if (this.quoteNext && !this.quoteNext.started) {
-            newSymbol.quoted = true;
-            this.quoteNext.started = true;
-        }
-
+        this._checkForQuoted(newSymbol);
         this._storeNewCell(newSymbol);
         this.currentSymbol = newSymbol;
     },
@@ -228,6 +220,12 @@ Parser.prototype = {
         }
         else {
             this.inProcessLists.pop();
+        }
+    },
+    _checkForQuoted: function (newCell) {
+        if (this.quoteNext && !this.quoteNext.started) {
+            newCell.quoted = true;
+            this.quoteNext.started = true;
         }
     },
     _endCurrentSymbol: function () {
