@@ -126,6 +126,10 @@ Parser.prototype = {
             }
         }
 
+        else if (this.currentChar === "'") {
+            this._parseStep_Quote();
+        }
+
         else if (this.currentChar === '(') {
             this._parseStep_StartNewList();
         }
@@ -181,6 +185,9 @@ Parser.prototype = {
                 "' at buffer position " +
                 this.parsePosition;
         }
+    },
+    _parseStep_Quote: function () {
+
     },
     _parseStep_StartNewList: function () {
         var newList = List.cons();
