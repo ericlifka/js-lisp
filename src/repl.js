@@ -108,6 +108,10 @@ function evalList(list, environment, callback) {
 
     var environmentValue = environment.getSymbolValue(firstSymbol.name);
 
+    if (!environmentValue) {
+        return callback(List.error("Symbol not found in environment " + firstSymbol.name));
+    }
+
     if (typeof environmentValue !== 'function') {
         return callback(List.error("Cannot invoke non function value '" + environmentValue + "'"));
     }
