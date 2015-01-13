@@ -17,15 +17,15 @@ var combineNumbers = function (base, parameters, combinator, callback) {
 };
 
 module.exports = {
-    "+": function (parameters, callback) {
+    "+": List.func(function (parameters, callback) {
         combineNumbers(List.number(0), parameters, function (a, b) { return a + b; }, callback);
-    },
+    }),
 
-    "*": function (parameters, callback) {
+    "*": List.func(function (parameters, callback) {
         combineNumbers(List.number(1), parameters, function (a, b) { return a * b; }, callback);
-    },
+    }),
 
-    "-": function (parameters, callback) {
+    "-": List.func(function (parameters, callback) {
         if (!parameters) {
             callback(List.error("- needs at least 1 argument"));
         }
@@ -35,9 +35,9 @@ module.exports = {
         else {
             combineNumbers(parameters.car, parameters.cdr, function (a, b) { return a - b; }, callback);
         }
-    },
+    }),
 
-    "/": function (parameters, callback) {
+    "/": List.func(function (parameters, callback) {
         if (!parameters) {
             callback(List.error("/ needs at least 1 argument"));
         }
@@ -47,5 +47,5 @@ module.exports = {
         else {
             combineNumbers(parameters.car, parameters.cdr, function (a, b) { return a / b; }, callback);
         }
-    }
+    })
 };
