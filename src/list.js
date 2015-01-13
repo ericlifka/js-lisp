@@ -58,6 +58,18 @@ function number(value) {
     return number;
 }
 
+function func(fn) {
+    var cell = new Cell('function');
+    cell.callable = fn;
+    return cell;
+}
+
+function macro(fn) {
+    var cell = new Cell('macro');
+    cell.callable = fn;
+    return cell;
+}
+
 function error(message) {
     var err = new Cell('error');
     err.message = arguments.length === 0 ? "" : ""+message;
@@ -85,6 +97,14 @@ function isError(cell) {
 
 function isNumber(cell) {
     return isType(cell, 'number');
+}
+
+function isFunc(cell) {
+    return isType(cell, 'function');
+}
+
+function isMacro(cell) {
+    return isType(cell, 'macro');
 }
 
 function isValidEntity(cell) {
@@ -131,9 +151,13 @@ module.exports = {
     symbol: symbol,
     string: string,
     number: number,
+    func: func,
+    macro: macro,
     error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
+    isFunc: isFunc,
+    isMacro: isMacro,
     isError: isError,
     isNumber: isNumber,
     isValidEntity: isValidEntity,
