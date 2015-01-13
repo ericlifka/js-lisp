@@ -99,17 +99,17 @@ function evalList(list, environment, callback) {
         return callback(list);
     }
 
-    var functionSymbol = list.car;
+    var firstSymbol = list.car;
     var parameters = list.cdr;
 
-    if (functionSymbol.type !== 'symbol') {
-        return callback(List.error("Cannot call '" + functionSymbol + "'"));
+    if (firstSymbol.type !== 'symbol') {
+        return callback(List.error("Cannot call '" + firstSymbol + "'"));
     }
 
-    var functionValue = environment.getSymbolValue(functionSymbol.name);
+    var environmentValue = environment.getSymbolValue(firstSymbol.name);
 
-    if (typeof functionValue !== 'function') {
-        return callback(List.error("Cannot invoke non function value '" + functionValue + "'"));
+    if (typeof environmentValue !== 'function') {
+        return callback(List.error("Cannot invoke non function value '" + environmentValue + "'"));
     }
 
     evaluateParameters(parameters, environment, function (evaluatedParameters) {
@@ -118,7 +118,7 @@ function evalList(list, environment, callback) {
             return callback(evaluatedParameters);
         }
 
-        functionValue(evaluatedParameters, callback);
+        environmentValue(evaluatedParameters, callback);
     });
 }
 
