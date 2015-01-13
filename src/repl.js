@@ -112,18 +112,22 @@ function evalList(list, environment, callback) {
         return callback(List.error("Symbol not found in environment " + firstSymbol.name));
     }
 
-    if (typeof environmentValue !== 'function') {
-        return callback(List.error("Cannot invoke non function value '" + environmentValue + "'"));
+    if (List.isMacro(environmentValue)) {
+
     }
 
-    evaluateParameters(parameters, environment, function (evaluatedParameters) {
-        // If any of the parameters resolve as an error then the whole statement is resolved as that error
-        if (List.isError(evaluatedParameters)) {
-            return callback(evaluatedParameters);
-        }
+    if (List.isFunc(environmentValue)) {
+        return evaluateParameters(parameters, environment, function (evaluatedParameters) {
+            // If any of the parameters resolve as an error then the whole statement is resolved as that error
+            if (List.isError(evaluatedParameters)) {
+                return callback(evaluatedParameters);
+            }
 
-        environmentValue(evaluatedParameters, callback);
-    });
+            environmentValue.callable(evaluatedParameters, callback);
+        });
+    }
+
+    callback(List.error("Non callable value for symbol '" + firstSymbol.name + "', '" + environmentValue + "'"));
 }
 
 function evaluateParameters(parameters, environment, callback) {
