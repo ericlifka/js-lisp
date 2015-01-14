@@ -1,4 +1,5 @@
 var MathBuiltins = require('./math');
+var SpecialForms = require('./special-forms');
 
 function Environment() {
     this.parent = null;
@@ -30,6 +31,10 @@ function addBuiltins(env) {
     env.symbols['-'] = MathBuiltins['-'];
     env.symbols['*'] = MathBuiltins['*'];
     env.symbols['/'] = MathBuiltins['/'];
+
+    env.symbols['fn'] = SpecialForms['fn'];
+    env.symbols['def-fn'] = SpecialForms['def-fn'];
+    env.symbols['def-macro'] = SpecialForms['def-macro'];
 
     return env;
 }
