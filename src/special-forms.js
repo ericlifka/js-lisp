@@ -12,6 +12,8 @@ module.exports = {
         if (!symbol || !value) {
             return callback(List.error("Symbol given to def must be valid"));
         }
+
+        scopeEnvironment.putSymbolValue(symbol.name, value);
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
