@@ -1,13 +1,13 @@
 var List = require('./list');
 
 module.exports = {
-    "fn": List.macro(function (list, callback) {
+    "fn": List.special(function (scopeEnvironment, list, callback) {
         callback(List.error("Not Implemented"));
     }),
-    "def-fn": List.macro(function (list, callback) {
+    "def-fn": List.special(function (list, callback) {
         callback(List.error("Not Implemented"));
     }),
-    "def-macro": List.macro(function (list, callback) {
+    "def-macro": List.special(function (list, callback) {
         callback(List.error("Not Implemented"));
     })
 };
