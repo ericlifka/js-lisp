@@ -112,6 +112,10 @@ function evalList(list, environment, callback) {
         return callback(List.error("Symbol not found in environment " + firstSymbol.name));
     }
 
+    if (List.isSpecial(environmentValue)) {
+        return environmentValue.callable(environment, parameters, callback);
+    }
+
     if (List.isMacro(environmentValue)) {
 
     }
