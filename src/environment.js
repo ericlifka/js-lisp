@@ -37,14 +37,14 @@ function createTopLevel() {
 }
 
 function addBuiltins(env) {
-    env.symbols['+'] = MathBuiltins['+'];
-    env.symbols['-'] = MathBuiltins['-'];
-    env.symbols['*'] = MathBuiltins['*'];
-    env.symbols['/'] = MathBuiltins['/'];
+    env.putSymbolValue('+', MathBuiltins['+']);
+    env.putSymbolValue('-', MathBuiltins['-']);
+    env.putSymbolValue('*', MathBuiltins['*']);
+    env.putSymbolValue('/', MathBuiltins['/']);
 
-    env.symbols['fn'] = SpecialForms['fn'];
-    env.symbols['def-fn'] = SpecialForms['def-fn'];
-    env.symbols['def-macro'] = SpecialForms['def-macro'];
+    env.putSymbolValue('fn', SpecialForms['fn']);
+    env.putSymbolValue('def-fn', SpecialForms['def-fn']);
+    env.putSymbolValue('def-macro', SpecialForms['def-macro']);
 
     return env;
 }
