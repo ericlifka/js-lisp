@@ -6,6 +6,12 @@ module.exports = {
             return callback(List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`"));
         }
 
+        var symbol = list.car;
+        var value = list.cdr.car;
+
+        if (!symbol || !value) {
+            return callback(List.error("Symbol given to def must be valid"));
+        }
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
