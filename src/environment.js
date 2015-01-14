@@ -18,6 +18,10 @@ var Environment = (function () {
             else {
                 return null;
             }
+        },
+
+        putSymbolValue: function (symbol, value) {
+            this.symbols[symbol] = value;
         }
     };
 
