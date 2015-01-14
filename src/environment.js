@@ -36,15 +36,19 @@ function createTopLevel() {
     return addBuiltins(create());
 }
 
-function addBuiltins(env) {
-    env.putSymbolValue('+', MathBuiltins['+']);
-    env.putSymbolValue('-', MathBuiltins['-']);
-    env.putSymbolValue('*', MathBuiltins['*']);
-    env.putSymbolValue('/', MathBuiltins['/']);
+function loadFromModule(env, module, symbol) {
+    env.putSymbolValue(symbol, module[symbol]);
+}
 
-    env.putSymbolValue('fn', SpecialForms['fn']);
-    env.putSymbolValue('def-fn', SpecialForms['def-fn']);
-    env.putSymbolValue('def-macro', SpecialForms['def-macro']);
+function addBuiltins(env) {
+    loadFromModule(env, MathBuiltins, "+");
+    loadFromModule(env, MathBuiltins, "-");
+    loadFromModule(env, MathBuiltins, "*");
+    loadFromModule(env, MathBuiltins, "/");
+
+    loadFromModule(env, SpecialForms, "fn");
+    loadFromModule(env, SpecialForms, "def-fn");
+    loadFromModule(env, SpecialForms, "def-macro");
 
     return env;
 }
