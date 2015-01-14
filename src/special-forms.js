@@ -1,6 +1,10 @@
 var List = require('./list');
 
 module.exports = {
+    "def": List.special(function (scopeEnvironment, list, callback) {
+
+    }),
+
     "fn": List.special(function (scopeEnvironment, list, callback) {
         if (!list || list.length() < 2) {
             return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
