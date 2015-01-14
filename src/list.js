@@ -58,6 +58,12 @@ function number(value) {
     return number;
 }
 
+function special(fn) {
+    var cell = new Cell('special');
+    cell.callable = fn;
+    return cell;
+}
+
 function func(fn) {
     var cell = new Cell('function');
     cell.callable = fn;
@@ -101,6 +107,10 @@ function isNumber(cell) {
 
 function isFunc(cell) {
     return isType(cell, 'function');
+}
+
+function isSpecial(cell) {
+    return isType(cell, 'special');
 }
 
 function isMacro(cell) {
@@ -152,11 +162,13 @@ module.exports = {
     string: string,
     number: number,
     func: func,
+    special: special,
     macro: macro,
     error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
     isFunc: isFunc,
+    isSpecial: isSpecial,
     isMacro: isMacro,
     isError: isError,
     isNumber: isNumber,
