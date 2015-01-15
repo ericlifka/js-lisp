@@ -1,4 +1,5 @@
 var List = require('./list');
+var Eval = require('./eval');
 
 module.exports = {
     "def": List.special(function (scopeEnvironment, list, callback) {
@@ -7,14 +8,16 @@ module.exports = {
         }
 
         var symbol = list.car;
-        var value = list.cdr.car;
+        var statement = list.cdr.car;
 
-        if (!symbol || !value) {
+        if (!symbol || !statement) {
             return callback(List.error("Symbol given to def must be valid"));
         }
 
-        scopeEnvironment.putSymbolValue(symbol.name, value);
-        callback(value);
+        Eval.evaluateStatement(statement, scopeEnvironment, function (value) {
+            scopeEnvironment.putSymbolValue(symbol.name, value);
+            callback(value);
+        });
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
