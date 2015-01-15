@@ -10,8 +10,12 @@ module.exports = {
         var symbol = list.car;
         var statement = list.cdr.car;
 
-        if (!symbol || !statement) {
+        if (!symbol || !symbol.name) {
             return callback(List.error("Symbol given to def must be valid"));
+        }
+
+        if (!statement) {
+            return callback(List.error("Statement given to def must be valid"));
         }
 
         Eval.evaluateStatement(statement, scopeEnvironment, function (value) {
