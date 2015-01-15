@@ -46,6 +46,7 @@ function addBuiltins(env) {
     loadFromModule(env, MathBuiltins, "*");
     loadFromModule(env, MathBuiltins, "/");
 
+    loadFromModule(env, SpecialForms, "def");
     loadFromModule(env, SpecialForms, "fn");
     loadFromModule(env, SpecialForms, "def-fn");
     loadFromModule(env, SpecialForms, "def-macro");

@@ -14,6 +14,7 @@ module.exports = {
         }
 
         scopeEnvironment.putSymbolValue(symbol.name, value);
+        callback(value);
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
