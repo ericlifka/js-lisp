@@ -76,6 +76,10 @@ function macro(fn) {
     return cell;
 }
 
+function nullValue() {
+    return new Cell('null');
+}
+
 function error(message) {
     var err = new Cell('error');
     err.message = arguments.length === 0 ? "" : ""+message;
@@ -115,6 +119,10 @@ function isSpecial(cell) {
 
 function isMacro(cell) {
     return isType(cell, 'macro');
+}
+
+function isNull(cell) {
+    return isType(cell, 'null');
 }
 
 function isValidEntity(cell) {
@@ -164,6 +172,7 @@ module.exports = {
     func: func,
     special: special,
     macro: macro,
+    nullValue: nullValue,
     error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
@@ -172,6 +181,7 @@ module.exports = {
     isMacro: isMacro,
     isError: isError,
     isNumber: isNumber,
+    isNull: isNull,
     isValidEntity: isValidEntity,
     addToEnd: addToEnd
 };
