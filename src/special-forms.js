@@ -31,8 +31,15 @@ module.exports = {
 
         var formals = list.car;
         var body = list.cdr;
+        var arity = formals.length();
 
         callback(List.func(function (parameters, innerCallback) {
+            var paramsSupplied = parameters.length();
+            if (arity !== paramsSupplied) {
+                return innerCallback(List.error("Function defined with arity " +
+                    arity + " but supplied " + paramsSupplied + " parameters"));
+            }
+
             innerCallback(List.error("Not Implemented"));
         }));
     }),
