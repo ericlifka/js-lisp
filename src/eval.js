@@ -55,7 +55,9 @@ function evaluateList(list, environment, callback) {
         }
 
         if (List.isMacro(callableResult)) {
-            return callback(List.error("Not Implemented"));
+            return callableResult.callable(environment, parameters, function (resultStatement) {
+                evaluateStatement(resultStatement, environment, callback);
+            });
         }
 
         if (List.isFunc(callableResult)) {
