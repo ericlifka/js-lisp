@@ -42,39 +42,34 @@ function evaluateList(list, environment, callback) {
         return callback(list);
     }
 
-    var firstSymbol = list.car;
+    var firstStatement = list.car;
     var parameters = list.cdr;
 
-    if (firstSymbol.type !== 'symbol') {
-        return callback(List.error("Cannot call '" + firstSymbol + "'"));
-    }
+    evaluateStatement(firstStatement, environment, function (callableResult) {
+        if (List.isError(callableResult)) {
+            return callback(callableResult);
+        }
 
-    var environmentValue = environment.getSymbolValue(firstSymbol.name);
+        if (List.isSpecial(callableResult)) {
+            return callableResult.callable(environment, parameters, callback);
+        }
 
-    if (!environmentValue) {
-        return callback(List.error("Symbol not found in environment " + firstSymbol.name));
-    }
+        if (List.isMacro(callableResult)) {
+            return callback(List.error("Not Implemented"));
+        }
 
-    if (List.isSpecial(environmentValue)) {
-        return environmentValue.callable(environment, parameters, callback);
-    }
+        if (List.isFunc(callableResult)) {
+            return evaluateParameters(parameters, environment, function (evaluatedParameters) {
+                if (List.isError(evaluatedParameters)) {
+                    return callback(evaluatedParameters);
+                }
 
-    if (List.isMacro(environmentValue)) {
+                callableResult.callable(evaluatedParameters, callback);
+            });
+        }
 
-    }
-
-    if (List.isFunc(environmentValue)) {
-        return evaluateParameters(parameters, environment, function (evaluatedParameters) {
-            // If any of the parameters resolve as an error then the whole statement is resolved as that error
-            if (List.isError(evaluatedParameters)) {
-                return callback(evaluatedParameters);
-            }
-
-            environmentValue.callable(evaluatedParameters, callback);
-        });
-    }
-
-    callback(List.error("Non callable value for symbol '" + firstSymbol.name + "', '" + environmentValue + "'"));
+        callback(List.error("Found non invokable value as first statement of s-expression: " + callableResult));
+    });
 }
 
 function evaluateParameters(parameters, environment, callback) {
