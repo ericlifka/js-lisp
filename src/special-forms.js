@@ -34,7 +34,7 @@ module.exports = {
         var arity = formals.length();
 
         callback(List.func(function (parameters, innerCallback) {
-            var paramsSupplied = parameters.length();
+            var paramsSupplied = parameters ? parameters.length() : 0;
             if (arity !== paramsSupplied) {
                 return innerCallback(List.error("Function defined with arity " +
                     arity + " but supplied " + paramsSupplied + " parameters"));
