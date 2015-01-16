@@ -52,7 +52,20 @@ module.exports = {
                 parameter = parameter.cdr;
             }
 
-            innerCallback(List.error("Not Implemented"));
+            var currentStatement = body;
+            var evaluateBody = function (resultValue) {
+                if (currentStatement) {
+                    var statement = currentStatement.car;
+                    currentStatement = currentStatement.cdr;
+
+                    Eval.evaluateStatement(statement, invocationEnvironment, evaluateBody);
+                }
+                else {
+                    innerCallback(resultValue || List.nullValue());
+                }
+            };
+
+            evaluateBody();
         }));
     }),
 
