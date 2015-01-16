@@ -1,5 +1,6 @@
 var List = require('./list');
 var Eval = require('./eval');
+var Environment = require('./environment');
 
 module.exports = {
     "def": List.special(function (scopeEnvironment, list, callback) {
@@ -39,6 +40,8 @@ module.exports = {
                 return innerCallback(List.error("Function defined with arity " +
                     arity + " but supplied " + paramsSupplied + " parameters"));
             }
+
+            var invocationEnvironment = Environment.create(scopeEnvironment);
 
             innerCallback(List.error("Not Implemented"));
         }));
