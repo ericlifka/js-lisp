@@ -42,6 +42,15 @@ module.exports = {
             }
 
             var invocationEnvironment = Environment.create(scopeEnvironment);
+            var formal = formals;
+            var parameter = parameters;
+
+            while (formal && parameter) {
+                invocationEnvironment.putSymbolValue(formal.car.name, parameter.car);
+
+                formal = formal.cdr;
+                parameter = parameter.cdr;
+            }
 
             innerCallback(List.error("Not Implemented"));
         }));
