@@ -2,8 +2,8 @@ var MathBuiltins = require('./math');
 var SpecialForms = require('./special-forms');
 
 var Environment = (function () {
-    function Environment() {
-        this.parent = null;
+    function Environment(parent) {
+        this.parent = parent;
         this.symbols = { };
     }
 
@@ -28,8 +28,8 @@ var Environment = (function () {
     return Environment;
 })();
 
-function create() {
-    return new Environment();
+function create(parent) {
+    return new Environment(parent);
 }
 
 function createTopLevel() {
