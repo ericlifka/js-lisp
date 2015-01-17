@@ -6,6 +6,7 @@ function evaluateStatement(statement, environment, callback) {
     }
 
     if (statement.quoted) {
+        statement.quoted = false;
         return callback(statement);
     }
 
