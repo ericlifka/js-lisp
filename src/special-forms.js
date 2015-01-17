@@ -74,7 +74,7 @@ module.exports = {
     }),
 
     "macro": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.error("Not Implemented"));
+        return createCallable(scopeEnvironment, list, callback);
     }),
 
     "def-fn": List.special(function (list, callback) {
