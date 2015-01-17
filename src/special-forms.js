@@ -11,7 +11,7 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
     var body = list.cdr;
     var arity = formals.length();
 
-    callback(callableType(function (parameters, innerCallback) {
+    var callable = callableType(function (parameters, innerCallback) {
         var paramsSupplied = parameters ? parameters.length() : 0;
         if (arity !== paramsSupplied) {
             return innerCallback(List.error("Function defined with arity " +
@@ -43,7 +43,9 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
         };
 
         evaluateBody();
-    }));
+    });
+
+    callback(callable);
 }
 
 module.exports = {
