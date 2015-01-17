@@ -14,6 +14,7 @@ function addBuiltins(env) {
 
     loadFromModule(env, SpecialForms, "def");
     loadFromModule(env, SpecialForms, "fn");
+    loadFromModule(env, SpecialForms, "macro");
     loadFromModule(env, SpecialForms, "def-fn");
     loadFromModule(env, SpecialForms, "def-macro");
 
