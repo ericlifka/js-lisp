@@ -2,6 +2,50 @@ var List = require('./list');
 var Eval = require('./eval');
 var Environment = require('./environment');
 
+function createCallable(scopeEnvironment, list, callback) {
+    if (!list || list.length() < 2) {
+        return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
+    }
+
+    var formals = list.car;
+    var body = list.cdr;
+    var arity = formals.length();
+
+    callback(List.func(function (parameters, innerCallback) {
+        var paramsSupplied = parameters ? parameters.length() : 0;
+        if (arity !== paramsSupplied) {
+            return innerCallback(List.error("Function defined with arity " +
+                arity + " but supplied " + paramsSupplied + " parameters"));
+        }
+
+        var invocationEnvironment = Environment.create(scopeEnvironment);
+        var formal = formals;
+        var parameter = parameters;
+
+        while (formal && parameter) {
+            invocationEnvironment.putSymbolValue(formal.car.name, parameter.car);
+
+            formal = formal.cdr;
+            parameter = parameter.cdr;
+        }
+
+        var currentStatement = body;
+        var evaluateBody = function (resultValue) {
+            if (currentStatement) {
+                var statement = currentStatement.car;
+                currentStatement = currentStatement.cdr;
+
+                Eval.evaluateStatement(statement, invocationEnvironment, evaluateBody);
+            }
+            else {
+                innerCallback(resultValue || List.nullValue());
+            }
+        };
+
+        evaluateBody();
+    }));
+}
+
 module.exports = {
     "def": List.special(function (scopeEnvironment, list, callback) {
         if (!list || list.length() !== 2) {
@@ -26,47 +70,7 @@ module.exports = {
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
-        if (!list || list.length() < 2) {
-            return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
-        }
-
-        var formals = list.car;
-        var body = list.cdr;
-        var arity = formals.length();
-
-        callback(List.func(function (parameters, innerCallback) {
-            var paramsSupplied = parameters ? parameters.length() : 0;
-            if (arity !== paramsSupplied) {
-                return innerCallback(List.error("Function defined with arity " +
-                    arity + " but supplied " + paramsSupplied + " parameters"));
-            }
-
-            var invocationEnvironment = Environment.create(scopeEnvironment);
-            var formal = formals;
-            var parameter = parameters;
-
-            while (formal && parameter) {
-                invocationEnvironment.putSymbolValue(formal.car.name, parameter.car);
-
-                formal = formal.cdr;
-                parameter = parameter.cdr;
-            }
-
-            var currentStatement = body;
-            var evaluateBody = function (resultValue) {
-                if (currentStatement) {
-                    var statement = currentStatement.car;
-                    currentStatement = currentStatement.cdr;
-
-                    Eval.evaluateStatement(statement, invocationEnvironment, evaluateBody);
-                }
-                else {
-                    innerCallback(resultValue || List.nullValue());
-                }
-            };
-
-            evaluateBody();
-        }));
+        return createCallable(scopeEnvironment, list, callback);
     }),
 
     "macro": List.special(function (scopeEnvironment, list, callback) {
