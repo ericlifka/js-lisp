@@ -55,7 +55,7 @@ function evaluateList(list, environment, callback) {
         }
 
         if (List.isMacro(callableResult)) {
-            return callableResult.callable(environment, parameters, function (resultStatement) {
+            return callableResult.callable(parameters, function (resultStatement) {
                 evaluateStatement(resultStatement, environment, callback);
             });
         }
