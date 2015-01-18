@@ -50,11 +50,11 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
 
 module.exports = {
     "quote": List.special(function (scopeEnvironment, list, callback) {
-
+        callback(list);
     }),
 
     "list": List.special(function (scopeEnvironment, list, callback) {
-
+        callback(List.error("Not Implemented"));
     }),
 
     "def": List.special(function (scopeEnvironment, list, callback) {
