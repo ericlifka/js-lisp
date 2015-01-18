@@ -49,6 +49,10 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
 }
 
 module.exports = {
+    "list": List.special(function (scopeEnvironment, list, callback) {
+
+    }),
+
     "def": List.special(function (scopeEnvironment, list, callback) {
         if (!list || list.length() !== 2) {
             return callback(List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`"));
