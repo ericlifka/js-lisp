@@ -19,6 +19,36 @@ Cell.prototype.toString = function () {
     }
 };
 
+Cell.prototype.clone = function () {
+    // This is only intended to be a shallow clone for the parser's convenience,
+    // it shouldn't be used for language features.
+    var cell = new Cell(this.type);
+
+    switch(this.type) {
+        case 'cons':
+            cell.car = this.car;
+            cell.cdr = this.cdr;
+            break;
+        case 'symbol':
+            cell.name = this.name;
+            break;
+        case 'string':
+        case 'number':
+            cell.value = this.value;
+            break;
+        case 'special':
+        case 'function':
+        case 'macro':
+            cell.callable = this.callable;
+            break;
+        case 'null':
+        default:
+            break;
+    }
+
+    return cell;
+};
+
 Cell.prototype.length = function () {
     if (this.type !== 'cons') {
         return NaN;
