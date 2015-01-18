@@ -12,6 +12,9 @@ Cell.prototype.toString = function () {
         case 'error': return 'Error: "' + this.message + '"';
         case 'number': return "" + this.value;
         case 'null': return "nil";
+        case 'function': return "[cell function]";
+        case 'macro': return "[cell macro]";
+        case 'special': return "[cell special-form]";
         default: return "[object Cell]";
     }
 };
