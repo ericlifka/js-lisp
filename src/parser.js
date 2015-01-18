@@ -31,10 +31,6 @@ function convertSymbolToNumber(cell) {
     delete cell.name;
 }
 
-function quoteStatement(cell) {
-
-}
-
 var ESCAPE_MAP = {
     "b": "\b",
     "f": "\f",
@@ -169,11 +165,8 @@ Parser.prototype = {
             this.escapeNext = false;
         }
         else if (this.currentChar === '"') {
-            if (this.currentString.quoted) {
-                quoteStatement(this.currentString);
-            }
-
             this.currentString = null;
+            this._closeQuoteLists();
         }
         else if (this.currentChar === '\\') {
             this.escapeNext = true;
@@ -208,21 +201,18 @@ Parser.prototype = {
     _parseStep_StartNewList: function () {
         var newList = List.cons();
 
-        this._checkForQuoted(newList);
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
     },
     _parseStep_StartNewString: function () {
         var newString = List.string();
 
-        this._checkForQuoted(newString);
         this._storeNewCell(newString);
         this.currentString = newString;
     },
     _parseStep_StartNewSymbol: function () {
         var newSymbol = List.symbol(this.currentChar);
 
-        this._checkForQuoted(newSymbol);
         this._storeNewCell(newSymbol);
         this.currentSymbol = newSymbol;
     },
@@ -233,16 +223,19 @@ Parser.prototype = {
                 this.parsePosition;
         }
         else {
-            var list = this.inProcessLists.pop();
-            if (list.quoted) {
-                quoteStatement(list);
-            }
+            this.inProcessLists.pop();
+            this._closeQuoteLists();
         }
     },
-    _checkForQuoted: function (newCell) {
-        if (this.quoteNext) {
-            newCell.quoted = true;
-            this.quoteNext = false;
+    _closeQuoteLists: function () {
+        // Close off every quoteList that's a direct parent in the process stack
+        var current = stackTop(this.inProcessLists);
+        while (current && current.isQuoteList) {
+            // isQuoteList is parser only data that shouldn't leak to the larger environment
+            delete current.isQuoteList;
+
+            this.inProcessLists.pop();
+            current = stackTop(this.inProcessLists);
         }
     },
     _endCurrentSymbol: function () {
@@ -257,12 +250,8 @@ Parser.prototype = {
                 convertSymbolToNumber(this.currentSymbol);
             }
 
-            if (this.currentSymbol.quoted) {
-                quoteStatement(this.currentSymbol);
-            }
-
             this.currentSymbol = null;
-
+            this._closeQuoteLists();
         }
     },
     _storeNewCell: function (cell) {
