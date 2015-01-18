@@ -13,6 +13,10 @@ function isLegalSymbolChar(char) {
     return /[a-zA-Z\d_|?:!@#$%^&*<>=+.\/\-\\]/.test(char);
 }
 
+function isQuoteChar(char) {
+    return char === "'" || char === "`";
+}
+
 function isNumeric(symbol) {
     return symbol && symbol.length > 0 && !isNaN(symbol);
 }
@@ -126,7 +130,7 @@ Parser.prototype = {
             }
         }
 
-        else if (this.currentChar === "'") {
+        else if (isQuoteChar(this.currentChar)) {
             this._parseStep_Quote();
         }
 
@@ -189,7 +193,8 @@ Parser.prototype = {
     _parseStep_Quote: function () {
         this.quoteNext = {
             parseLevel: this.inProcessLists.length,
-            started: false
+            started: false,
+            quasi: false
         };
     },
     _parseStep_StartNewList: function () {
