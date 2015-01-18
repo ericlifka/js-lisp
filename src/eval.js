@@ -5,11 +5,6 @@ function evaluateStatement(statement, environment, callback) {
         return callback(List.error("Eval on non-valid entity"));
     }
 
-    if (statement.quoted) {
-        statement.quoted = false;
-        return callback(statement);
-    }
-
     switch (statement.type) {
         case 'cons':
             evaluateList(statement, environment, callback);
