@@ -194,7 +194,7 @@ Parser.prototype = {
         this.quoteNext = {
             parseLevel: this.inProcessLists.length,
             started: false,
-            quasi: false
+            quasi: this.currentChar === '`'
         };
     },
     _parseStep_StartNewList: function () {
