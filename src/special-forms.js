@@ -50,7 +50,12 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
 
 module.exports = {
     "quote": List.special(function (scopeEnvironment, list, callback) {
-        callback(list);
+        if (!list || !list.car) {
+            callback(List.nullValue());
+        }
+        else {
+            callback(list.car);
+        }
     }),
 
     "list": List.special(function (scopeEnvironment, list, callback) {
