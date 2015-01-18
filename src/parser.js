@@ -199,7 +199,11 @@ Parser.prototype = {
         }
     },
     _parseStep_Quote: function () {
-        this.quoteNext = true;
+        var quoteList = List.cons(List.symbol('quote'));
+        quoteList.isQuoteList = true;
+
+        this._storeNewCell(quoteList);
+        this.inProcessLists.push(quoteList);
     },
     _parseStep_StartNewList: function () {
         var newList = List.cons();
