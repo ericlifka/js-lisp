@@ -49,6 +49,10 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
 }
 
 module.exports = {
+    "quote": List.special(function (scopeEnvironment, list, callback) {
+
+    }),
+
     "list": List.special(function (scopeEnvironment, list, callback) {
 
     }),
