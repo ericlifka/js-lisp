@@ -11,6 +11,7 @@ Cell.prototype.toString = function () {
         case 'string': return '"' + this.value + '"';
         case 'error': return 'Error: "' + this.message + '"';
         case 'number': return "" + this.value;
+        case 'null': return "nil";
         default: return "[object Cell]";
     }
 };
