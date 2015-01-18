@@ -12,6 +12,8 @@ function addBuiltins(env) {
     loadFromModule(env, MathBuiltins, "*");
     loadFromModule(env, MathBuiltins, "/");
 
+    loadFromModule(env, SpecialForms, "quote");
+    loadFromModule(env, SpecialForms, "list");
     loadFromModule(env, SpecialForms, "def");
     loadFromModule(env, SpecialForms, "fn");
     loadFromModule(env, SpecialForms, "macro");
