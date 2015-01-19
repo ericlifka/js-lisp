@@ -1,6 +1,9 @@
 var Environment = require('./environment');
-var MathBuiltins = require('./math');
-var SpecialForms = require('./special-forms');
+
+var modules = [
+    require('./constructs/math'),
+    require('./constructs/special-forms')
+];
 
 function loadModuleFunctions(env, module) {
     for (var symbol in module) {
@@ -11,8 +14,9 @@ function loadModuleFunctions(env, module) {
 }
 
 function addBuiltins(env) {
-    loadModuleFunctions(env, MathBuiltins);
-    loadModuleFunctions(env, SpecialForms);
+    modules.forEach(function (module) {
+        loadModuleFunctions(env, module);
+    });
 
     return env;
 }
