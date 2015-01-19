@@ -1,10 +1,13 @@
-var TopLevel = require('./top-level');
 var Readline = require('readline');
+
+var Environment = require('./environment');
+var TopLevel = require('./top-level');
 var Parser = require('./parser');
 var Eval = require('./eval');
 
 var PARSER = new Parser();
-var GLOBAL_ENVIRONMENT = TopLevel.create();
+var TOP_LEVEL = TopLevel.create();
+var GLOBAL_ENVIRONMENT = Environment.create(TOP_LEVEL);
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
 var NEW_STATEMENT_PROMPT = 'js-lisp> ';
 var CONTINUE_STATEMENT_PROMPT = "> ";
