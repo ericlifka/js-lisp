@@ -1,2 +1,2 @@
-exports.math = require("./math.js");
-exports['special-forms'] = require("./special-forms.js");
+exports.math = require("./math");
+exports.specialForms = require("./special-forms");
