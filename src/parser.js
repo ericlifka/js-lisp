@@ -13,10 +13,6 @@ function isLegalSymbolChar(char) {
     return /[a-zA-Z\d_|?:!@#$%^&*<>=+.\/\-\\]/.test(char);
 }
 
-function isQuoteChar(char) {
-    return char === "'" || char === "`";
-}
-
 function isNumeric(symbol) {
     return symbol && symbol.length > 0 && !isNaN(symbol);
 }
@@ -96,11 +92,13 @@ Parser.prototype = {
 
             while (this.parsePosition < this.currentParseString.length) {
                 this.currentChar = this.currentParseString[this.parsePosition];
+                this.lookAheadChar = this.currentParseString[this.parsePosition + 1];
+
                 this._parseStep();
                 if (this.errorState) {
                     return;
                 }
-                this.parsePosition++;
+                this._nextChar();
             }
 
             this._clearCurrentString();
@@ -117,6 +115,9 @@ Parser.prototype = {
         this._endCurrentSymbol();
         this.parsePosition = 0;
     },
+    _nextChar: function () {
+        this.parsePosition++;
+    },
     _parseStep: function () {
         if (this.currentString) {
             this._parseStep_InString();
@@ -130,8 +131,22 @@ Parser.prototype = {
             }
         }
 
-        else if (isQuoteChar(this.currentChar)) {
-            this._parseStep_Quote();
+        else if (this.currentChar === "'") {
+            this._parseStep_Quote('quote');
+        }
+
+        else if (this.currentChar === "`") {
+            this._parseStep_Quote('quasi-quote');
+        }
+
+        else if (this.currentChar === ",") {
+            if (this.lookAheadChar === "@") {
+                this._parseStep_Quote('unquote-splice');
+                this._nextChar();
+            }
+            else {
+                this._parseStep_Quote('unquote');
+            }
         }
 
         else if (this.currentChar === '(') {
@@ -191,8 +206,8 @@ Parser.prototype = {
                 this.parsePosition;
         }
     },
-    _parseStep_Quote: function () {
-        var quoteList = List.cons(List.symbol('quote'));
+    _parseStep_Quote: function (quoteSymbol) {
+        var quoteList = List.cons(List.symbol(quoteSymbol));
         quoteList.isQuoteList = true;
 
         this._storeNewCell(quoteList);
