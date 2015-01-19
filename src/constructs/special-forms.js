@@ -66,7 +66,7 @@ module.exports = {
         callback(List.error("Not Implemented"));
     }),
 
-    "quote-splat": List.special(function (scopeEnvironment, list, callback) {
+    "unquote-splat": List.special(function (scopeEnvironment, list, callback) {
         callback(List.error("Not Implemented"));
     }),
 
