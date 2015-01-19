@@ -1,22 +1,16 @@
 var Environment = require('./environment');
-
-var modules = [
-    require('./constructs/math'),
-    require('./constructs/special-forms')
-];
+var ConstructModules = require('./constructs');
 
 function loadModuleFunctions(env, module) {
     for (var symbol in module) {
-        if (module.hasOwnProperty(symbol)) {
-            env.putSymbolValue(symbol, module[symbol]);
-        }
+        env.putSymbolValue(symbol, module[symbol]);
     }
 }
 
 function addBuiltins(env) {
-    modules.forEach(function (module) {
-        loadModuleFunctions(env, module);
-    });
+    for (var module in ConstructModules) {
+        loadModuleFunctions(env, ConstructModules[module]);
+    }
 
     return env;
 }
