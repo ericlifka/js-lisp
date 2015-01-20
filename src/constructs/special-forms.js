@@ -90,7 +90,7 @@ module.exports = {
             if (List.isCons(nextItem)) {
                 if (isUnquoteList(nextItem)) {
                     return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultCell) {
-                        nextItem.copyFrom(resultCell);
+                        resultCell.cloneInto(nextItem);
                         processQueue();
                     });
                 }

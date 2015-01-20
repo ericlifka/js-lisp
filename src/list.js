@@ -5,50 +5,73 @@ function Cell(type) {
 }
 
 Cell.prototype.toString = function () {
-    switch(this.type) {
-        case 'cons': return "(" + printList(this) + ")";
-        case 'symbol': return this.name;
-        case 'string': return '"' + this.value + '"';
-        case 'error': return 'Error: "' + this.message + '"';
-        case 'number': return "" + this.value;
-        case 'null': return "nil";
-        case 'function': return "[cell function]";
-        case 'macro': return "[cell macro]";
-        case 'special': return "[cell special-form]";
-        default: return "[object Cell]";
+    switch (this.type) {
+        case 'cons':
+            return "(" + printList(this) + ")";
+        case 'symbol':
+            return this.name;
+        case 'string':
+            return '"' + this.value + '"';
+        case 'error':
+            return 'Error: "' + this.message + '"';
+        case 'number':
+            return "" + this.value;
+        case 'null':
+            return "nil";
+        case 'function':
+            return "[cell function]";
+        case 'macro':
+            return "[cell macro]";
+        case 'special':
+            return "[cell special-form]";
+        default:
+            return "[object Cell]";
     }
 };
 
-Cell.prototype.clone = function () {
-    var cell = new Cell(this.type);
+Cell.prototype.clone = function (target) {
+    if (target) {
+        // Reset supplied cell
+        delete target.type;
+        delete target.car;
+        delete target.cdr;
+        delete target.name;
+        delete target.value;
+        delete target.callable;
 
-    switch(this.type) {
+        target.type = this.type;
+    }
+    else {
+        target = new Cell(this.type);
+    }
+
+    switch (this.type) {
         case 'cons':
-            cell.car = this.car && this.car.clone ? this.car.clone() : this.car;
-            cell.cdr = this.cdr && this.cdr.clone ? this.cdr.clone() : this.cdr;
+            target.car = this.car && this.car.clone ? this.car.clone() : this.car;
+            target.cdr = this.cdr && this.cdr.clone ? this.cdr.clone() : this.cdr;
             break;
         case 'symbol':
-            cell.name = this.name;
+            target.name = this.name;
             break;
         case 'string':
         case 'number':
-            cell.value = this.value;
+            target.value = this.value;
             break;
         case 'special':
         case 'function':
         case 'macro':
             //TODO: these should probably store their parameters and bodies on the object so they can be cloned too
-            cell.callable = this.callable;
+            target.callable = this.callable;
             break;
         case 'null':
         default:
             break;
     }
 
-    return cell;
+    return target;
 };
 
-Cell.prototype.copyFrom = function (sourceCell) { };
+Cell.prototype.cloneInto = Cell.prototype.clone; // synonym for clarity
 
 Cell.prototype.length = function () {
     if (this.type !== 'cons') {
@@ -77,13 +100,13 @@ function cons(car, cdr) {
 
 function symbol(name) {
     var symbol = new Cell('symbol');
-    symbol.name = arguments.length === 0 ? "" : ""+name;
+    symbol.name = arguments.length === 0 ? "" : "" + name;
     return symbol;
 }
 
 function string(value) {
     var string = new Cell('string');
-    string.value = arguments.length === 0 ? "" : ""+value;
+    string.value = arguments.length === 0 ? "" : "" + value;
     return string;
 }
 
@@ -117,7 +140,7 @@ function nullValue() {
 
 function error(message) {
     var err = new Cell('error');
-    err.message = arguments.length === 0 ? "" : ""+message;
+    err.message = arguments.length === 0 ? "" : "" + message;
     return err;
 }
 
@@ -162,8 +185,7 @@ function isNull(cell) {
 
 function isValidEntity(cell) {
     return cell &&
-        cell instanceof Cell &&
-        !!cell.type;
+        cell instanceof Cell && !!cell.type;
 }
 
 function printList(list) {
