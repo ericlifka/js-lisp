@@ -11,13 +11,7 @@ function evaluateStatement(statement, environment, callback) {
             break;
 
         case 'symbol':
-            var value = environment.getSymbolValue(statement.name);
-            if (value) {
-                callback(value);
-            }
-            else {
-                callback(List.error('No value found for symbol "' + statement.name + '"'));
-            }
+            evaluateSymbol(statement, environment, callback);
             break;
 
         case 'error':
@@ -31,6 +25,17 @@ function evaluateStatement(statement, environment, callback) {
             break;
     }
 }
+
+function evaluateSymbol(symbol, environment, callback) {
+    var value = environment.getSymbolValue(symbol.name);
+    if (value) {
+        callback(value);
+    }
+    else {
+        callback(List.error('No value found for symbol "' + symbol.name + '"'));
+    }
+}
+
 
 function evaluateList(list, environment, callback) {
     // The empty list evaluates to itself
