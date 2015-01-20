@@ -20,14 +20,12 @@ Cell.prototype.toString = function () {
 };
 
 Cell.prototype.clone = function () {
-    // This is only intended to be a shallow clone for the parser's convenience,
-    // it shouldn't be used for language features.
     var cell = new Cell(this.type);
 
     switch(this.type) {
         case 'cons':
-            cell.car = this.car;
-            cell.cdr = this.cdr;
+            cell.car = this.car && this.car.clone ? this.car.clone() : this.car;
+            cell.cdr = this.cdr && this.cdr.clone ? this.cdr.clone() : this.cdr;
             break;
         case 'symbol':
             cell.name = this.name;
@@ -39,6 +37,7 @@ Cell.prototype.clone = function () {
         case 'special':
         case 'function':
         case 'macro':
+            //TODO: these should probably store their parameters and bodies on the object so they can be cloned too
             cell.callable = this.callable;
             break;
         case 'null':
