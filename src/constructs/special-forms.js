@@ -104,7 +104,15 @@ module.exports = {
                     });
                 }
                 else if (isSplatList(nextItem)) {
-
+                    return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultList) {
+                        if (List.isCons(resultList)) {
+                            // Copy list into original place
+                        }
+                        else {
+                            resultList.cloneInto(nextItem);
+                        }
+                        processQueue();
+                    });
                 }
                 else {
                     queueList(nextItem);
