@@ -16,6 +16,22 @@ function isSpliceList(list) {
         list.car.name === 'unquote-splice';
 }
 
+function spliceInto(resultList, context) {
+    // Save a reference to the items that come after the context item
+    var rest = context.cdr;
+
+    // Replace the context cell with the resultList, effectively inserting the result items
+    resultList.cloneInto(context);
+
+    // Find the end of the result list
+    while (context.cdr) {
+        context = context.cdr;
+    }
+
+    // Append the saved items to the end of the result list, finishing the in place splice
+    context.cdr = rest;
+}
+
 function createCallable(callableType, scopeEnvironment, list, callback) {
     if (!list || list.length() < 2) {
         return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
@@ -95,42 +111,30 @@ module.exports = {
             var context = queue.shift();
             var item = context.car;
 
-            if (List.isCons(item)) {
-                if (isUnquoteList(item)) {
-                    return Eval.evaluateStatement(item, scopeEnvironment, function (resultCell) {
-                        resultCell.cloneInto(item);
-                        processQueue();
-                    });
-                }
-                else if (isSpliceList(item)) {
-                    return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
-                        if (List.isCons(resultList)) {
-                            // Save a reference to the items that come after the current context item
-                            var rest = context.cdr;
-
-                            // Replace the context cell with the resultList, effectively inserting the result items
-                            resultList.cloneInto(context);
-
-                            // Find the end of the result list
-                            while (context.cdr) {
-                                context = context.cdr;
-                            }
-
-                            // Append the saved items to the end of the result list, finishing the in place splice
-                            context.cdr = rest;
-                        }
-                        else {
-                            // Non-list results are treated like normal unquote
-                            resultList.cloneInto(item);
-                        }
-                        processQueue();
-                    });
-                }
-                else {
-                    queueList(item);
-                }
+            if (!List.isCons(item)) {
+                return processQueue();
             }
 
+            if (isUnquoteList(item)) {
+                return Eval.evaluateStatement(item, scopeEnvironment, function (resultCell) {
+                    resultCell.cloneInto(item);
+                    processQueue();
+                });
+            }
+
+            if (isSpliceList(item)) {
+                return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
+                    if (List.isCons(resultList)) {
+                        spliceInto(resultList, context)
+                    }
+                    else {
+                        resultList.cloneInto(item);
+                    }
+                    processQueue();
+                });
+            }
+
+            queueList(item);
             processQueue();
         };
 
