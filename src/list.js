@@ -217,7 +217,14 @@ function addToEnd(list, cell) {
         current = current.cdr;
     }
 
-    current.cdr = cons(cell);
+    // A list should be appended to the end while a data cell should be inserted into the last spot
+    if (isCons(cell)) {
+        current.cdr = cell;
+    }
+    else {
+        current.cdr = cons(cell);
+    }
+
     return list;
 }
 
