@@ -70,8 +70,9 @@ module.exports = {
             return callback(List.nullValue());
         }
 
-        var statement = list.car.clone();
-        var queue = [];
+        var structure = list.car.clone();
+
+        var queue = [structure];
         var queueList = function (list) {
             while (list) {
                 if (list.car) {
@@ -81,12 +82,13 @@ module.exports = {
                 list = list.cdr;
             }
         };
+
         var processQueue = function () {
             if (queue.length === 0) {
-                return;
+                return callback(structure);
             }
-            var nextItem = queue.shift();
 
+            var nextItem = queue.shift();
             if (List.isCons(nextItem)) {
                 if (isUnquoteList(nextItem)) {
                     return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultCell) {
@@ -102,7 +104,7 @@ module.exports = {
             processQueue();
         };
 
-        callback(List.error("Not Implemented"));
+        processQueue();
     }),
 
     "unquote": List.special(function (scopeEnvironment, list, callback) {
