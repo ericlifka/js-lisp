@@ -13,7 +13,7 @@ function isSplatList(list) {
     return list &&
         list.car &&
         list.car.type === 'symbol' &&
-        list.car.name === 'unquote-splat';
+        list.car.name === 'unquote-splice';
 }
 
 function createCallable(callableType, scopeEnvironment, list, callback) {
@@ -105,10 +105,22 @@ module.exports = {
                 else if (isSplatList(item)) {
                     return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
                         if (List.isCons(resultList)) {
-                            // Copy list into original place
+                            // Save a reference to the items that come after the current context item
+                            var rest = context.cdr;
 
+                            // Replace the context cell with the resultList, effectively inserting the result items
+                            resultList.cloneInto(context);
+
+                            // Find the end of the result list
+                            while (context.cdr) {
+                                context = context.cdr;
+                            }
+
+                            // Append the saved items to the end of the result list, finishing the in place splice
+                            context.cdr = rest;
                         }
                         else {
+                            // Non-list results are treated like normal unquote
                             resultList.cloneInto(item);
                         }
                         processQueue();
