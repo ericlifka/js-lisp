@@ -14,6 +14,9 @@ function evaluateStatement(statement, environment, callback) {
             evaluateSymbol(statement, environment, callback);
             break;
 
+        case 'function':
+        case 'macro':
+        case 'special':
         case 'error':
         case 'string':
         case 'number':
