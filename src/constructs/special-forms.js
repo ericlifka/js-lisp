@@ -59,6 +59,12 @@ module.exports = {
     }),
 
     "quasi-quote": List.special(function (scopeEnvironment, list, callback) {
+        if (!list) {
+            return callback(List.nullValue());
+        }
+
+        var statement = list.car;
+
         callback(List.error("Not Implemented"));
     }),
 
