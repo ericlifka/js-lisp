@@ -37,6 +37,7 @@ Cell.prototype.clone = function (target) {
         delete target.cdr;
         delete target.name;
         delete target.value;
+        delete target.message;
         delete target.callable;
 
         target.type = this.type;
@@ -56,6 +57,9 @@ Cell.prototype.clone = function (target) {
         case 'string':
         case 'number':
             target.value = this.value;
+            break;
+        case 'error':
+            target.message = this.message;
             break;
         case 'special':
         case 'function':
