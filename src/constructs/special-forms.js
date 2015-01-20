@@ -77,45 +77,45 @@ module.exports = {
             return callback(List.nullValue());
         }
 
-        var structure = list.car.clone();
+        var structure = list.clone();
 
         var queue = [structure];
         var queueList = function (list) {
             while (list) {
-                if (list.car) {
-                    queue.push(list.car);
-                }
-
+                queue.push(list);
                 list = list.cdr;
             }
         };
 
         var processQueue = function () {
             if (queue.length === 0) {
-                return callback(structure);
+                return callback(structure.car);
             }
 
-            var nextItem = queue.shift();
-            if (List.isCons(nextItem)) {
-                if (isUnquoteList(nextItem)) {
-                    return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultCell) {
-                        resultCell.cloneInto(nextItem);
+            var context = queue.shift();
+            var item = context.car;
+
+            if (List.isCons(item)) {
+                if (isUnquoteList(item)) {
+                    return Eval.evaluateStatement(item, scopeEnvironment, function (resultCell) {
+                        resultCell.cloneInto(item);
                         processQueue();
                     });
                 }
-                else if (isSplatList(nextItem)) {
-                    return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultList) {
+                else if (isSplatList(item)) {
+                    return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
                         if (List.isCons(resultList)) {
                             // Copy list into original place
+
                         }
                         else {
-                            resultList.cloneInto(nextItem);
+                            resultList.cloneInto(item);
                         }
                         processQueue();
                     });
                 }
                 else {
-                    queueList(nextItem);
+                    queueList(item);
                 }
             }
 
