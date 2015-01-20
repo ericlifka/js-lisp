@@ -63,7 +63,17 @@ module.exports = {
             return callback(List.nullValue());
         }
 
-        var statement = list.car;
+        var statement = list.car.clone();
+        var queue = [];
+        var queueList = function (list) {
+            while (list) {
+                if (list.car) {
+                    queue.push(list.car);
+                }
+
+                list = list.cdr;
+            }
+        };
 
         callback(List.error("Not Implemented"));
     }),
