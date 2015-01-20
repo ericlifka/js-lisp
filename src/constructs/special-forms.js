@@ -106,11 +106,17 @@ module.exports = {
     }),
 
     "unquote": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.error("Not Implemented"));
+        if (!list || !list.car) {
+            return callback(List.nullValue());
+        }
+        Eval.evaluateStatement(list.car, scopeEnvironment, callback);
     }),
 
     "unquote-splat": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.error("Not Implemented"));
+        if (!list || !list.car) {
+            return callback(List.nullValue());
+        }
+        Eval.evaluateStatement(list.car, scopeEnvironment, callback);
     }),
 
     "def": List.special(function (scopeEnvironment, list, callback) {
