@@ -2,6 +2,13 @@ var List = require('./../list');
 var Eval = require('./../eval');
 var Environment = require('./../environment');
 
+function isUnquoteList(list) {
+    return list &&
+        list.car &&
+        list.car.type === 'symbol' &&
+        list.car.name === 'unquote';
+}
+
 function createCallable(callableType, scopeEnvironment, list, callback) {
     if (!list || list.length() < 2) {
         return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
