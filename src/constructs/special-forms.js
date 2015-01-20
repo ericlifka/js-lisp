@@ -9,7 +9,7 @@ function isUnquoteList(list) {
         list.car.name === 'unquote';
 }
 
-function isSplatList(list) {
+function isSpliceList(list) {
     return list &&
         list.car &&
         list.car.type === 'symbol' &&
@@ -102,7 +102,7 @@ module.exports = {
                         processQueue();
                     });
                 }
-                else if (isSplatList(item)) {
+                else if (isSpliceList(item)) {
                     return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
                         if (List.isCons(resultList)) {
                             // Save a reference to the items that come after the current context item
@@ -144,7 +144,7 @@ module.exports = {
         Eval.evaluateStatement(list.car, scopeEnvironment, callback);
     }),
 
-    "unquote-splat": List.special(function (scopeEnvironment, list, callback) {
+    "unquote-splice": List.special(function (scopeEnvironment, list, callback) {
         if (!list || !list.car) {
             return callback(List.nullValue());
         }
