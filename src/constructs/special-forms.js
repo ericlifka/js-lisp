@@ -74,6 +74,26 @@ module.exports = {
                 list = list.cdr;
             }
         };
+        var processQueue = function () {
+            if (queue.length === 0) {
+                return;
+            }
+            var nextItem = queue.shift();
+
+            if (List.isCons(nextItem)) {
+                if (isUnquoteList(nextItem)) {
+                    return Eval.evaluateStatement(nextItem, scopeEnvironment, function (resultCell) {
+                        nextItem.copyFrom(resultCell);
+                        processQueue();
+                    });
+                }
+                else {
+                    queueList(nextItem);
+                }
+            }
+
+            processQueue();
+        };
 
         callback(List.error("Not Implemented"));
     }),
