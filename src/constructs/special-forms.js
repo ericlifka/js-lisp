@@ -9,6 +9,13 @@ function isUnquoteList(list) {
         list.car.name === 'unquote';
 }
 
+function isSplatList(list) {
+    return list &&
+        list.car &&
+        list.car.type === 'symbol' &&
+        list.car.name === 'unquote-splat';
+}
+
 function createCallable(callableType, scopeEnvironment, list, callback) {
     if (!list || list.length() < 2) {
         return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
@@ -95,6 +102,9 @@ module.exports = {
                         resultCell.cloneInto(nextItem);
                         processQueue();
                     });
+                }
+                else if (isSplatList(nextItem)) {
+
                 }
                 else {
                     queueList(nextItem);
