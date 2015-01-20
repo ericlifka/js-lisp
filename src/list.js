@@ -49,6 +49,8 @@ Cell.prototype.clone = function () {
     return cell;
 };
 
+Cell.prototype.copyFrom = function (sourceCell) { };
+
 Cell.prototype.length = function () {
     if (this.type !== 'cons') {
         return NaN;
