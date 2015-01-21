@@ -185,11 +185,11 @@ module.exports = {
         return createCallable(List.macro, scopeEnvironment, list, callback);
     }),
 
-    "def-fn": List.special(function (list, callback) {
+    "def-fn": List.special(function (scopeEnvironment, list, callback) {
         callback(List.error("Not Implemented"));
     }),
 
-    "def-macro": List.special(function (list, callback) {
+    "def-macro": List.special(function (scopeEnvironment, list, callback) {
         callback(List.error("Not Implemented"));
     })
 };
