@@ -77,3 +77,20 @@ describe 'list', ->
             cons = list.cons
             cons(1, cons(2)).length().should.equal(2)
             cons(1, cons(2, cons(3))).length().should.equal(3)
+
+    describe 'createList', ->
+        it 'should return null for empty list', ->
+            should(list.createList()).be.null
+
+        it 'should create a cons list of arguments', ->
+            li = list.createList 1, 2, 3
+            li.length().should.equal 3
+            li.car.should.equal 1
+            li.cdr.car.should.equal 2
+            li.cdr.cdr.car.should.equal 3
+
+        it 'should handle 1 argument', ->
+            list.createList(1).length().should.equal 1
+
+        it 'should handle a lot of arguments', ->
+            list.createList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).length().should.equal 15
