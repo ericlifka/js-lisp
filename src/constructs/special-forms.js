@@ -80,6 +80,25 @@ function createCallable(scopeEnvironment, list) {
     };
 }
 
+function defTransform(list, callableSymbol) {
+    if (!list || list.length() < 3) {
+        return List.error("expected form (def-fn symbol (...arguments) ...body)");
+    }
+
+    // Input structure:  (def-macro name (...arguments) ...body)
+    // Output structure: (def name (fn (...arguments) ...body))
+    var def = List.symbol("def");
+    var macroSym = List.symbol(callableSymbol);
+    var name = list.car;
+    var macroDef = list.cdr;
+
+    return List.createList(
+        def,
+        name,
+        List.cons(macroSym, macroDef)
+    );
+}
+
 module.exports = {
     "quote": List.special(function (scopeEnvironment, list, callback) {
         if (!list || !list.car) {
@@ -188,44 +207,10 @@ module.exports = {
     }),
 
     "def-fn": List.macro(function (list, callback) {
-        if (!list || list.length() < 3) {
-            return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
-        }
-
-        // Input structure:  (def-macro name (...arguments) ...body)
-        // Output structure: (def name (fn (...arguments) ...body))
-        var def = List.symbol("def");
-        var macroSym = List.symbol("fn");
-        var name = list.car;
-        var macroDef = list.cdr;
-
-        callback(
-            List.createList(
-                def,
-                name,
-                List.cons(macroSym, macroDef)
-            )
-        );
+        callback(defTransform(list, "fn"));
     }),
 
     "def-macro": List.macro(function (list, callback) {
-        if (!list || list.length() < 3) {
-            return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
-        }
-
-        // Input structure:  (def-macro name (...arguments) ...body)
-        // Output structure: (def name (macro (...arguments) ...body))
-        var def = List.symbol("def");
-        var macroSym = List.symbol("macro");
-        var name = list.car;
-        var macroDef = list.cdr;
-
-        callback(
-            List.createList(
-                def,
-                name,
-                List.cons(macroSym, macroDef)
-            )
-        );
+        callback(defTransform(list, "macro"));
     })
 };
