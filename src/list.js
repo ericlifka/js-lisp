@@ -192,6 +192,21 @@ function isValidEntity(cell) {
         cell instanceof Cell && !!cell.type;
 }
 
+function createList() {
+    if (arguments.length === 0) {
+        return null;
+    }
+
+    var list = cons(arguments[0]);
+    var current = list;
+    for (var i = 1; i < arguments.length; i++) {
+        current.cdr = cons(arguments[i]);
+        current = current.cdr;
+    }
+
+    return list;
+}
+
 function printList(list) {
     var curr = "";
     if (list.car) {
