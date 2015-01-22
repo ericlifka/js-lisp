@@ -204,12 +204,19 @@ module.exports = {
             return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
         }
 
-        var symbol = list.car;
-        var functionList = list.cdr;
+        // Input structure:  (def-macro name (...arguments) ...body)
+        // Output structure: (def name (macro (...arguments) ...body))
+        var def = List.symbol("def");
+        var macroSym = List.symbol("macro");
+        var name = list.car;
+        var macroDef = list.cdr;
 
-        // Generate structure: (def symbol (fn (...arguments) ...body))
-        var defList = List.createList(List.symbol("def"), symbol, List.cons(List.symbol("macro"), functionList));
-
-        callback(defList);
+        callback(
+            List.createList(
+                def,
+                name,
+                List.cons(macroSym, macroDef)
+            )
+        );
     })
 };
