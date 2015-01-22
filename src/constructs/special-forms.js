@@ -209,12 +209,14 @@ module.exports = {
         var functionList = list.cdr;
 
         // Generate structure: (def symbol (fn (...arguments) ...body))
-        var defList =
-            List.cons(
-                List.symbol("def"),
-                List.cons(
-                    symbol,
-                    List.cons(List.cons(List.symbol("fn")), functionList)));
+        var defList = List.createList(List.symbol("def"), symbol, List.cons(List.symbol("macro"), functionList));
+        console.log(defList.toString());
+//        var defList =
+//            List.cons(
+//                List.symbol("def"),
+//                List.cons(
+//                    symbol,
+//                    List.cons(List.cons(List.symbol("fn")), functionList)));
 
         callback(defList);
     })
