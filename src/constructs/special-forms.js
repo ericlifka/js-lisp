@@ -41,6 +41,10 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
     var body = list.cdr;
     var arity = formals.length();
 
+    if (!List.isCons(formals)) {
+        return callback(List.error("Invalid lambda, first argument must be a list"));
+    }
+
     var callable = callableType(function (parameters, innerCallback) {
         var paramsSupplied = parameters ? parameters.length() : 0;
         if (arity !== paramsSupplied) {
