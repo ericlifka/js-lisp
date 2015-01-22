@@ -190,6 +190,14 @@ module.exports = {
     }),
 
     "def-fn": List.special(function (scopeEnvironment, list, callback) {
+        if (!list || list.length() < 3) {
+            return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
+        }
+
+        var symbol = list.car;
+        var functionList = list.cdr;
+        var functionCell = createCallable(List.func, scopeEnvironment, functionList, callback);
+
         callback(List.error("Not Implemented"));
     }),
 
