@@ -187,16 +187,25 @@ module.exports = {
         callback(List.macro(createCallable(scopeEnvironment, list)));
     }),
 
-    "def-fn": List.special(function (scopeEnvironment, list, callback) {
+    "def-fn": List.macro(function (list, callback) {
         if (!list || list.length() < 3) {
             return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
         }
 
-        var symbol = list.car;
-        var functionList = list.cdr;
-        var functionCell = List.func(createCallable(scopeEnvironment, functionList));
+        // Input structure:  (def-macro name (...arguments) ...body)
+        // Output structure: (def name (fn (...arguments) ...body))
+        var def = List.symbol("def");
+        var macroSym = List.symbol("fn");
+        var name = list.car;
+        var macroDef = list.cdr;
 
-        callback(List.error("Not Implemented"));
+        callback(
+            List.createList(
+                def,
+                name,
+                List.cons(macroSym, macroDef)
+            )
+        );
     }),
 
     "def-macro": List.macro(function (list, callback) {
