@@ -32,9 +32,9 @@ function spliceInto(resultList, context) {
     context.cdr = rest;
 }
 
-function createCallable(callableType, scopeEnvironment, list, callback) {
+function createCallable(scopeEnvironment, list) {
     if (!list || list.length() < 2) {
-        return callback(List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`"));
+        return List.error("Invalid lambda, must be of the form `(fn (...arguments) ...body)`");
     }
 
     var formals = list.car;
@@ -42,10 +42,10 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
     var arity = formals.length();
 
     if (!List.isCons(formals)) {
-        return callback(List.error("Invalid lambda, first argument must be a list"));
+        return List.error("Invalid lambda, first argument must be a list");
     }
 
-    var callable = callableType(function (parameters, innerCallback) {
+    return function (parameters, innerCallback) {
         var paramsSupplied = parameters ? parameters.length() : 0;
         if (arity !== paramsSupplied) {
             return innerCallback(List.error("Function defined with arity " +
@@ -77,9 +77,7 @@ function createCallable(callableType, scopeEnvironment, list, callback) {
         };
 
         evaluateBody();
-    });
-
-    callback(callable);
+    };
 }
 
 module.exports = {
@@ -182,11 +180,11 @@ module.exports = {
     }),
 
     "fn": List.special(function (scopeEnvironment, list, callback) {
-        return createCallable(List.func, scopeEnvironment, list, callback);
+        callback(List.func(createCallable(scopeEnvironment, list)));
     }),
 
     "macro": List.special(function (scopeEnvironment, list, callback) {
-        return createCallable(List.macro, scopeEnvironment, list, callback);
+        callback(List.macro(createCallable(scopeEnvironment, list)));
     }),
 
     "def-fn": List.special(function (scopeEnvironment, list, callback) {
