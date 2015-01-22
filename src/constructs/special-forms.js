@@ -158,6 +158,7 @@ module.exports = {
     }),
 
     "def": List.special(function (scopeEnvironment, list, callback) {
+        console.log(list.length(), list);
         if (!list || list.length() !== 2) {
             return callback(List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`"));
         }
@@ -194,12 +195,27 @@ module.exports = {
 
         var symbol = list.car;
         var functionList = list.cdr;
-        var functionCell = createCallable(List.func, scopeEnvironment, functionList, callback);
+        var functionCell = List.func(createCallable(scopeEnvironment, functionList));
 
         callback(List.error("Not Implemented"));
     }),
 
-    "def-macro": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.error("Not Implemented"));
+    "def-macro": List.macro(function (list, callback) {
+        if (!list || list.length() < 3) {
+            return callback(List.error("expected form (def-fn symbol (...arguments) ...body)"));
+        }
+
+        var symbol = list.car;
+        var functionList = list.cdr;
+
+        // Generate structure: (def symbol (fn (...arguments) ...body))
+        var defList =
+            List.cons(
+                List.symbol("def"),
+                List.cons(
+                    symbol,
+                    List.cons(List.cons(List.symbol("fn")), functionList)));
+
+        callback(defList);
     })
 };
