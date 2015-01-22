@@ -260,5 +260,6 @@ module.exports = {
     isNumber: isNumber,
     isNull: isNull,
     isValidEntity: isValidEntity,
+    createList: createList,
     addToEnd: addToEnd
 };
