@@ -158,7 +158,6 @@ module.exports = {
     }),
 
     "def": List.special(function (scopeEnvironment, list, callback) {
-        console.log(list.length(), list);
         if (!list || list.length() !== 2) {
             return callback(List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`"));
         }
@@ -210,13 +209,6 @@ module.exports = {
 
         // Generate structure: (def symbol (fn (...arguments) ...body))
         var defList = List.createList(List.symbol("def"), symbol, List.cons(List.symbol("macro"), functionList));
-        console.log(defList.toString());
-//        var defList =
-//            List.cons(
-//                List.symbol("def"),
-//                List.cons(
-//                    symbol,
-//                    List.cons(List.cons(List.symbol("fn")), functionList)));
 
         callback(defList);
     })
