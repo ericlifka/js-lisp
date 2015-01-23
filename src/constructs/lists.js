@@ -1,5 +1,18 @@
 var List = require('./../list');
 
+var car = List.func(function (parameters, callback) {
+    if (!parameters || parameters.length() < 1) {
+        return callback(List.error("car - needs at least 1 parameter"));
+    }
+
+    var arg = parameters.car;
+    if (!List.isCons(arg)) {
+        return callback(List.error("car - parameter must be a cons cell"));
+    }
+
+    callback(arg.car);
+});
+
 module.exports = {
     "list": List.func(function (parameters, callback) {
         callback(parameters);
@@ -15,5 +28,8 @@ module.exports = {
         else {
             callback(List.cons(parameters.car, parameters.cdr.car));
         }
-    })
+    }),
+
+    "car": car,
+    "first": car
 };
