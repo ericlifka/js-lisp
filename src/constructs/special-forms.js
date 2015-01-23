@@ -212,5 +212,30 @@ module.exports = {
 
     "def-macro": List.macro(function (list, callback) {
         callback(defTransform(list, "macro"));
+    }),
+
+    "if": List.special(function (scopeEnvironment, list, callback) {
+        if (!list || list.length < 2) {
+            return callback(List.error("if - invalid structure, expected (if booleanStatement trueStatement ?falseStatement"));
+        }
+
+        var boolStatement = list.car;
+        var trueStatement = list.cdr.car;
+        if (list.length() >= 3) {
+            var falseStatement = list.cdr.cdr.car;
+        }
+
+        Eval.evaluateStatement(boolStatement, scopeEnvironment, function (boolValue) {
+            var chosenStatement = (boolValue) ?
+                trueStatement :
+                falseStatement;
+
+            if (chosenStatement) {
+                Eval.evaluateStatement(chosenStatement, scopeEnvironment, callback);
+            }
+            else {
+                callback(List.nullValue());
+            }
+        });
     })
 };
