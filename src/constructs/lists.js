@@ -13,6 +13,19 @@ var car = List.func(function (parameters, callback) {
     callback(arg.car);
 });
 
+var cdr = List.func(function (parameters, callback) {
+    if (!parameters || parameters.length() < 1) {
+        return callback(List.error("cdr - needs at least 1 parameter"));
+    }
+
+    var arg = parameters.car;
+    if (!List.isCons(arg)) {
+        return callback(List.error("cdr - parameter must be a cons cell"));
+    }
+
+    callback(arg.cdr);
+});
+
 module.exports = {
     "list": List.func(function (parameters, callback) {
         callback(parameters);
@@ -31,5 +44,7 @@ module.exports = {
     }),
 
     "car": car,
-    "first": car
+    "first": car,
+    "cdr": cdr,
+    "rest": cdr
 };
