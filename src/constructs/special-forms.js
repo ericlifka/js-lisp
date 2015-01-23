@@ -226,7 +226,7 @@ module.exports = {
         }
 
         Eval.evaluateStatement(boolStatement, scopeEnvironment, function (boolValue) {
-            var chosenStatement = (boolValue) ?
+            var chosenStatement = List.cellToBool(boolValue) ?
                 trueStatement :
                 falseStatement;
 

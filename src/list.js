@@ -241,6 +241,38 @@ function addToEnd(list, cell) {
     return list;
 }
 
+function cellToBool(cell) {
+    if (!cell) {
+        return false;
+    }
+
+    switch (cell.type) {
+        case 'cons':
+            return cell.car && cell.cdr;
+
+        case 'symbol':
+            return cell.name;
+
+        case 'error':
+            return cell.message;
+
+        case 'string':
+        case 'number':
+            return cell.value;
+
+        case 'null':
+            return null;
+
+        case 'function':
+        case 'macro':
+        case 'special':
+            return cell.callable;
+
+        default:
+            return false;
+    }
+}
+
 module.exports = {
     cons: cons,
     symbol: symbol,
@@ -261,5 +293,6 @@ module.exports = {
     isNull: isNull,
     isValidEntity: isValidEntity,
     createList: createList,
+    cellToBool: cellToBool,
     addToEnd: addToEnd
 };
