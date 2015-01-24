@@ -195,12 +195,12 @@ module.exports = {
         });
     }),
 
-    "fn": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.func(createCallable(scopeEnvironment, list)));
+    "fn": List.special(function (scopeEnvironment, list) {
+        return List.func(createCallable(scopeEnvironment, list));
     }),
 
     "macro": List.special(function (scopeEnvironment, list, callback) {
-        callback(List.macro(createCallable(scopeEnvironment, list)));
+        return List.macro(createCallable(scopeEnvironment, list));
     }),
 
     "def-fn": List.macro(function (list, callback) {
