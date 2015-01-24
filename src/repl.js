@@ -17,6 +17,22 @@ INPUT.on('close', function () {
     console.log("terminating js-lisp REPL");
     process.exit(0);
 });
+INPUT.on('line', function (line) {
+    if (line === "(quit)") {
+        INPUT.close();
+    }
+    else {
+        parseInput(line);
+    }
+});
+
+if (!module.parent) {
+    main();
+}
+
+function main() {
+    INPUT.prompt();
+}
 
 function parseInput(line) {
     PARSER.parseString(line);
@@ -41,22 +57,12 @@ function parseInput(line) {
     INPUT.prompt();
 }
 
-function evaluateInput(statements, callback) {
-    var current = 0;
-    var total = statements.length;
-    var next = function () {
-        if (current >= total) {
-            return callback();
-        }
-
-        Eval.evaluateStatement(statements[current], GLOBAL_ENVIRONMENT, function (evalResult) {
-            printResult(evalResult);
-            current += 1;
-            next();
-        });
-    };
-
-    next();
+function evaluateInput(statements) {
+    var i, result;
+    for (i = 0; i < statements.length; i++) {
+        result = Eval.evaluateStatement(statements[i], GLOBAL_ENVIRONMENT);
+        printResult(result);
+    }
 }
 
 function printResult(result) {
@@ -65,26 +71,4 @@ function printResult(result) {
 
 function parseError(error) {
     console.log("ParseError: " + error);
-}
-
-function main() {
-    INPUT.on('line', function (line) {
-        if (line === "(quit)") {
-            INPUT.close();
-            return;
-        }
-
-        parseInput(line);
-    });
-
-    INPUT.prompt();
-}
-
-if (!module.parent) {
-    main();
-} else {
-    module.exports = {
-        processLine: parseInput,
-        printResult: printResult
-    };
 }
