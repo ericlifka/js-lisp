@@ -71,31 +71,25 @@ function evaluateList(list, environment) {
     return List.error("Found non invokable value as first statement of s-expression: " + callable);
 }
 
-function evaluateParameters(parameters, environment, callback) {
+function evaluateParameters(parameters, environment) {
     if (!parameters) {
-        return callback(parameters);
+        return parameters;
     }
 
     var evaluated = List.cons();
     var current = parameters;
-    var next = function () {
-        if (!current) {
-            return callback(evaluated);
+    var resultValue;
+
+    while (current) {
+        resultValue = evaluateStatement(current.car, environment);
+
+        if (List.isError(resultValue)) {
+            return resultValue;
         }
 
-        evaluateStatement(current.car, environment, function (resultValue) {
-            // If any parameter resolves to an error then we can stop evaluating immediately
-            if (List.isError(resultValue)) {
-                return callback(resultValue);
-            }
-
-            List.addToEnd(evaluated, resultValue);
-            current = current.cdr;
-            next();
-        });
-    };
-
-    next();
+        List.addToEnd(evaluated, resultValue);
+        current = current.cdr;
+    }
 }
 
 module.exports = {
