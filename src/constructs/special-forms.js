@@ -45,11 +45,11 @@ function createCallable(scopeEnvironment, list) {
         return List.error("Invalid lambda, first argument must be a list");
     }
 
-    return function (parameters, innerCallback) {
+    return function (parameters) {
         var paramsSupplied = parameters ? parameters.length() : 0;
         if (arity !== paramsSupplied) {
-            return innerCallback(List.error("Function defined with arity " +
-                arity + " but supplied " + paramsSupplied + " parameters"));
+            return List.error("Function defined with arity " +
+                arity + " but supplied " + paramsSupplied + " parameters");
         }
 
         var invocationEnvironment = Environment.create(scopeEnvironment);
@@ -63,20 +63,17 @@ function createCallable(scopeEnvironment, list) {
             parameter = parameter.cdr;
         }
 
+        var statement;
+        var result;
         var currentStatement = body;
-        var evaluateBody = function (resultValue) {
-            if (currentStatement) {
-                var statement = currentStatement.car;
-                currentStatement = currentStatement.cdr;
+        while (currentStatement) {
+            statement = currentStatement.car;
+            currentStatement = currentStatement.cdr;
 
-                Eval.evaluateStatement(statement, invocationEnvironment, evaluateBody);
-            }
-            else {
-                innerCallback(resultValue || List.nullValue());
-            }
-        };
+            result = Eval.evaluateStatement(statement, invocationEnvironment);
+        }
 
-        evaluateBody();
+        return result || List.nullValue();
     };
 }
 
