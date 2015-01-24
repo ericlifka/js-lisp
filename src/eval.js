@@ -2,17 +2,15 @@ var List = require('./list');
 
 function evaluateStatement(statement, environment, callback) {
     if (!List.isValidEntity(statement)) {
-        return callback(List.error("Eval on non-valid entity"));
+        return List.error("Eval on non-valid entity");
     }
 
     switch (statement.type) {
         case 'cons':
-            evaluateList(statement, environment, callback);
-            break;
+            return evaluateList(statement, environment);
 
         case 'symbol':
-            evaluateSymbol(statement, environment, callback);
-            break;
+            return evaluateSymbol(statement, environment);
 
         case 'function':
         case 'macro':
@@ -20,12 +18,10 @@ function evaluateStatement(statement, environment, callback) {
         case 'error':
         case 'string':
         case 'number':
-            callback(statement);
-            break;
+            return statement;
 
         default:
-            callback(List.error("Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'"));
-            break;
+            return List.error("Unrecognized type '" + statement.type + "' for evaluation object '" + statement + "'");
     }
 }
 
