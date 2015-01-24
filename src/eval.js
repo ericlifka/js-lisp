@@ -35,6 +35,7 @@ function evaluateSymbol(symbol, environment) {
 }
 
 function evaluateList(list, environment) {
+
     // The empty list evaluates to itself
     if (list.length() === 0) {
         return list;
@@ -58,10 +59,10 @@ function evaluateList(list, environment) {
         return evaluateStatement(macroResult, environment);
     }
 
-    if (list.isFunc(callable)) {
+    if (List.isFunc(callable)) {
         var evaluatedParameters = evaluateParameters(parameters, environment);
 
-        if (list.isError(evaluatedParameters)) {
+        if (List.isError(evaluatedParameters)) {
             return evaluatedParameters;
         }
 
@@ -90,6 +91,8 @@ function evaluateParameters(parameters, environment) {
         List.addToEnd(evaluated, resultValue);
         current = current.cdr;
     }
+
+    return evaluated;
 }
 
 module.exports = {
