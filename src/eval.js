@@ -25,16 +25,13 @@ function evaluateStatement(statement, environment, callback) {
     }
 }
 
-function evaluateSymbol(symbol, environment, callback) {
+function evaluateSymbol(symbol, environment) {
     var value = environment.getSymbolValue(symbol.name);
-    if (value) {
-        callback(value);
-    }
-    else {
-        callback(List.error('No value found for symbol "' + symbol.name + '"'));
-    }
-}
 
+    return value ?
+        value :
+        List.error('No value found for symbol "' + symbol.name + '"');
+}
 
 function evaluateList(list, environment, callback) {
     // The empty list evaluates to itself
