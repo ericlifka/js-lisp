@@ -1,6 +1,6 @@
 var List = require('./list');
 
-function evaluateStatement(statement, environment, callback) {
+function evaluateStatement(statement, environment) {
     if (!List.isValidEntity(statement)) {
         return List.error("Eval on non-valid entity");
     }
@@ -34,42 +34,41 @@ function evaluateSymbol(symbol, environment) {
         List.error('No value found for symbol "' + symbol.name + '"');
 }
 
-function evaluateList(list, environment, callback) {
+function evaluateList(list, environment) {
     // The empty list evaluates to itself
     if (list.length() === 0) {
-        return callback(list);
+        return list;
     }
 
     var firstStatement = list.car;
     var parameters = list.cdr;
 
-    evaluateStatement(firstStatement, environment, function (callableResult) {
-        if (List.isError(callableResult)) {
-            return callback(callableResult);
+    var callable = evaluateStatement(firstStatement, environment);
+
+    if (List.isError(callable)) {
+        return callable;
+    }
+
+    if (List.isSpecial(callable)) {
+        return callable.callable(environment, parameters);
+    }
+
+    if (List.isMacro(callable)) {
+        var macroResult = callable.callable(parameters);
+        return evaluateStatement(macroResult, environment);
+    }
+
+    if (list.isFunc(callable)) {
+        var evaluatedParameters = evaluateParameters(parameters, environment);
+
+        if (list.isError(evaluatedParameters)) {
+            return evaluatedParameters;
         }
 
-        if (List.isSpecial(callableResult)) {
-            return callableResult.callable(environment, parameters, callback);
-        }
+        return callable.callable(evaluatedParameters);
+    }
 
-        if (List.isMacro(callableResult)) {
-            return callableResult.callable(parameters, function (resultStatement) {
-                evaluateStatement(resultStatement, environment, callback);
-            });
-        }
-
-        if (List.isFunc(callableResult)) {
-            return evaluateParameters(parameters, environment, function (evaluatedParameters) {
-                if (List.isError(evaluatedParameters)) {
-                    return callback(evaluatedParameters);
-                }
-
-                callableResult.callable(evaluatedParameters, callback);
-            });
-        }
-
-        callback(List.error("Found non invokable value as first statement of s-expression: " + callableResult));
-    });
+    return List.error("Found non invokable value as first statement of s-expression: " + callable);
 }
 
 function evaluateParameters(parameters, environment, callback) {
