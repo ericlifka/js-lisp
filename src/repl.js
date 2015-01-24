@@ -27,19 +27,18 @@ function parseInput(line) {
 
         PARSER.reset();
         INPUT.setPrompt(NEW_STATEMENT_PROMPT);
-        INPUT.prompt();
     }
     else if (!state.complete) {
         INPUT.setPrompt(CONTINUE_STATEMENT_PROMPT);
-        INPUT.prompt();
     }
     else {
-        evaluateInput(PARSER.getStatements(), function () {
-            PARSER.reset();
-            INPUT.setPrompt(NEW_STATEMENT_PROMPT);
-            INPUT.prompt();
-        });
+        evaluateInput(PARSER.getStatements());
+
+        PARSER.reset();
+        INPUT.setPrompt(NEW_STATEMENT_PROMPT);
     }
+
+    INPUT.prompt();
 }
 
 function evaluateInput(statements, callback) {
