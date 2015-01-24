@@ -18,6 +18,7 @@ function evaluateStatement(statement, environment, callback) {
         case 'error':
         case 'string':
         case 'number':
+        case 'null':
             return statement;
 
         default:
