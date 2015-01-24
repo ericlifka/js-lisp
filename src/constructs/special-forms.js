@@ -97,12 +97,12 @@ function defTransform(list, callableSymbol) {
 }
 
 module.exports = {
-    "quote": List.special(function (scopeEnvironment, list, callback) {
+    "quote": List.special(function (scopeEnvironment, list) {
         if (!list || !list.car) {
-            callback(List.nullValue());
+            return List.nullValue();
         }
         else {
-            callback(list.car);
+            return list.car;
         }
     }),
 
@@ -159,18 +159,20 @@ module.exports = {
         processQueue();
     }),
 
-    "unquote": List.special(function (scopeEnvironment, list, callback) {
+    "unquote": List.special(function (scopeEnvironment, list) {
         if (!list || !list.car) {
-            return callback(List.nullValue());
+            return List.nullValue();
         }
-        Eval.evaluateStatement(list.car, scopeEnvironment, callback);
+
+        return Eval.evaluateStatement(list.car, scopeEnvironment);
     }),
 
-    "unquote-splice": List.special(function (scopeEnvironment, list, callback) {
+    "unquote-splice": List.special(function (scopeEnvironment, list) {
         if (!list || !list.car) {
-            return callback(List.nullValue());
+            return List.nullValue();
         }
-        Eval.evaluateStatement(list.car, scopeEnvironment, callback);
+
+        return Eval.evaluateStatement(list.car, scopeEnvironment);
     }),
 
     "def": List.special(function (scopeEnvironment, list, callback) {
