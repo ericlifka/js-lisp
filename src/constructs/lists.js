@@ -27,19 +27,19 @@ var cdr = List.func(function (parameters, callback) {
 });
 
 module.exports = {
-    "list": List.func(function (parameters, callback) {
-        callback(parameters);
+    "list": List.func(function (parameters) {
+        return parameters;
     }),
 
-    "cons": List.func(function (parameters, callback) {
+    "cons": List.func(function (parameters) {
         if (!parameters) {
-            callback(null);
+            return null;
         }
         else if (parameters.length() === 1) {
-            callback(List.cons(parameters.car));
+            return List.cons(parameters.car);
         }
         else {
-            callback(List.cons(parameters.car, parameters.cdr.car));
+            return List.cons(parameters.car, parameters.cdr.car);
         }
     }),
 
