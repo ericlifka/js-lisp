@@ -177,24 +177,23 @@ module.exports = {
 
     "def": List.special(function (scopeEnvironment, list, callback) {
         if (!list || list.length() !== 2) {
-            return callback(List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`"));
+            return List.error("Def takes exactly 2 arguments, a symbol and a value: `(def a 2)`");
         }
 
         var symbol = list.car;
         var statement = list.cdr.car;
 
         if (!symbol || !symbol.name) {
-            return callback(List.error("Symbol given to def must be valid"));
+            return List.error("Symbol given to def must be valid");
         }
 
         if (!statement) {
-            return callback(List.error("Statement given to def must be valid"));
+            return List.error("Statement given to def must be valid");
         }
 
-        Eval.evaluateStatement(statement, scopeEnvironment, function (value) {
-            scopeEnvironment.putSymbolValue(symbol.name, value);
-            callback(value);
-        });
+        var resultValue = Eval.evaluateStatement(statement, scopeEnvironment);
+        scopeEnvironment.putSymbolValue(symbol.name, resultValue);
+        return resultValue;
     }),
 
     "fn": List.special(function (scopeEnvironment, list) {
