@@ -212,28 +212,18 @@ module.exports = {
         return defTransform(list, "macro");
     }),
 
-    "if": List.special(function (scopeEnvironment, list, callback) {
+    "if": List.special(function (scopeEnvironment, list) {
         if (!list || list.length < 2) {
-            return callback(List.error("if - invalid structure, expected (if booleanStatement trueStatement ?falseStatement"));
+            return List.error("if - invalid structure, expected (if booleanStatement trueStatement ?falseStatement");
         }
 
         var boolStatement = list.car;
         var trueStatement = list.cdr.car;
-        if (list.length() >= 3) {
-            var falseStatement = list.cdr.cdr.car;
-        }
+        var falseStatement = (list.length() >= 3) ? list.cdr.cdr.car : List.nullValue();
 
-        Eval.evaluateStatement(boolStatement, scopeEnvironment, function (boolValue) {
-            var chosenStatement = List.cellToBool(boolValue) ?
-                trueStatement :
-                falseStatement;
+        var boolValue = Eval.evaluateStatement(boolStatement, scopeEnvironment);
 
-            if (chosenStatement) {
-                Eval.evaluateStatement(chosenStatement, scopeEnvironment, callback);
-            }
-            else {
-                callback(List.nullValue());
-            }
-        });
+        var chosenStatement = List.cellToBool(boolValue) ? trueStatement : falseStatement;
+        return Eval.evaluateStatement(chosenStatement, scopeEnvironment);
     })
 };
