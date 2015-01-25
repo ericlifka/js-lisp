@@ -1,29 +1,29 @@
 var List = require('./../list');
 
-var car = List.func(function (parameters, callback) {
+var car = List.func(function (parameters) {
     if (!parameters || parameters.length() < 1) {
-        return callback(List.error("car - needs at least 1 parameter"));
+        return List.error("car - needs at least 1 parameter");
     }
 
     var arg = parameters.car;
     if (!List.isCons(arg)) {
-        return callback(List.error("car - parameter must be a cons cell"));
+        return List.error("car - parameter must be a cons cell");
     }
 
-    callback(arg.car);
+    return arg.car;
 });
 
-var cdr = List.func(function (parameters, callback) {
+var cdr = List.func(function (parameters) {
     if (!parameters || parameters.length() < 1) {
-        return callback(List.error("cdr - needs at least 1 parameter"));
+        return List.error("cdr - needs at least 1 parameter");
     }
 
     var arg = parameters.car;
     if (!List.isCons(arg)) {
-        return callback(List.error("cdr - parameter must be a cons cell"));
+        return List.error("cdr - parameter must be a cons cell");
     }
 
-    callback(arg.cdr);
+    return arg.cdr;
 });
 
 module.exports = {
