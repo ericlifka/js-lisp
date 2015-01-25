@@ -106,9 +106,9 @@ module.exports = {
         }
     }),
 
-    "quasi-quote": List.special(function (scopeEnvironment, list, callback) {
+    "quasi-quote": List.special(function (scopeEnvironment, list) {
         if (!list) {
-            return callback(List.nullValue());
+            return List.nullValue();
         }
 
         var structure = list.clone();
@@ -121,42 +121,38 @@ module.exports = {
             }
         };
 
-        var processQueue = function () {
-            if (queue.length === 0) {
-                return callback(structure.car);
-            }
+        var evalResult, context, item;
 
-            var context = queue.shift();
-            var item = context.car;
+        while (queue.length > 0) {
+
+            context = queue.shift();
+            item = context.car;
 
             if (!List.isCons(item)) {
-                return processQueue();
+                continue;
             }
 
             if (isUnquoteList(item)) {
-                return Eval.evaluateStatement(item, scopeEnvironment, function (resultCell) {
-                    resultCell.cloneInto(item);
-                    processQueue();
-                });
+                evalResult = Eval.evaluateStatement(item, scopeEnvironment);
+                evalResult.cloneInto(item);
+                continue;
             }
 
             if (isSpliceList(item)) {
-                return Eval.evaluateStatement(item, scopeEnvironment, function (resultList) {
-                    if (List.isCons(resultList)) {
-                        spliceInto(resultList, context)
-                    }
-                    else {
-                        resultList.cloneInto(item);
-                    }
-                    processQueue();
-                });
+                evalResult = Eval.evaluateStatement(item, scopeEnvironment);
+                if (List.isCons(evalResult)) {
+                    spliceInto(evalResult, context)
+                }
+                else {
+                    evalResult.cloneInto(item);
+                }
+                continue;
             }
 
             queueList(item);
-            processQueue();
-        };
+        }
 
-        processQueue();
+        return structure.car;
     }),
 
     "unquote": List.special(function (scopeEnvironment, list) {
