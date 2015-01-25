@@ -200,16 +200,16 @@ module.exports = {
         return List.func(createCallable(scopeEnvironment, list));
     }),
 
-    "macro": List.special(function (scopeEnvironment, list, callback) {
+    "macro": List.special(function (scopeEnvironment, list) {
         return List.macro(createCallable(scopeEnvironment, list));
     }),
 
-    "def-fn": List.macro(function (list, callback) {
-        callback(defTransform(list, "fn"));
+    "def-fn": List.macro(function (list) {
+        return defTransform(list, "fn");
     }),
 
-    "def-macro": List.macro(function (list, callback) {
-        callback(defTransform(list, "macro"));
+    "def-macro": List.macro(function (list) {
+        return defTransform(list, "macro");
     }),
 
     "if": List.special(function (scopeEnvironment, list, callback) {
