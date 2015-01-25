@@ -221,5 +221,13 @@ module.exports = {
 
         var chosenStatement = List.cellToBool(boolValue) ? trueStatement : falseStatement;
         return Eval.evaluateStatement(chosenStatement, scopeEnvironment);
+    }),
+
+    "while": List.special(function (scopeEnvironment, list) {
+        if (!list || list.length < 1) {
+            return List.error("while - invalid structure, expected (while booleanStatement ...body?)");
+        }
+
+
     })
 };
