@@ -228,6 +228,18 @@ module.exports = {
             return List.error("while - invalid structure, expected (while booleanStatement ...body?)");
         }
 
+        var boolStatement = list.car;
+        var bodyStatements = list.cdr;
+        var result = List.nullValue();
+        var boolStatementResult;
 
+        while (true) {
+            boolStatementResult = Eval.evaluateStatement(boolStatement, scopeEnvironment);
+            if (!List.cellToBool(boolStatementResult)) {
+                break;
+            }
+
+
+        }
     })
 };
