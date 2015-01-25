@@ -231,7 +231,7 @@ module.exports = {
         var boolStatement = list.car;
         var bodyStatements = list.cdr;
         var result = List.nullValue();
-        var boolStatementResult;
+        var boolStatementResult, currentBody, currentBodyStatement;
 
         while (true) {
             boolStatementResult = Eval.evaluateStatement(boolStatement, scopeEnvironment);
@@ -239,7 +239,16 @@ module.exports = {
                 break;
             }
 
+            currentBody = bodyStatements;
+            while (currentBody) {
+                currentBodyStatement = currentBody.car;
 
+                result = Eval.evaluateStatement(currentBodyStatement, scopeEnvironment);
+
+                currentBody = currentBody.cdr;
+            }
         }
+
+        return result;
     })
 };
