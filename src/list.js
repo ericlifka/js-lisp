@@ -8,22 +8,32 @@ Cell.prototype.toString = function () {
     switch (this.type) {
         case 'cons':
             return "(" + printList(this) + ")";
+
         case 'symbol':
             return this.name;
+
         case 'string':
             return '"' + this.value + '"';
+
         case 'error':
             return 'Error: "' + this.message + '"';
+
         case 'number':
+        case 'boolean':
             return "" + this.value;
+
         case 'null':
             return "nil";
+
         case 'function':
             return "[cell function]";
+
         case 'macro':
             return "[cell macro]";
+
         case 'special':
             return "[cell special-form]";
+
         default:
             return "[object Cell]";
     }
@@ -51,22 +61,28 @@ Cell.prototype.clone = function (target) {
             target.car = this.car && this.car.clone ? this.car.clone() : this.car;
             target.cdr = this.cdr && this.cdr.clone ? this.cdr.clone() : this.cdr;
             break;
+
         case 'symbol':
             target.name = this.name;
             break;
+
         case 'string':
         case 'number':
+        case 'boolean':
             target.value = this.value;
             break;
+
         case 'error':
             target.message = this.message;
             break;
+
         case 'special':
         case 'function':
         case 'macro':
             //TODO: these should probably store their parameters and bodies on the object so they can be cloned too
             target.callable = this.callable;
             break;
+
         case 'null':
         default:
             break;
@@ -118,6 +134,12 @@ function number(value) {
     var number = new Cell('number');
     number.value = arguments.length === 0 ? 0 : +value;
     return number;
+}
+
+function boolean(bool) {
+    var boolean = new Cell('boolean');
+    boolean.value = bool;
+    return boolean;
 }
 
 function special(fn) {
@@ -173,6 +195,10 @@ function isNumber(cell) {
 
 function isFunc(cell) {
     return isType(cell, 'function');
+}
+
+function isBoolean(cell) {
+    return isType(cell, 'boolean');
 }
 
 function isSpecial(cell) {
@@ -258,6 +284,7 @@ function cellToBool(cell) {
 
         case 'string':
         case 'number':
+        case 'boolean':
             return cell.value;
 
         case 'null':
@@ -278,6 +305,7 @@ module.exports = {
     symbol: symbol,
     string: string,
     number: number,
+    boolean: boolean,
     func: func,
     special: special,
     macro: macro,
@@ -290,6 +318,7 @@ module.exports = {
     isMacro: isMacro,
     isError: isError,
     isNumber: isNumber,
+    isBoolean: isBoolean,
     isNull: isNull,
     isValidEntity: isValidEntity,
     createList: createList,
