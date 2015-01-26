@@ -300,6 +300,45 @@ function cellToBool(cell) {
     }
 }
 
+function compareCells(a, b, comparisonFn) {
+    if (a.type !== b.type) {
+        return false;
+    }
+
+    switch(a.type) {
+        case 'cons':
+            if (!comparisonFn(a.car, b.car)) {  // check the current item
+                return false;
+            }
+            if (!a.cdr || !b.cdr) {             // check if either list has ended
+                return false;
+            }
+            return compareCells(a.cdr, b.cdr, comparisonFn);    // check the rest of the list
+
+        case 'symbol':
+            return comparisonFn(a.name, b.name);
+
+        case 'error':
+            return comparisonFn(a.message, b.message);
+
+        case 'string':
+        case 'number':
+        case 'boolean':
+            return comparisonFn(a.value, b.value);
+
+        case 'null':
+            return comparisonFn(null, null);
+
+        case 'function':
+        case 'macro':
+        case 'special':
+            return comparisonFn(a.callable, b.callable);
+
+        default:
+            return false;
+    }
+}
+
 module.exports = {
     cons: cons,
     symbol: symbol,
