@@ -300,6 +300,33 @@ function cellToBool(cell) {
     }
 }
 
+function compareLists(a, b, comparisonFn) {
+    if (a.length() !== b.length()) {
+        return false;
+    }
+
+
+    while (a && b) {
+
+        if (a.car && b.car) {
+            if (!compareCells(a.car, b.car, comparisonFn)) {
+                return false;
+            }
+        }
+        // This monstrosity checks if one but not both items are null
+        else if (!a.car || !b.car) {
+            if (a.car || b.car) {
+                return false;
+            }
+        }
+
+        a = a.cdr;
+        b = b.cdr;
+    }
+
+    return true;
+}
+
 function compareCells(a, b, comparisonFn) {
     if (a.type !== b.type) {
         return false;
@@ -307,13 +334,7 @@ function compareCells(a, b, comparisonFn) {
 
     switch(a.type) {
         case 'cons':
-            if (!comparisonFn(a.car, b.car)) {  // check the current item
-                return false;
-            }
-            if (!a.cdr || !b.cdr) {             // check if either list has ended
-                return false;
-            }
-            return compareCells(a.cdr, b.cdr, comparisonFn);    // check the rest of the list
+            return compareLists(a, b, comparisonFn);
 
         case 'symbol':
             return comparisonFn(a.name, b.name);
@@ -362,5 +383,6 @@ module.exports = {
     isValidEntity: isValidEntity,
     createList: createList,
     cellToBool: cellToBool,
+    compareCells: compareCells,
     addToEnd: addToEnd
 };
