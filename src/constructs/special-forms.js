@@ -200,12 +200,22 @@ module.exports = {
         var statement = list.cdr.car;
 
         if (!symbol || !symbol.name) {
-            return List.error("Symbol given to set must be valid");
+            return List.error("set - symbol not valid");
         }
         else if (!statement) {
-            return List.error("Statement given to def must be valid");
+            return List.error("set - statement not valid");
         }
 
+        var env = scopeEnvironment;
+        while (env) {
+            if (env.hasSymbolValue(symbol)) {
+
+            }
+
+            env = env.parent;
+        }
+
+        return List.error("set - symbol not defined in environment chain");
     }),
 
     "fn": List.special(function (scopeEnvironment, list) {
