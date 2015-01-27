@@ -12,22 +12,30 @@ module.exports = {
     "=": List.func(function (parameters) {
         return compare(parameters, "=", function (valA, valB) {
             return valA === valB;
-        })
+        });
     }),
 
     ">": List.func(function (parameters) {
-
+        return compare(parameters, ">", function (valA, valB) {
+            return valA > valB;
+        });
     }),
 
     "<": List.func(function (parameters) {
-
+        return compare(parameters, "<", function (valA, valB) {
+            return valA < valB;
+        });
     }),
 
     ">=": List.func(function (parameters) {
-
+        return compare(parameters, ">=", function (valA, valB) {
+            return valA >= valB;
+        });
     }),
 
     "<=": List.func(function (parameters) {
-
+        return compare(parameters, "<=", function (valA, valB) {
+            return valA <= valB;
+        });
     })
 };
