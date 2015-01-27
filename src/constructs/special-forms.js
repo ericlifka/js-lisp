@@ -209,7 +209,10 @@ module.exports = {
         var env = scopeEnvironment;
         while (env) {
             if (env.hasSymbolValue(symbol)) {
+                var resultValue = Eval.evaluateStatement(statement, scopeEnvironment);
+                env.putSymbolValue(symbol, resultValue);
 
+                return resultValue;
             }
 
             env = env.parent;
