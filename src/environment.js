@@ -17,6 +17,10 @@ var Environment = (function () {
             }
         },
 
+        hasSymbolValue: function (symbol) {
+            return this.symbols.hasOwnProperty(symbol);
+        },
+
         putSymbolValue: function (symbol, value) {
             this.symbols[symbol] = value;
         }
