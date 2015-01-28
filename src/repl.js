@@ -7,7 +7,7 @@ var Eval = require('./eval');
 
 var PARSER = new Parser();
 var TOP_LEVEL = TopLevel.create();
-var GLOBAL_ENVIRONMENT = Environment.create(TOP_LEVEL);
+var GLOBAL_ENVIRONMENT = Environment.create({parent: TOP_LEVEL});
 var INPUT = Readline.createInterface(process.stdin, process.stdout);
 var NEW_STATEMENT_PROMPT = 'js-lisp> ';
 var CONTINUE_STATEMENT_PROMPT = "> ";

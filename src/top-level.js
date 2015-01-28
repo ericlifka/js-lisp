@@ -17,6 +17,6 @@ function addBuiltins(env) {
 
 module.exports = {
     create: function () {
-        return addBuiltins(Environment.create());
+        return addBuiltins(Environment.create({readOnly: true}));
     }
 };

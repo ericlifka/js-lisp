@@ -1,6 +1,7 @@
 var Environment = (function () {
-    function Environment(parent) {
-        this.parent = parent;
+    function Environment(options) {
+        this.parent = options.parent;
+        this.readOnly = options.readOnly;
         this.symbols = { };
     }
 
@@ -29,8 +30,8 @@ var Environment = (function () {
     return Environment;
 })();
 
-function create(parent) {
-    return new Environment(parent);
+function create(options) {
+    return new Environment(options);
 }
 
 module.exports = {

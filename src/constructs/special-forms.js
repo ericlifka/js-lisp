@@ -52,7 +52,7 @@ function createCallable(scopeEnvironment, list) {
                 arity + " but supplied " + paramsSupplied + " parameters");
         }
 
-        var invocationEnvironment = Environment.create(scopeEnvironment);
+        var invocationEnvironment = Environment.create({parent: scopeEnvironment});
         var formal = formals;
         var parameter = parameters;
 
