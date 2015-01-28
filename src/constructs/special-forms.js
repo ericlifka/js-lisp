@@ -285,5 +285,14 @@ module.exports = {
         }
 
         return result;
+    }),
+
+    "let": List.special(function (scopeEnvironment, list) {
+        if (!list || list.length() < 1) {
+            return List.error("let - invalid structure expected `(let (...assignment pairs) ...statements?)`");
+        }
+
+        var assignments = list.car;
+        var statements = list.cdr;
     })
 };
