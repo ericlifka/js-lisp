@@ -172,6 +172,9 @@ module.exports = {
     }),
 
     "def": List.special(function (scopeEnvironment, list) {
+        if (scopeEnvironment.readOnly) {
+            return List.error("def - tried to set value in a read only environment");
+        }
         if (!list || list.length() !== 2) {
             return List.error("def - takes exactly 2 arguments, a symbol and a value: `(def a 2)`");
         }
@@ -209,6 +212,9 @@ module.exports = {
         var env = scopeEnvironment;
         while (env) {
             if (env.hasSymbolValue(symbol)) {
+                if (env.readOnly) {
+                    return List.error("set - symbol '" + symbol + "' is defined in a read only environment");
+                }
                 var resultValue = Eval.evaluateStatement(statement, scopeEnvironment);
                 env.putSymbolValue(symbol, resultValue);
 
