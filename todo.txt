@@ -3,3 +3,5 @@ map
 for
 sequence generator
 load
+run file(s) from command line
+bundleable as web package
