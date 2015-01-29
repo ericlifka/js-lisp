@@ -299,7 +299,7 @@ module.exports = {
             return List.error("let - second parameter to let must be a list");
         }
 
-        var scope = Environment.create({parent: scopeEnvironment});
+        var localLetScope = Environment.create({parent: scopeEnvironment});
 
         if (assignments) { // The empty list is a valid let form
 
@@ -308,13 +308,14 @@ module.exports = {
             }
 
             var assignmentPtr = assignments;
-            var symbol, expression;
+            var symbol, expression, expressionResult;
 
             while (assignmentPtr) {
                 symbol = assignmentPtr.car;
                 expression = assignmentPtr.cdr.car;
 
-
+                expressionResult = Eval.evaluateStatement(expression, localLetScope);
+                localLetScope.putSymbolValue(symbol, expressionResult);
 
                 assignmentPtr = assignmentPtr.cdr.cdr; // jump forward two positions at a time
             }
