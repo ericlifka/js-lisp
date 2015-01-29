@@ -185,6 +185,10 @@ function isTrueCons(cell) {
     return isType(cell, 'cons');
 }
 
+function isSymbol(cell) {
+    return isType(cell, 'symbol');
+}
+
 function isError(cell) {
     return isType(cell, 'error');
 }
@@ -373,6 +377,7 @@ module.exports = {
     error: error,
     isTrueCons: isTrueCons,
     isCons: isCons,
+    isSymbol: isSymbol,
     isFunc: isFunc,
     isSpecial: isSpecial,
     isMacro: isMacro,
