@@ -325,5 +325,18 @@ module.exports = {
             }
         }
 
+        var statementsPtr = statements;
+        var result = List.nullValue();
+        var statement;
+
+        while (statementsPtr) {
+            statement = statementsPtr.car;
+
+            result = Eval.evaluateStatement(statement, localLetScope);
+
+            statementsPtr = statementsPtr.cdr;
+        }
+
+        return result;
     })
 };
