@@ -301,6 +301,12 @@ module.exports = {
 
         var scope = Environment.create({parent: scopeEnvironment});
 
+        if (assignments) { // The empty list is a valid let form
+            var assignmentPtr = assignments;
+            while (assignmentPtr) {
+
+            }
+        }
 
     })
 };
