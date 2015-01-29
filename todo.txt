@@ -9,3 +9,4 @@ array type
 hash table type
 variable arguments function calls
 special symbols for null true and false
+de-referencing into complex assignments
