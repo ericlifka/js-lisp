@@ -308,8 +308,15 @@ module.exports = {
             }
 
             var assignmentPtr = assignments;
-            while (assignmentPtr) {
+            var symbol, expression;
 
+            while (assignmentPtr) {
+                symbol = assignmentPtr.car;
+                expression = assignmentPtr.cdr.car;
+
+
+
+                assignmentPtr = assignmentPtr.cdr.cdr; // jump forward two positions at a time
             }
         }
 
