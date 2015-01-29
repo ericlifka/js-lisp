@@ -314,6 +314,10 @@ module.exports = {
                 symbol = assignmentPtr.car;
                 expression = assignmentPtr.cdr.car;
 
+                if (!List.isSymbol(symbol)) {
+                    return List.error("let - found non symbol in symbol position: '" + symbol + "'");
+                }
+
                 expressionResult = Eval.evaluateStatement(expression, localLetScope);
                 localLetScope.putSymbolValue(symbol, expressionResult);
 
