@@ -294,5 +294,8 @@ module.exports = {
 
         var assignments = list.car;
         var statements = list.cdr;
+
+        var scope = Environment.create({parent: scopeEnvironment});
+
     })
 };
