@@ -5,3 +5,6 @@ sequence generator
 load
 run file(s) from command line
 bundleable as web package
+array type
+hash table type
+variable arguments function calls
