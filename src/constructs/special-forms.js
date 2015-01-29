@@ -295,7 +295,12 @@ module.exports = {
         var assignments = list.car;
         var statements = list.cdr;
 
+        if (!List.isCons(assignments)) {
+            return List.error("let - second parameter to let must be a list");
+        }
+
         var scope = Environment.create({parent: scopeEnvironment});
+
 
     })
 };
