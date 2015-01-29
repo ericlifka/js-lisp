@@ -302,6 +302,11 @@ module.exports = {
         var scope = Environment.create({parent: scopeEnvironment});
 
         if (assignments) { // The empty list is a valid let form
+
+            if (assignments.length() % 2 !== 0) {
+                return List.error("let - imbalanced assignments list, must be matched pairs");
+            }
+
             var assignmentPtr = assignments;
             while (assignmentPtr) {
 
