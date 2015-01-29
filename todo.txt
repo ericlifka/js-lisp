@@ -8,3 +8,4 @@ bundleable as web package
 array type
 hash table type
 variable arguments function calls
+special symbols for null true and false
