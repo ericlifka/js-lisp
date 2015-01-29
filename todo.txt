@@ -1,4 +1,3 @@
-let
 map
 for
 sequence generator
