@@ -20,7 +20,7 @@ function delimiterToType(char) {
         case '[':
             return 'array';
         default:
-            throw 'unsupported data type character ' + char;
+            return null;
     }
 }
 
@@ -226,7 +226,10 @@ Parser.prototype = {
     _parseStep_InSymbol: function () {
         if (isSymbolTerminator(this.currentChar)) {
             this._endCurrentSymbol();
-            this._parseStep_EndCurrentList();
+
+            if (delimiterToType(this.currentChar)) {
+                this._parseStep_EndCurrentList();
+            }
         }
 
         else if (isLegalSymbolChar(this.currentChar)) {
