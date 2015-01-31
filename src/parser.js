@@ -13,6 +13,17 @@ function isLegalSymbolChar(char) {
     return /[a-zA-Z\d_|?:!@#$%^&*<>=+.\/\-\\]/.test(char);
 }
 
+function delimiterToType(char) {
+    switch(char) {
+        case '(':
+            return 'list';
+        case '[':
+            return 'array';
+        default:
+            throw 'unsupported data type character ' + char;
+    }
+}
+
 function isNumeric(symbol) {
     return symbol && symbol.length > 0 && !isNaN(symbol);
 }
@@ -143,10 +154,6 @@ Parser.prototype = {
 
         else if (this.currentSymbol) {
             this._parseStep_InSymbol();
-
-            if (this.currentChar === ')') {
-                this._parseStep_EndCurrentList();
-            }
         }
 
         else if (this.currentChar === "'") {
@@ -176,11 +183,11 @@ Parser.prototype = {
         }
 
         else if (this.currentChar === ']') {
-            this._parseStep_EndCurrentList('array');
+            this._parseStep_EndCurrentList();
         }
 
         else if (this.currentChar === ')') {
-            this._parseStep_EndCurrentList('list');
+            this._parseStep_EndCurrentList();
         }
 
         else if (this.currentChar === '"') {
@@ -219,6 +226,7 @@ Parser.prototype = {
     _parseStep_InSymbol: function () {
         if (isSymbolTerminator(this.currentChar)) {
             this._endCurrentSymbol();
+            this._parseStep_EndCurrentList();
         }
 
         else if (isLegalSymbolChar(this.currentChar)) {
@@ -258,7 +266,7 @@ Parser.prototype = {
         this._storeNewCell(newSymbol);
         this.currentSymbol = newSymbol;
     },
-    _parseStep_EndCurrentList: function (type) {
+    _parseStep_EndCurrentList: function () {
         if (this.inProcessLists.length === 0) {
             this.errorState = "Unbalanced List - Found closing character without " +
                 "matching opening character at buffer position " +
@@ -268,6 +276,7 @@ Parser.prototype = {
         }
 
         var structure = this.inProcessLists.pop();
+        var type = delimiterToType(this.currentChar);
 
         if (structure.parseType !== type) {
             this.errorState = "Mismatched data structure types, opened as '" +
