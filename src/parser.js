@@ -157,8 +157,12 @@ Parser.prototype = {
             this._parseStep_StartNewList('list');
         }
 
+        else if (this.currentChar === ']') {
+            this._parseStep_EndCurrentList('array');
+        }
+
         else if (this.currentChar === ')') {
-            this._parseStep_EndCurrentList();
+            this._parseStep_EndCurrentList('list');
         }
 
         else if (this.currentChar === '"') {
@@ -236,16 +240,24 @@ Parser.prototype = {
         this._storeNewCell(newSymbol);
         this.currentSymbol = newSymbol;
     },
-    _parseStep_EndCurrentList: function () {
+    _parseStep_EndCurrentList: function (type) {
         if (this.inProcessLists.length === 0) {
-            this.errorState = "Unbalanced List - Found close ')' without " +
-                "matching open '(' at buffer position " +
+            this.errorState = "Unbalanced List - Found closing character without " +
+                "matching opening character at buffer position " +
                 this.parsePosition;
+
+            return;
         }
-        else {
-            this.inProcessLists.pop();
-            this._closeQuoteLists();
+
+        var structure = this.inProcessLists.pop();
+        if (structure.parseType !== type) {
+            this.errorState = "Mismatched data structure types, opened as '" +
+                structure.parseType + "' but closed as '" + type + "'";
+
+            return;
         }
+
+        this._closeQuoteLists();
     },
     _closeQuoteLists: function () {
         // Close off every quoteList that's a direct parent in the process stack
