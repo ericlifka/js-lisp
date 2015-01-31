@@ -149,6 +149,11 @@ Parser.prototype = {
             }
         }
 
+        else if (this.currentChar === '[') {
+            var list = this._parseStep_StartNewList();
+            list.convertType = 'array';
+        }
+
         else if (this.currentChar === '(') {
             this._parseStep_StartNewList();
         }
@@ -218,6 +223,8 @@ Parser.prototype = {
 
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
+
+        return newList;
     },
     _parseStep_StartNewString: function () {
         var newString = List.string();
