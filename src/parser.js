@@ -150,12 +150,11 @@ Parser.prototype = {
         }
 
         else if (this.currentChar === '[') {
-            var list = this._parseStep_StartNewList();
-            list.convertType = 'array';
+            this._parseStep_StartNewList('array');
         }
 
         else if (this.currentChar === '(') {
-            this._parseStep_StartNewList();
+            this._parseStep_StartNewList('list');
         }
 
         else if (this.currentChar === ')') {
@@ -218,13 +217,12 @@ Parser.prototype = {
         this._storeNewCell(quoteList);
         this.inProcessLists.push(quoteList);
     },
-    _parseStep_StartNewList: function () {
+    _parseStep_StartNewList: function (type) {
         var newList = List.cons();
+        newList.parseType = type;
 
         this._storeNewCell(newList);
         this.inProcessLists.push(newList);
-
-        return newList;
     },
     _parseStep_StartNewString: function () {
         var newString = List.string();
