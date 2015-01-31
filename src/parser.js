@@ -6,7 +6,7 @@ function isWhitespace(char) {
 }
 
 function isSymbolTerminator(char) {
-    return isWhitespace(char) || char === ')';
+    return isWhitespace(char) || char === ')' || char === ']';
 }
 
 function isLegalSymbolChar(char) {

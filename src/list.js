@@ -9,6 +9,9 @@ Cell.prototype.toString = function () {
         case 'cons':
             return "(" + printList(this) + ")";
 
+        case 'array':
+            return "" + this.value;
+
         case 'symbol':
             return this.name;
 
