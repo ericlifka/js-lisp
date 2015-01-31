@@ -27,6 +27,24 @@ function convertSymbolToNumber(cell) {
     delete cell.name;
 }
 
+function convertListToArray(list) {
+    var arr = [];
+    var ptr = list;
+    if (!list.car && !list.cdr) {
+        return arr;
+    }
+
+    while (ptr) {
+        arr.push(ptr.car);
+        ptr = ptr.cdr;
+    }
+
+    list.type = 'array';
+    delete list.car;
+    delete list.cdr;
+    list.value = arr;
+}
+
 var ESCAPE_MAP = {
     "b": "\b",
     "f": "\f",
@@ -250,6 +268,7 @@ Parser.prototype = {
         }
 
         var structure = this.inProcessLists.pop();
+
         if (structure.parseType !== type) {
             this.errorState = "Mismatched data structure types, opened as '" +
                 structure.parseType + "' but closed as '" + type + "'";
@@ -257,6 +276,11 @@ Parser.prototype = {
             return;
         }
 
+        if (type === 'array') {
+            convertListToArray(structure);
+        }
+
+        delete structure.parseType;
         this._closeQuoteLists();
     },
     _closeQuoteLists: function () {
