@@ -16,8 +16,10 @@ function isLegalSymbolChar(char) {
 function delimiterToType(char) {
     switch(char) {
         case '(':
+        case ')':
             return 'list';
         case '[':
+        case ']':
             return 'array';
         default:
             return null;
