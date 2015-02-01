@@ -18,6 +18,11 @@ describe 'parser', ->
         list = Parser.parse("(1 2 3)")
         list.toString().should.equal("(1 2 3)")
 
+    it 'should parse an array', ->
+        arr = Parser.parse("[1 2 3]")
+        arr.type.should.equal('array')
+        arr.value.length.should.equal(3)
+
     it 'should support nested lists', ->
         list = Parser.parse("(1 (2 3) 4)")
         list.toString().should.equal("(1 (2 3) 4)")
