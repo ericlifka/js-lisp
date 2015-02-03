@@ -5,8 +5,7 @@ load
 auto load standard library
 run file(s) from command line
 bundleable as web package
-array type
+support arrays for functions that support lists
 hash table type
 variable arguments function calls
-special symbols for null true and false
 de-referencing into complex assignments
