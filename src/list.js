@@ -26,7 +26,7 @@ Cell.prototype.toString = function () {
             return "" + this.value;
 
         case 'null':
-            return "nil";
+            return "null";
 
         case 'function':
             return "[cell function]";

@@ -40,6 +40,17 @@ function convertSymbolToNumber(cell) {
     delete cell.name;
 }
 
+function convertSymbolToBoolean(cell, value) {
+    cell.value = !!value;
+    cell.type = 'boolean';
+    delete cell.name;
+}
+
+function convertSymbolToNull(cell) {
+    delete cell.name;
+    cell.type = 'null';
+}
+
 function convertListToArray(list) {
     var arr = [];
     var ptr = list;
@@ -310,14 +321,24 @@ Parser.prototype = {
     },
     _endCurrentSymbol: function () {
         if (this.currentSymbol) {
+            var sym = this.currentSymbol.name;
             // Rather than try to parse numbers differently, we can allow
             // all numeric characters in symbols and then check at the end
             // of the symbol if it could be read as a number instead. This
             // simplifies parsing because we don't have to guess the type
             // number and then convert back to symbol if parsing fails.
-            if (isNumeric(this.currentSymbol.name)) {
+            if (isNumeric(sym)) {
                 // Numbers evaluate to themselves already, so quoted numbers are just numbers
                 convertSymbolToNumber(this.currentSymbol);
+            }
+            else if (sym === 'true') {
+                convertSymbolToBoolean(this.currentSymbol, true);
+            }
+            else if (sym === 'false') {
+                convertSymbolToBoolean(this.currentSymbol, false);
+            }
+            else if (sym === 'null') {
+                convertSymbolToNull(this.currentSymbol);
             }
 
             this.currentSymbol = null;
