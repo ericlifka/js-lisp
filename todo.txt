@@ -9,3 +9,4 @@ support arrays for functions that support lists
 hash table type
 variable arguments function calls
 de-referencing into complex assignments
+re-implement def-fn and def-macro in js-lisp once standard library is loaded
