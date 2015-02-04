@@ -52,7 +52,7 @@ function defTransform(list, callableSymbol) {
         return List.error("expected form (def-fn symbol (...arguments) ...body)");
     }
 
-    // Input structure:  (def-macro name (...arguments) ...body)
+    // Input structure:  (def-fn name (...arguments) ...body)
     // Output structure: (def name (fn (...arguments) ...body))
     var def = List.symbol("def");
     var macroSym = List.symbol(callableSymbol);
