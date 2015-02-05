@@ -44,5 +44,9 @@ module.exports = {
         }
 
         return result;
+    }),
+
+    "map": List.special(function (scopeEnvironment, list) {
+
     })
 };
