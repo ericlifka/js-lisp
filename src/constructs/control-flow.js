@@ -46,7 +46,9 @@ module.exports = {
         return result;
     }),
 
-    "map": List.special(function (scopeEnvironment, list) {
-
+    "map": List.func(function (scopeEnvironment, list) {
+        if (!list || list.length < 1) {
+            return List.error("map - not enough arguments supplied");
+        }
     })
 };
