@@ -54,5 +54,14 @@ module.exports = {
         var lambda = parameters.car;
         var list = parameters.cdr.car;
 
+        if (!List.isFunc(lambda)) {
+            return List.error("map - first parameter must be function expression");
+        }
+
+        if (!List.isCons(list)) {
+            return List.error("map - second parameter must be a list");
+        }
+
+
     })
 };
