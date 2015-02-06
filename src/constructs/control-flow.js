@@ -62,6 +62,19 @@ module.exports = {
             return List.error("map - second parameter must be a list");
         }
 
+        var listPtr = list;
+        var resultList = List.cons();
+        var item, value;
 
+        while (listPtr) {
+            item = listPtr.car;
+
+            value = lambda.callable(item);
+            List.addToEnd(resultList, value);
+
+            listPtr = listPtr.cdr;
+        }
+
+        return resultList;
     })
 };
