@@ -46,8 +46,8 @@ module.exports = {
         return result;
     }),
 
-    "map": List.func(function (scopeEnvironment, parameters) {
-        if (!parameters || parameters.length < 2) {
+    "map": List.func(function (parameters) {
+        if (!parameters || parameters.length() < 2) {
             return List.error("map - expected form `(map fn-value list-value)`");
         }
 
@@ -69,7 +69,7 @@ module.exports = {
         while (listPtr) {
             item = listPtr.car;
 
-            value = lambda.callable(item);
+            value = lambda.callable(List.cons(item));
             List.addToEnd(resultList, value);
 
             listPtr = listPtr.cdr;
