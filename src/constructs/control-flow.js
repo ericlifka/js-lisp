@@ -46,11 +46,13 @@ module.exports = {
         return result;
     }),
 
-    "map": List.func(function (scopeEnvironment, list) {
-        if (!list || list.length < 2) {
+    "map": List.func(function (scopeEnvironment, parameters) {
+        if (!parameters || parameters.length < 2) {
             return List.error("map - expected form `(map fn-value list-value)`");
         }
 
+        var lambda = parameters.car;
+        var list = parameters.cdr.car;
 
     })
 };
