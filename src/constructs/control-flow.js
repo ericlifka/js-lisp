@@ -47,8 +47,10 @@ module.exports = {
     }),
 
     "map": List.func(function (scopeEnvironment, list) {
-        if (!list || list.length < 1) {
-            return List.error("map - not enough arguments supplied");
+        if (!list || list.length < 2) {
+            return List.error("map - expected form `(map fn-value list-value)`");
         }
+
+
     })
 };
