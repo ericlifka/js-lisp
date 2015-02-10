@@ -1,4 +1,5 @@
 var Readline = require('readline');
+var fs = require('fs');
 
 var Environment = require('./environment');
 var TopLevel = require('./top-level');
@@ -31,7 +32,20 @@ if (!module.parent) {
 }
 
 function main() {
-    INPUT.prompt();
+    fs.readFile('src/stdlib.jsl', {encoding: 'utf8'}, function (err, data) {
+        if (err) return console.error(data);
+
+        PARSER.parseString(data);
+        var state = PARSER.parseState();
+        if (state.error) return console.error("Error in StdLib: " + state.error);
+
+        PARSER.getStatements().forEach(function (statement) {
+            Eval.evaluateStatement(statement, GLOBAL_ENVIRONMENT);
+        });
+
+        PARSER.reset();
+        INPUT.prompt();
+    });
 }
 
 function parseInput(line) {
