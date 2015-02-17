@@ -1,7 +1,6 @@
 for
 sequence generator
 load
-auto load standard library
 run file(s) from command line
 bundleable as web package
 support arrays for functions that support lists
